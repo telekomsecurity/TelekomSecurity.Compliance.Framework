@@ -25,13 +25,13 @@ SSHv1 must permanently be disabled in configuration of the SSH server. With Open
 
 _Motivation:_ SSH protocol version 1 has weaknesses and is obsolete today. With the use of SSHv1 the confidentiality and integrity of transmitted data cannot be guaranteed.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -44,13 +44,13 @@ The file "/etc/ssh/moduli" contains pre-generated group parameters – named mod
 
 _Motivation:_ If the DH moduli is to short the key exchange is not protected in an adequate way.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -69,13 +69,13 @@ For key exchange the following algorithms are allowed:
 
 _Motivation:_ An attacker can possibly break the encryption of transported data if weak ciphers and algorithms are used to access sensitive data.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -95,13 +95,13 @@ Outdated and insecure ciphers and algorithms must not be used. Use the following
 
 _Motivation:_ An attacker can possibly break the encryption of transported data if weak ciphers and algorithms are used to access sensitive data.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -119,13 +119,13 @@ It is important to avoid the use of insecure MAC algorithms for SSH. Examples of
 
 _Motivation:_ An attacker can possibly break the encryption of transported data if weak ciphers and algorithms are used to access sensitive data.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -138,13 +138,13 @@ Logging for SSH must be enabled. It is recommended to use level INFO to get impo
 
 _Motivation:_ Logging security-relevant events is a basic requirement for detecting ongoing attacks as well as at-tacks that have already occurred. This is the only way in which suitable measures can be taken to maintain or restore system security. Logging data could be used as evidence to take legal steps against attackers.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -157,13 +157,13 @@ The LoginGraceTime parameter restricts the time window for a successful authenti
 
 _Motivation:_ An adequate time for LoginGraceTime parameter protects the system against unauthenticated SSH connections which waste system resources.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -176,13 +176,13 @@ The MaxAuthTries parameter specifies the maximum number of authentication attemp
 
 _Motivation:_ This parameter will minimize the risk of successful brute force attacks to the SSH server.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -197,13 +197,13 @@ IMPORTANT: It is also possible to achieve an adequate security level if only fun
 
 _Motivation:_ It is a high risk to use user root on a Linux system and to allow remote login. If an attacker is able to compromise this account, the system is complete under control of the attacker.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -216,13 +216,13 @@ SSH StrictModes must be enabled. This enables checks to ensure that SSH files an
 
 _Motivation:_ This feature blocks unwanted access to files and directories.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -237,13 +237,13 @@ IMPORTANT: The private key of human beings must be protected with a passphrase.
 
 _Motivation:_ Passwords are usually attackable via Phishing, Keylogger and Brute Force attacks. An attacker who occupies a password can misuse the corresponding user account.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -256,13 +256,13 @@ The login must be done with public/key authentication. Login with password only 
 
 _Motivation:_ Passwords are usually attackable via Phishing, Keylogger and Brute Force attacks. Additionally, pass-words can be easily shared and a non-repudiation therefore is reasonable hard.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -273,13 +273,13 @@ _Motivation:_ Passwords are usually attackable via Phishing, Keylogger and Brute
 
 _Motivation:_ If a trust relationship is configured with another system an attacker has direct access to all other trusted systems in case of an intrusion.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -290,13 +290,13 @@ _Motivation:_ If a trust relationship is configured with another system an attac
 
 _Motivation:_ If a trust relationship is configured with another system an attacker has direct access to all other trusted systems in case of an intrusion.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -309,13 +309,13 @@ For easier and more secure system administration it is necessary to use dedicate
 
 _Motivation:_ The usage of dedicated users or groups makes user management for SSH more secure.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -334,13 +334,13 @@ Example: if the ClientAliveInterval is 20 seconds and the ClientAliveCountMax is
 _Motivation:_ Open or unused sessions give the possibility to an unauthorized user for session high-jacking. This session
 can then be used to get access to the effected system and its data.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -353,13 +353,13 @@ SSH can be used to tunnel services. For management service of Linux servers this
 
 _Motivation:_ SSH tunnel feature can be used by an attacker to tunnel traffic to own destinations.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -374,13 +374,13 @@ IMPORTANT: This requirement is not valid for Jump Servers!
 
 _Motivation:_ If this feature is not used in a controlled manner, it could be a security risk for servers.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -395,13 +395,13 @@ IMPORTANT: This requirement is not valid for Jump Servers!
 
 _Motivation:_ The server-side deactivation blocks the creation of a server-side agent forwarding socket, this socket consequently cannot be misused.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -414,13 +414,13 @@ SSH Gateway ports specifies whether remote hosts can connect to ports forwarded 
 
 _Motivation:_ If this feature is not used in a controlled manner, it could be a security risk for servers.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -433,13 +433,13 @@ X11 is not used on Linux servers. The forwarding of X11 over SSH must be disable
 
 _Motivation:_ If this feature is not used in a controlled manner, it could be a security risk for servers.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -452,13 +452,13 @@ The SSH PermitUserEnviroment parameter specifies if user defined environment var
 
 _Motivation:_ Enabling the processing environment variable may enable users to bypass SSH access restrictions.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -471,13 +471,13 @@ With the 'PermitEmptyPasswords' parameter can be configured the SSH server allow
 
 _Motivation:_ If login without a password remotely over SSH is possible unauthorized users can get access to the server.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
@@ -490,13 +490,13 @@ OpenSSH has its own SFTP daemon. If SFTP should be used this function must be en
 
 _Motivation:_ It is necessary to use the OpenSSH SFTP daemon to align the security configuration for all SSH based services and not to have different security levels.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation*
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check*
 
 ----
    <tbd>Compliance Check
