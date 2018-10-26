@@ -1,4 +1,4 @@
-= Sec Req 3.65 - Linux OS for Servers
+= Telekom Security Compliance Framework
 :author_name: Markus Schumburg (Telekom Security)
 :author_email: security.automation@telekom.de
 :revnumber: 0.1
@@ -7,10 +7,12 @@
 :imagesdir: ./images
 :toc:
 :toc-title: List of Requirements
-:toclevels: 3
+:toclevels: 4
 
 :sectlinks:
-== 2. Basic Hardening
+
+== Linux OS for Servers
+=== 2. Basic Hardening
 
 [#req365-1]
 ==== Req 1: Unused services and protocols must be deactivated.
@@ -27,10 +29,10 @@ _Motivation:_ Services and protocols that are not Required for system operation 
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-2]
@@ -51,10 +53,10 @@ _Motivation:_ Disabling services on network interfaces and the implementation of
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-3]
@@ -86,10 +88,10 @@ _Motivation:_ Vulnerabilities in software offer an attack window for attackers t
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-4]
@@ -114,10 +116,10 @@ _Motivation:_ The availability of unneeded filesystem types increases the local 
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-5]
@@ -141,10 +143,10 @@ _Motivation:_ A filled filesystem can stop operation of a server. This can be tr
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-6]
@@ -171,10 +173,10 @@ _Motivation:_ It must be avoided for such partitions that an attacker can execut
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-7]
@@ -190,10 +192,10 @@ _Motivation:_ With automounting enabled any external file system will be mounted
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-8]
@@ -209,10 +211,10 @@ _Motivation:_ Users can misuse these tools to execute jobs on a system.
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-9]
@@ -228,10 +230,10 @@ _Motivation:_ Setting the sticky bit on world writable directories prevents user
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-10]
@@ -247,10 +249,10 @@ _Motivation:_ Data in world-writable files can be read, modified, and potentiall
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-11]
@@ -266,10 +268,10 @@ _Motivation:_ It an unauthorized person gets access to a password file, the pass
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-12]
@@ -287,10 +289,10 @@ _Motivation:_ With a strict umask the manipulation of files by unauthorized user
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-13]
@@ -346,10 +348,10 @@ _Motivation:_ Executables with SUID and SGID are a high risk for a system. If su
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-14]
@@ -365,10 +367,10 @@ _Motivation:_ Core dumps can include some sensitive data. To avoid information l
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-15]
@@ -391,10 +393,10 @@ _Motivation:_ Buffer overflow attacks can be used to unauthorizedly execute code
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-16]
@@ -410,10 +412,10 @@ _Motivation:_ Prelink must be disabled to use the ASLR feature PIE (Position-ind
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-17]
@@ -443,10 +445,10 @@ _Motivation:_ An unhardened IPv4 protocol stack is vulnerable against several at
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-18]
@@ -469,10 +471,10 @@ _Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several a
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-19]
@@ -490,10 +492,10 @@ _Motivation:_ Vulnerabilities increases the risk of successful exploitation by a
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-20]
@@ -509,10 +511,10 @@ _Motivation:_ The GPG check is necessary to guarantee the authenticity of used s
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-21]
@@ -532,10 +534,10 @@ misuse. Furthermore, it makes it possible to log activities and actions on a sys
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-22]
@@ -553,10 +555,10 @@ _Motivation:_ Accounts that are needed only for local functionality can be used 
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-23]
@@ -583,10 +585,10 @@ _Motivation:_ User accounts that are not protected with a secret authentication 
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-24]
@@ -609,10 +611,10 @@ An attacker could get extensive rights by compromising such a user account and g
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-25]
@@ -630,10 +632,10 @@ _Motivation:_ Central administration of identity of accounts and their rights me
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-26]
@@ -649,10 +651,10 @@ _Motivation:_ Without authentication, an unauthorized user can gain root privile
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-27]
@@ -668,10 +670,10 @@ _Motivation:_ By restricting the accessibility to legitimate systems, the group 
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-28]
@@ -687,10 +689,10 @@ _Motivation:_ This Requirement ensures that management services are not reachabl
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
 
 [#req365-29]
@@ -706,8 +708,8 @@ _Motivation:_ Management connections and access must be protected against eavesd
    <tbd>implementation
 ----
 
-*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
-   <tbd>audit
+   <tbd>Compliance Check
 ----
