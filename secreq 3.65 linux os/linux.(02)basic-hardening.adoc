@@ -1,0 +1,511 @@
+= Sec Req 3.65 - Linux OS for Servers
+:author_name: Markus Schumburg (Telekom Security)
+:author_email: security.automation@telekom.de
+:revnumber: 0.1
+:revdate: 26-10-2018
+:revremark: draft
+:imagesdir: ./images
+:toc:
+:toc-title: List of Requirements
+:toclevels: 3
+
+:sectlinks:
+== 2. Basic Hardening
+
+[#req365-1]
+==== Req 1: Unused services and protocols must be deactivated.
+
+After installation of systems and software products local or remote reachable services and protocols may be active, which are not necessarily needed for operation and functionality of the system. These include also services and protocols which may not be used in Deutsche Telekom Group networks due to known security vulnerabilities. Such services and protocols must be completely disabled on the system. Additionally, it is important that protocols and service are still deactivated after system re-boot.
+
+This kind of system hardening must be done before the system is reachable from the network. Otherwise an attacker has the possibility to attack and maybe compromise the unsecured system.
+
+_Motivation:_ Services and protocols that are not Required for system operation increase the potential attack sur-face and thus the risk of the system being compromised. This risk is further increased by the fact that a security inspection and appropriate optimization of the configuration for unused services and protocols is not being done in most cases.
+
+*Implementation* +
+[cols="20,80"]
+|===
+a|
+* [x] Ubuntu LTS 14.04
+* [x] Ubuntu LTS16.04
+* [x] Ubuntu LTS 18.04
+* [*] RHEL 7.x
+* [x] SLES 12
+
+| This is a test
+
+hshhsh
+sjjsj
+|===
+
+//----
+//   <tbd>implementation
+//----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-2]
+==== Req 2: The reachability of services must be restricted.
+
+The available services of a server are enabled without any restrictions for network reachability by default on all available network interfaces. In most cases it is not needed that such services are re-motely reachable for anyone. To limit the attack surface services must be bound only to the network interfaces where they are needed.
+
+Some services of a system, like management services, have only a limited and clearly defined set of needed communication partners. The reachability of such services must be restricted to IP addresses of legitimated communication partners. To limit the reachability a local firewall solution must be used in case no external solution to control the reachability (e.g. dedicated firewall, OpenStack secu-rity groups) in front of the system is available. Examples for local firewall solutions are:
+
+*	iptables (see chapter 5 for more details)
+*	nftables
+
+_Motivation:_ Disabling services on network interfaces and the implementation of filters to limit the reachability can reduce the potential attack possibilities.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-3]
+==== Req 3: Unused software must not be installed or must be uninstalled.
+
+Software could be installed during setup of Linux operating system which is not needed for the functionality of the server. Such software should not be installed or must be uninstalled after installation. Examples for software that is typically not needed on a server system are:
+
+*	inetd
+*	xinetd
+*	X Window System
+*	Avahi Server
+*	CUPS
+*	rsync service
+*	NIS server/client
+*	talk server/client
+*	telnet server/client
+*	tftp server/client
+*	ftp server/client
+*	rsh server/client
+
+
+IMPORTANT: It is not allowed to install software on a server that is not needed for operation, maintenance or general functionality!
+
+_Motivation:_ Vulnerabilities in software offer an attack window for attackers to infiltrate the system. By uninstalling not needed software the attack surface and the risk of a successful compromise can be re-duced.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-4]
+==== Req 4:	Unused filesystems must be disabled.
+
+Linux supports a lot of filesystem types. Most of them are not needed on a server and must be disabled. Examples for filesystem types that are should not used on servers are:
+
+*	cramfs
+*	freevxfs
+*	jffs2
+*	hfs
+*	hfsplus
+*	squashfs
+*	udf
+*	vfat
+
+_Motivation:_ The availability of unneeded filesystem types increases the local attack surface of a server.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-5]
+==== Req 5:	Dedicated partitions must be used for growing content that can influence the availability of the system.
+
+An own partition must be created for directories that are used to store dynamic content. It is recommended to use a dedicated partition for the directories:
+
+*	/tmp
+*	/var
+
+In specific cases it could be necessary to use the following partitions:
+
+*	/var/log and /var/tmp (instead of /var)
+*	/home (for file servers with high number of users)
+
+_Motivation:_ A filled filesystem can stop operation of a server. This can be triggered by an attacker to effect avail-ability of a server.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-6]
+==== Req 6:	Parameters nodev, nosuid and noexec must be set for partitions where this is applicable.
+
+The named mount options must be set for the following partitions if they exist:
+
+*	/tmp (nodev, nosuid)
+*	/var/tmp (nodev, nosuid, noexec)
+*	/home (nodev)
+
+IMPORTANT: For installation reasons it could be necessary to remove 'noexec' from partition '/tmp' as this is used sometimes for script execution during software installation.
+
+If separate partition exists also for:
+
+*	/dev/shm (RHEL, SLES) (nodev, nosuid, noexec)
+*	/run/shm (Ubuntu) (nodev, nosuid, noexec)
+
+_Motivation:_ It must be avoided for such partitions that an attacker can execute files with suid, to store device files and to save and execute files from this partition.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-7]
+==== Req 7:	Automounting must be disabled.
+
+Automounting of file systems must be disabled to avoid the automated mounting and use of external file systems like USB sticks and CD-ROMs.
+
+_Motivation:_ With automounting enabled any external file system will be mounted to the server and can possibly misused.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-8]
+==== Req 8: The use of at/cron must be restricted to authorized users.
+
+The use of the tools 'cron' and 'at', that can be used to schedule automated execution of jobs on a Linux system, must be restricted to authorized users.
+
+_Motivation:_ Users can misuse these tools to execute jobs on a system.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-9]
+==== Req 9: Sticky bit must be set on all world-writable directories.
+
+This feature prevents the ability to delete or rename files in world writable directories (such as /tmp) that are owned by another user.
+
+_Motivation:_ Setting the sticky bit on world writable directories prevents users from deleting or renaming files in that directory that are not owned by them.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-10]
+==== Req 10: No regular files that are world writable must exist.
+
+World writable files are files that have write permission set for other. These files are writable by any user of the server. Such files must be detected and if existing the rights of these files must be changed to an adequate level.
+
+_Motivation:_ Data in world-writable files can be read, modified, and potentially compromised by any user on the system.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-11]
+==== Req 11:	Passwords must be protected with an appropriate hashing function.
+
+Passwords must always be stored as hashes. Sha512-crypt with 640.000 rounds and Salt (96 Bit) must be used as a hashing algorithm to protect passwords.
+
+_Motivation:_ It an unauthorized person gets access to a password file, the password can be misused if not stored in a secure way.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-12]
+==== Req 12: The default user umask must be 027 or more restrictive.
+
+The setting of the umask defines which mode files or directories get when they are created by a user. The default umask on most Linux systems is less strict. This is the reason why a stricter umask must be configured.
+
+A umask of 027 is recommended. This defines the permissions 'read, write, execute' (0) for the user, 'read, execute' (2) for group and no permissions (7) for others.
+
+_Motivation:_ With a strict umask the manipulation of files by unauthorized users can be prevented.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-13]
+==== Req 13:	Not needed SUID and SGID bits must be removed from executables.
+
+Executables with SUID or SGID bits set run with extensive rights. Such executables pose a security risk. Therefore, executables with SUID and SGID bit set must be limited to the absolutly needed ones. From all others, the SUID and SGID bits must be removed. An alternative is to grant more granular permission for such commands with Posix capabilities. This solution allows to enable only needed system functions for a binary file and not full root privileges as with SUID/SGID. It is highly recommended where even possible to use Posix capabilities instead of SUID/SGID!
+
+The following executables are allowed to run with SUID and SGID if not Posix capabilities can be used:
+
+*	/bin/ping
+*	/sbin/pam_timestamp_check
+*	/sbin/unix_chkpwd
+*	/usr/bin/at
+*	/usr/bin/gpasswd
+*	/usr/bin/locate
+*	/usr/bin/newgrp
+*	/usr/bin/passwd
+*	/usr/bin/ssh-agent
+*	/usr/libexec/utempter/utempter
+*	/usr/sbin/lockdev
+*	/usr/sbin/sendmail.sendmail
+*	/usr/bin/expiry
+*	/bin/ping6
+*	/usr/bin/traceroute6.iputils
+*	/sbin/mount.nfs
+*	/sbin/umount.nfs
+*	/sbin/mount.nfs4
+*	/sbin/umount.nfs4
+*	/usr/bin/crontab
+*	/usr/bin/wall
+*	/usr/bin/write
+*	/usr/bin/screen
+*	/usr/bin/mlocate
+*	/usr/bin/chage
+*	/usr/bin/chfn
+*	/usr/bin/chsh
+*	/bin/fusermount
+*	/usr/bin/pkexec
+*	/usr/bin/sudo
+*	/usr/bin/sudoedit
+*	/usr/sbin/postdrop
+*	/usr/sbin/postqueue
+*	/usr/sbin/suexec
+*	/usr/sbin/ccreds_validate
+*	/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+*	/usr/lib/policykit-1/polkit-agent-helper-1
+
+_Motivation:_ Executables with SUID and SGID are a high risk for a system. If such an executable has a vulnerability it could possibly lead to compromise of the system.
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
+[#req365-14]
+==== Req 14:	Core dumps must be disabled.
+
+A core dump includes complete memory content of an executable program. It is used to debug pro-gram crashes. Core dumps should be disabled during normal operation and only be enabled in case of debugging. On systems where core dumps are needed it is recommended to disable core dumps for setuid processes.
+
+_Motivation:_ Core dumps can include some sensitive data. To avoid information leakage core dumps must be restricted.
+
+[#req365-15]
+==== Req 15:	Protection against buffer overflows must be enabled.
+
+A protection function against buffer overflow attacks must be used on Linux servers. The following solutions are available:
+
+*	ASLR (Debian based Linux like Ubuntu)
+*	Exec Shield (RedHat based Linux. Per default activated in RHEL 7)
+*
+NoExecute (NX)/ eXecute Disable (XD) must be activated in system bios for the functionality of buffer overflow protection solutions.
+
+IMPORTANT: ASLR has some weaknesses. For servers with a high security demand it is recommended to use Exec Shield as buffer overflow protection solution.
+
+_Motivation:_ Buffer overflow attacks can be used to unauthorizedly execute code on a system to influence availability or to get full access to a system.
+
+[#req365-16]
+==== Req 16:	Prelink must not be used.
+
+Prelink is a tool to modify ELF shared libraries and ELF dynamically linked binaries. This tool must be disabled on Linux based servers.
+
+_Motivation:_ Prelink must be disabled to use the ASLR feature PIE (Position-independent executable). Additionally, prelink increases the risk of a compromise to a common library such as libc.
+
+[#req365-17]
+==== Req 17:	IPv4 protocol stack must be securely configured.
+
+If IPv4 is not used it must be completely disabled. Otherwise, the IPv4 stack on Linux servers must be hardened. For this the following configuration must be implemented:
+
+*	IPv4 forwarding must be disabled.
+*	IPv4 redirects must not be accepted.
+*	Secure IPv4 redirects must not be accepted.
+*	IPv4 packet redirect sending must be disabled.
+*	IPv4 source routed packets must not be accepted.
+*	Suspicious packets must be logged
+*	Broadcast ICMP Requests must be ignored.
+*	Bogus ICMP responses must be ignored.
+*	Reverse Path Filtering must be enabled.
+*	TCP SYN Cookies must be enabled.
+*	An ICMP ratelimit must be configured.
+*	Timestamp must be disabled.
+*	ARP must be restricted.
+
+_Motivation:_ An unhardened IPv4 protocol stack is vulnerable against several attacks like denial of service, traffic high jacking.
+
+[#req365-18]
+==== Req 18:	IPv6 protocol stack must be securely configured.
+
+If IPv6 is not used it must be completely disabled. Otherwise, the IPv6 stack on Linux servers must be hardened. For this the following configuration must be implemented:
+
+*	IPv6 forwarding must be disabled.
+*	IPv6 redirects must not be accepted.
+*	IPv6 source routed packets must not be accepted.
+*	IPv6 router advertisements must not be accepted.
+*	IPv6 router solicitations messages must not be accepted.
+*	IPv6 autoconfiguration must be disabled
+
+_Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several attacks like denial of service, traffic high jacking.
+
+[#req365-19]
+==== Req 19:	Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse.
+
+The administrator must check before the installation of software on a server if vulnerabilities are known for the selected version. Software with known vulnerabilities must not be used. Excepted from this rule are components for which the vendor has already provided a measure to remedy the vulner-ability, e.g. a patch, update or workaround. In this case, the additional measure must be implement-ed on the server.
+
+IMPORTANT: It is mandatory to implement a patch management process covering the complete life cycle of the server to guarantee that upcoming vulnerabilities will be fixed as soon as possible.
+
+_Motivation:_ Vulnerabilities increases the risk of successful exploitation by an attacker. The likelihood raises if de-tailed information and tools are available that help to exploit the vulnerability.
+
+[#req365-20]
+==== Req 20: GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured.
+
+GPG check must be enabled and keys must be configured properly to verify integrity during installation of software from a repository server. On RedHat Linux it is necessary to activate the gpgcheck globally.
+
+_Motivation:_ The GPG check is necessary to guarantee the authenticity of used source an integrity of software. Without this check an attacker could possibly manipulate software packets before installation.
+
+[#req365-21]
+==== Req 21:	User accounts must be used that allow unambiguous identification of the user.
+
+Users must be identified unambiguously by the system. This can typically be achieved by using a unique user account per user. So, called group accounts, i.e. the use of one user account for several persons, must not be created and used for this purpose. This also means that the use of specific Linux accounts like 'root' by humans is not allowed.
+
+One exception of this Requirement is machine (or M2M) accounts. These will be used for authentication and authorization of systems to each other or for applications on a system. They can’t be as-signed to a single person. Such user accounts must be assigned on a per system or per application basis. In this connection, it must be guaranteed that this user account can’t be misused.
+
+_Motivation:_ Unambiguous user identification is mandatory to assign user rights that are necessary to perform the Required
+tasks on the system. This is the only way to adequately control access to system data and services and to prevent
+misuse. Furthermore, it makes it possible to log activities and actions on a system and to assign them to individual users.
+
+[#req365-22]
+==== Req 22:	System accounts must be non-login.
+
+On Linux servers, several users are available that are needed for functionality of applications. These users are not intended to provide a shell. To avoid that such accounts are used to login the shell pa-rameter in file '/etc/passwd' must be set to '/usr/sbin/nologin' or '/bin/false'.
+
+IMPORTANT: The system accounts root, sync, shutdown and halt are excluded from this requirement!
+
+_Motivation:_ Accounts that are needed only for local functionality can be used to get unauthorized access to the system if not protected in a proper way.
+
+[#req365-23]
+==== Req 23:	User accounts must be protected against unauthorized usage by at least one authentication attribute.
+
+The various user and machine accounts on a system must be protected from misuse. To this end, an authentication attribute is typically used, which, when combined with the user name, enables unam-biguous authentication and identification of the authorized user.
+
+Authentication attributes include:
+
+*	Cryptographic keys
+*	Token
+*	Passwords
+*	PINs
+
+This means that authentication based on a parameter that can be spoofed (e.g. phone numbers, public IP addresses or VPN membership) is not permitted. Exceptions are attributes that cannot be faked or spoofed by an attacker. Two of the above options can be combined (2-factor authentication) to achieve a higher level of security. Whether or not this is suitable and necessary depends on the pro-tection needs of the individual system and its data and must be evaluated for individual cases.
+
+In companies of Deutsche Telekom group where the MyCard or a comparable smartcard is available this solution should be preferred.
+
+_Motivation:_ User accounts that are not protected with a secret authentication attribute can be used by an attacker to gain unauthorized access to a system and the data and applications stored on it.
+
+[#req365-24]
+==== Req 24:	User accounts with extensive rights must be protected with two authentication attributes.
+
+Some user accounts, for example those used for administration, maintenance and troubleshooting, have extensive rights. Extensive rights mean that with an appropriate user account changes like writ-ing, reading etc. to system parameters and configurations are possible. Therefore, a simple protec-tion (e.g. using a password), as for normal user accounts with less rights, is not suitable. To get a higher protection level it is necessary to use two independent authentication attributes. For this a combination of an attribute that the user knows and an attribute that the user owns will often be used often. This kind of authentication is called as 2-factor authentication. Examples for 2-factor authentication are:
+
+*	Smartcard (e.g. MyCard) protected by a PIN
+*	Private key protected by a passphrase
+*	Password plus additional one-time token
+
+In companies of Deutsche Telekom group where the MyCard or a comparable smartcard is available this solution should be preferred.
+
+_Motivation:_ User accounts with extensive rights as used for system administration have a higher risk for system’s security.
+An attacker could get extensive rights by compromising such a user account and get access to wide parts of the system and stored data.
+
+[#req365-25]
+==== Req 25:	The system must be connected to a central system for user administration.
+
+Systems must be connected to a central system for user administration. A solution for identity management should be preferred. Accounts and their rights must be administrated on central identity management systems (e.g. cIAM, WiW, ZAM) in Deutsche Telekom Group. The system must provide a central interface (e.g. LDAPs for authorization, Kerberos for authentication, revocation information for certificates) or decentralized mechanisms (e.g. public-key authentication) for the provisioning of authorization data. In areas where a central identity management system is not available a central system such as LDAP, TACACS+ or Radius server must be used for the administration of accounts and their authentication and authorization.
+
+Exceptions to this Requirement are accounts that are used only internally by the system involved and that are Required for one or more applications on the system to function. Also, for those accounts remote access and local login must be forbidden to prevent abusive usage.
+
+_Motivation:_ Central administration of identity of accounts and their rights means that they only have to be maintained once instead of separately on each system. Regarding the aspect of security, the advantage is that a user account and its rights are only known on a single central site. This information can be transmitted from the central site to other systems (provisioning), central administrated (reconcilia-tion) and central deleted (deprovisioning). This reduces the risk of accounts being forgotten during changing or deletion since they are not configured on multiple systems. Faulty account management could give user inappropriate system rights or continued access to a system e.g. after leaving the company or changing the responsibility.
+
+[#req365-26]
+==== Req 26:	Authentication must be used for single user mode.
+
+For system recovery, the so called single user mode is used. This mode can also be manually selected from the bootloader during system boot. Authentication must be enabled for single user mode to protect this access. This is especially relevant, if the console of the machine can be reached remotely (e.g. via lights-out-management or via virtual console in case of virtual machines).
+
+_Motivation:_ Without authentication, an unauthorized user can gain root privileges by forcing a reboot.
+
+[#req365-27]
+==== Req 27: The management of the operating system must be done via a dedicated management network which is independent from the production network.
+
+Management access to a server must be done via a separate management network. The access must be limited to legitimate systems. The reachability of the management services must be limited to single IP addresses or small IP address ranges of subnets.
+
+_Motivation:_ By restricting the accessibility to legitimate systems, the group of potential attackers can be reduced, and thus also the likeliness of a successful attack. Furthermore, systems must be manageable even in the case the customer or production network is down.
+
+[#req365-28]
+==== Req 28:	Management services must be bound to the management network.
+
+The services used for server administration must be bound to an interface connected to a management network or an IP address of the management network.
+
+_Motivation:_ This Requirement ensures that management services are not reachable from untrusted networks and limits so the possibility of attacks.
+
+[#req365-29]
+==== Req 29: Encrypted protocols must be used for management access to administrate the operating system.
+
+The used services and protocols for system management and administration must be encrypted. Only services like SSHv2 and HTTPS (TLS) are allowed.
+
+_Motivation:_ Management connections and access must be protected against eavesdropping of sensitive data and unauthorized access.
