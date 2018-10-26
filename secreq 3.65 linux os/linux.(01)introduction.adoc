@@ -25,4 +25,5 @@ This document is not intended to be used for workstations with Linux OS and cont
 
 == Content
 
-<tbd>
+   1. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(01)introduction.adoc#1-introduction[Introduction]
+   2. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(02)basic-hardening.adoc[Basic Hardening]
