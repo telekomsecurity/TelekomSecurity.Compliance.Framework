@@ -1,0 +1,28 @@
+= SecReq 3.65 - Linux OS for Servers
+:author_name: Markus Schumburg (Telekom Security)
+:author_email: security.automation@telekom.de
+:revnumber: 0.1
+:revdate: 26-10-2018
+:revremark: draft
+:imagesdir: ./images
+
+:sectlinks:
+===	Introduction
+Linux is a popular operating system for server systems. It is used from single bare metal servers to high scaling cloud environments. This document includes security requirements for the base operat-ing system and also for applications which are part of the operating system like, iptables, mandatory access control solutions etc. The security requirements are valid for all Linux distributions.
+
+<tbd> supported linx versions
+<tbd> how to use
+
+==== Scope
+In scope of this is document are server systems with Linux OS. This includes the following types of servers:
+
+* bare metal servers
+* virtualized servers (VMs)
+* virtualization hosts
+
+==== Not in Scope
+This document is not intended to be used for workstations with Linux OS and container images based on Linux. Because of different use cases, associated threats and needed software, workstations need another set of requirements. Container images have to be treated differently as they normally do not include a full Linux OS.
+
+=== Content
+
+<tbd>
