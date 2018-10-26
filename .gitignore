@@ -1,0 +1,5 @@
+# Files and directories not to track in git tree
+
+# Global files for the entire tree
+*.bak
+*.tmp
