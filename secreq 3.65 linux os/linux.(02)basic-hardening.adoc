@@ -22,7 +22,7 @@ This kind of system hardening must be done before the system is reachable from t
 _Motivation:_ Services and protocols that are not Required for system operation increase the potential attack sur-face and thus the risk of the system being compromised. This risk is further increased by the fact that a security inspection and appropriate optimization of the configuration for unused services and protocols is not being done in most cases.
 
 *Implementation* +
-[cols="20,80",%autowidth.stretch]
+[cols="20,80",width=100]
 |===
 a|
 * [x] Ubuntu LTS 14.04
