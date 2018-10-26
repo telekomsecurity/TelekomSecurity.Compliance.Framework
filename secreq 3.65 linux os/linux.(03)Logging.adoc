@@ -123,9 +123,11 @@ On Linux servers, the following System events must be logged:
 |Privileged commands execution
 |The use of privileged commands with SUID/SGID must be logged.
 |Mandatory
-|Loading/unloading of kernel modules	The loading and unloading of kernel module must be logged.
+|Loading/unloading of kernel modules
+|The loading and unloading of kernel module must be logged.
 |Mandatory
-|Change of scheduled jobs	Jobs which are executed periodically, must be monitored, if they are changed or deleted.
+|Change of scheduled jobs
+|Jobs which are executed periodically, must be monitored, if they are changed or deleted.
 |Optional
 |===
 

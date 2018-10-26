@@ -12,7 +12,7 @@
 :sectlinks:
 
 == Linux OS for Servers
-=== 4	Pluggable Authentication modules
+=== 4	Pluggable Authentication Modules
 
 PAM (Pluggable Authentication Modules) is a solution to provide independent modules for authentication schemes to programs. PAM is used by default in most common Linux distributions.
 
