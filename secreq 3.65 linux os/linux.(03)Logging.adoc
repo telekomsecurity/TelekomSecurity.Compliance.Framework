@@ -1,0 +1,405 @@
+= Telekom Security Compliance Framework
+:author_name: Markus Schumburg (Telekom Security)
+:author_email: security.automation@telekom.de
+:revnumber: 0.1
+:revdate: 26-10-2018
+:revremark: draft
+:imagesdir: ./images
+:toc:
+:toc-title: List of Requirements
+:toclevels: 4
+
+:sectlinks:
+
+== Linux OS for Servers
+=== 3	Logging
+
+[#req365-30]
+===== Req 30:	Logging must be enabled in bootloader configuration.
+
+It is important to configure logging during system boot in grub.cfg to ensure the logging of security events before auditd daemon is started.
+
+_Motivation:_ Logging security-relevant events is a basic requirement for detecting ongoing attacks as well as at-tacks that have already occurred. This is the only way in which suitable measures can be taken to maintain or restore system security. Logging data could be used as evidence to take legal steps against attackers.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-31]
+===== Req 31:	Log rotation for logfiles must be configured.
+
+Log rotation for logfiles must be enabled. Files must be rotated based on file size and max lifetime of file.
+
+_Motivation:_ An attacker can trigger log events to fill up the disk space of the server. This could lead to a denial of service of the server.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-32]
+===== Req 32:	System time must be synchronized against a reference time source.
+
+A service like NTP (client programs: ntp, crony) must be used for time synchronization. Example for Deutsche Telekom AG NTP server pools are:
+
+*	ntp-pool-info_ntpp10.telekom.de
+*	ntp-pool-info_ntpp21.telekom.de
+
+_Motivation:_ Time synchronization must be done on a server to support time sensitive security mechanisms like the usage of certificates or solutions like Kerberos. A precise time is also mandatory to ensures con-sistent time records for logging events.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+==== 3.1	Auditd
+
+The auditd subsystem is an access monitoring and accounting for Linux. It can be used to define granular log events to be monitored under Linux OS. From security point of view log events can be used to detect malicious activities and to analyze possible breaches.
+
+[#req365-33]
+===== Req 33:	Auditd service must be used to log security relevant events.
+
+On Linux server, the auditd daemon must be installed and configured to log security events. Every security event must be logged with a precise timestamp and a unique system reference.
+
+_Motivation:_ Logging security-relevant events is a basic requirement for detecting ongoing attacks as well as at-tacks that have already occurred. This is the only way in which suitable measures can be taken to maintain or restore system security. Logging data could be used as evidence to take legal steps against attackers.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-34]
+===== Req 34:	System events must be logged.
+
+On Linux servers, the following System events must be logged:
+
+[cols="30,60,10",options="header"]
+|===
+|Event Type
+|Description
+|Category
+
+|System Startup and Shut-down
+|All restarts or shutdowns of the OS must be logged.
+|Mandatory
+|(Un)Installation of software
+|After the commissioning of the server, every uninstallation and installation of software must be logged.
+|Mandatory
+|Change of system time
+|Modification of the local system time and change of ntp settings must be logged.
+|Mandatory
+|Connection of external device (storage)
+|The connection of external devices like USB-Flash drives, which can mount on the running server, must be logged.
+|Mandatory
+|Privileged commands execution
+|The use of privileged commands with SUID/SGID must be logged.
+|Mandatory
+|Loading/unloading of kernel modules	The loading and unloading of kernel module must be logged.
+|Mandatory
+|Change of scheduled jobs	Jobs which are executed periodically, must be monitored, if they are changed or deleted.
+|Optional
+|===
+
+_Motivation:_ It is unusual to make system changes when the OS is put into operation. An attacker who has access to the server could change the system for its malicious purpose. The logging of the system events is necessary to detect and backtrack these attacks.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-35]
+===== Req 35:	Access and Authentication events must be logged.
+
+On Linux servers, the following Access and Authentication events must be logged:
+
+[cols="30,60,10",options="header"]
+|===
+|Event Type
+|Description
+|Category
+
+|Logon and Logoff
+|The Logon and Logoff of a User via external or local access must be logged.
+|Mandatory
+|Password Change
+|User Password changes or resets must be logged.
+|Mandatory
+|Account Expiration
+|It must be logged when an account expires.
+|Mandatory
+|Account Lockout / Reactivation
+|It must be logged, if an account will be locked or reactivated.
+|Mandatory
+|Escalation of privileges
+|It must be logged, if a user with administrator equivalent rights logs on.
+|Mandatory
+|===
+
+_Motivation:_ The logging of authentication and access events can be useful to backtrack who has access to a certain time.
+With these logs it is for example possible to detect a captured account which is used by an attacker.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-36]
+===== Req 36:	Account and Group Management events must be logged.
+
+On Linux servers, the following Account and Group Management events must be logged:
+
+[cols="30,60,10",options="header"]
+|===
+|Event Type
+|Description
+|Category
+
+|Create User
+|If a new user is created, it must be logged.
+|Mandatory
+|Modify User
+|If a user is modified (e.g. Membership, User rights), it must be logged.
+|Mandatory
+|Delete User
+|If a user is deleted, it must be logged.
+|Mandatory
+|Create Group
+|If a new group is created, it must be logged.
+|Mandatory
+|Modify Group
+|If a group is modified (e.g. Members, Group Rights), it must be logged.
+|Mandatory
+|Delete Group
+|If a group is deleted, it must be logged.
+|Mandatory
+|===
+
+_Motivation:_ The logging of account and group management events can be useful to backtrack user and group management.
+With these logs it is possible to detect malicious modification, creation and deletion of users and groups.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-37]
+===== Req 37:	Configuration Change events must be logged.
+
+On Linux servers, the following Configuration Change events must be logged:
+
+[cols="30,60,10",options="header"]
+|===
+|Event Type
+|Description
+|Category
+
+|Disable logging
+|It must be logged, if the logging service is disabled.
+|Mandatory
+|Deletion and unauthorized modification of logs
+|The deletion of events must be logged. The unauthorized modification of logs must be logged.
+|Mandatory
+|Change of logging configuration
+|It must be logged, if there is a change of the logging configuration.
+|Mandatory
+|Authentication Subsystem changes
+|Changes of Authentication Subsystems (e.g. LDAP- or Kerberos-Policy) must be logged.
+|Optional
+|Security Subsystem change
+|Changes of Security Subsystems shall be logged.
+|Optional
+|Backup configuration change
+|It shall be logged, if there is a change of the backup con-figuration.
+|Optional
+|OS FW configuration change
+|The change of the OS Firewall configuration shall be logged.
+|Optional
+|Critical Registry/Flags/File changes
+|Depending on the use case, critical registry--, flags- or file-changes should be logged.
+|Optional
+|===
+
+_Motivation:_ Configuration changes could have a massive impact of the OS and consequently could be a security risk.
+It is necessary to identify all important configurations on the OS and log the changes.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-38]
+===== Req 38:	Auditd configuration must be immutable.
+
+Immutable mode must be set for auditd to avoid that audit rules can be modified with 'auditctl' command.
+
+_Motivation:_ If auditd is not in immutable mode, unauthorized users can initiate changes to hide malicious activity.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+==== 3.2	External Logging
+
+[#req365-39]
+===== Req 39:	Security relevant logging data must be send to an external system direct after their creation.
+
+Security relevant logging data must be forwarded to a logging server as soon as possible after their creation. Logging solutions like rsyslog or syslog-ng can be used.
+
+_Motivation:_ If logging data is only stored locally, it can be manipulated by an attacker to conceal the attack and any manipulation done on the system. This is the reason why the events must be forwarded immedi-ately after occurrence.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+==== 3.2.1	RSyslog
+
+[#req365-40]
+===== Req 40:	If RSyslog is used, the default permission of 640 or more restrictive for logfiles must be configured.
+
+For RSyslog the default permissions of 640 or more restrictive used for new generated logging files must be configured in file 'rsyslog.conf'.
+
+_Motivation:_ Unauthorized access to logging files is possible if they have wrong file permissions. This is a risk of unwanted information leakage, as such files can contain sensitive information.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-41]
+===== Req 41:	If RSyslog is used, at least one central logging server must be configured.
+
+One or several external log servers must be configured in RSyslog configuration.
+
+_Motivation:_ If logging data is only stored locally, it can be manipulated by an attacker to conceal the attack and any manipulation done on the system. This is the reason why the events must be forwarded immedi-ately after occurrence.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+==== 3.2.2	Syslog-NG
+
+[#req365-42]
+===== Req 42:	If Syslog-NG is used, the default permission of 640 or more restrictive for logfiles must be configured.
+
+For Syslog-NG the default permissions of 640 or more restrictive used for new generated logging files must be configured in file 'syslog-ng.conf'.
+
+_Motivation:_ Unauthorized access to logging files is possible if they have wrong file permissions. This is a risk of unwanted information leakage, as such files can contain sensitive information.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-43]
+===== Req 43:	If Syslog-NG is used, at least one central logging server must be configured.
+
+One or several external log servers must be configured in RSyslog configuration.
+
+_Motivation:_ If logging data is only stored locally, it can be manipulated by an attacker to conceal the attack and any manipulation done on the system. This is the reason why the events must be forwarded immedi-ately after occurrence.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----

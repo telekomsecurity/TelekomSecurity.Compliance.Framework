@@ -1,0 +1,219 @@
+= Telekom Security Compliance Framework
+:author_name: Markus Schumburg (Telekom Security)
+:author_email: security.automation@telekom.de
+:revnumber: 0.1
+:revdate: 26-10-2018
+:revremark: draft
+:imagesdir: ./images
+:toc:
+:toc-title: List of Requirements
+:toclevels: 4
+
+:sectlinks:
+
+== Linux OS for Servers
+=== 7.	Regular Compliance Checks
+
+This chapter includes requirements that show the default behavior of a Linux OS. These requirements must normally not be configured after installation. Nevertheless, these requirements are also im-portant to mention as it is necessary to include them in regular compliance checks in order to identify misconfiguration and to guarantee an adequate security level during the complete lifecycle of a sys-tem.
+
+[#req365-61]
+===== Req 61:	No legacy + entries must exist in files passwd, shadows and group.
+
+The character "+" is used as a marker in configuration files to insert data from NIS (Network Infor-mation Service) maps. Such markers must not exist in the files '/etc/passwd', '/etc/shadows' and '/etc/group'.
+
+_Motivation:_ Attackers could possibly inject own code to gain privileged access if the character "+" exists in files '/etc/passwd', '/etc/shadows' and '/etc/group'.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-62]
+===== Req 62	A user's home directory must be owned by the user and have mode 750 or more restric-tive.
+
+A user can change the permissions of its home directory. It must be validated regularly that the mode of all user home directories is 750 and the corresponding user is owner of its home directory.
+
+This is only valid for accounts of real users and excludes system accounts. An exception of this re-quirement are home directories for users used for SFTP in a chroot environment. In this case the home directory must be owned by root.
+
+_Motivation:_ If accidently a wrong user becomes owner of another user's home directory or if permissions are wrong another user can access foreign data.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-63]
+===== Req 63:	Default group for the root account must be GID 0.
+
+The usage of GID 0 as default group for the root account is the default on most Linux systems. This must not be changed and should be checked in '/etc/passwd' file on a regular basis.
+
+_Motivation:_ Changing the GID for root may result in root-owned files that become accessible by non-privileged users.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-64]
+===== Req 64:	Root must be the only UID 0 account.
+
+Any account with UID 0 has root privileges on the server. It must be validated on a regular basis that only the root account has UID 0.
+
+_Motivation:_ A user with restricted rights can accidently become root if UID 0 is set for its account.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-65]
+===== Req 65:	All groups in /etc/passwd must exist in /etc/group.
+
+It must be checked on a regular basis that all groups exit in '/etc/group file' and also in '/etc/passwd' file.
+
+_Motivation:_ Errors in group management can result in unspecific authentication and authorization behavior.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-66]
+===== Req 66:	No duplicate UIDs and GIDs must exist.
+
+It must be checked on a regular basis that no duplicate UIDs and GIDs in the files '/etc/passwd' and '/etc/group' exist on the server.
+
+_Motivation:_Users and groups must be assigned to unique UIDs and GIDs for accountability and to ensure appro-priate access protections.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-67]
+===== Req 67:	No duplicate user and group names must exist.
+
+The tools "useradd" and " groupadd" do not allow to set duplicate user or group names. Unfortunate-ly, an administrator can do so by manually editing the corresponding configuration files. The file "/etc/passwd" and "/etc/group" must be checked for duplicate entries.
+
+_Motivation:_ Duplicate user name or group name can result in unauthorized access to data.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-68]
+===== Req 68: The shadow group must be empty (only Ubuntu Linux).
+
+On Ubuntu Linux the shadow group allows system programs which require access the ability to read the '/etc/shadow' file. No users must be assigned to the shadow group. The shadow group must be checked in file '/etc/group' on a regular basis that no users are assigned to it.
+
+_Motivation:_ With unauthorized access to the '/etc/shadow' file it is possible to run password cracking attacks against the stored password hashes.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-69]
+===== Req 69: No files and directories without assigned user or group must exist.
+
+If users or groups are deleted from a system, their files and directories must also be deleted, or the ownership must be transferred to another user or group. Otherwise, files and directories without a user or group are left on the system. The system must be checked for files and directories without assigned user or group on a regular basis.
+
+_Motivation:_ If files and directories without an assigned user or group exist on system, it could happen that a new-ly generated user can access this data if same UID or GID is assigned as used by the user or group deleted before.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-70]
+===== Req 70:	Permissions of security relevant configuration files must have the distribution default values or more restrictive.
+
+The permissions of configuration files must be correct and set to according user and group. See the following list of security relevant files:
+
+*	/etc/passwd; /etc/passwd-
+*	/etc/shadow; /etc/shadow-
+*	/etc/group; /etc/group-
+*	/etc/gshadow; /etc/gshadow-
+*	/boot/grub2/grub.cfg; /boot/grub2/user.cfg (RedHat based Linux)
+*	/boot/grub/grub.cfg (Ubuntu Linux)
+*	/var/log/*
+*	/etc/crontab; /etc/cron.*; /etc/cron.d
+*	/etc/sshd_config
+
+_Motivation:_ In configuration files sensitive information is stored. With wrong privileges, an unauthorized user can possibly access these files and misuse data or even modify configuration.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----

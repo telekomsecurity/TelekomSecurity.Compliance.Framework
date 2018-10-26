@@ -1,0 +1,99 @@
+= Telekom Security Compliance Framework
+:author_name: Markus Schumburg (Telekom Security)
+:author_email: security.automation@telekom.de
+:revnumber: 0.1
+:revdate: 26-10-2018
+:revremark: draft
+:imagesdir: ./images
+:toc:
+:toc-title: List of Requirements
+:toclevels: 4
+
+:sectlinks:
+
+== Linux OS for Servers
+=== 4	Pluggable Authentication modules
+
+PAM (Pluggable Authentication Modules) is a solution to provide independent modules for authentication schemes to programs. PAM is used by default in most common Linux distributions.
+
+[#req365-44]
+===== Req 44:	If PAM is used, an appropriate hashing function must be configured for password protection for PAM.
+
+If PAM is used the hashing algorithm for password protection must be configured like the configuration in 'login.defs'. This means sha512-crypt with 640.000 rounds and Salt (96 Bit) must be used.
+
+_Motivation:_ It an unauthorized person gets access to a password file, the password can be misused if not stored in a secure way.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-45]
+===== Req 45:	If PAM is used, password rules must be configured for PAM to force the use of passwords with a minimum length of 8 characters and a combination of three out of the following categories: upper cases, lower case, numbers and special characters.
+
+PAM must be configuration that only passwords that comply with the following complexity can be used on the system:
+
+*	Minimum length of 8 characters.
+*	Comprising at least three of the following categories: upper/lower case letters, numbers and special characters
+
+_Motivation:_ Passwords with the above complexity offer high robustness against attacks coupled with acceptable user friendliness. Passwords with this level of complexity have proved their efficiency in practice. Trivial passwords that are too short are susceptible to brute force and dictionary attacks and are therefore easy for attackers to determine. Once a password has been ascertained it can be used by an attacker for unauthorized access to the system and the data on it.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-46]
+===== Req 46:	If PAM is used, a protection against brute force and dictionary attacks that hinder pass-word guessing must be configured in PAM.
+
+Brute force and dictionary attacks aim to use automated guessing to passwords for user and machine accounts. To prevent these kind of attacks a limitation for invalid authentication reties must be con-figured in file " /etc/pam.d/common-auth".  It is recommended to lock an account after 5 retries for 10 minutes.
+
+_Motivation:_ Without any protection mechanism, an attacker can possibly determine a password by executing dictionary lists or automated creation of character combinations. With the guessed password than the misuse of the according user account is possible.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-47]
+===== Req 47:	If PAM is used , PAM must be configured that motd did not contain any sensitive data.
+
+Message of the day (motd) outputs must not contain any sensitive data like number of missing patches, used software or kernel version. The following files must be checked for such information:
+
+*	/etc/pam.d/login
+*	/etc/pam.d/sshd
+
+_Motivation:_ Sensitive data in motd can give attackers information that are helpful for further attacks.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
