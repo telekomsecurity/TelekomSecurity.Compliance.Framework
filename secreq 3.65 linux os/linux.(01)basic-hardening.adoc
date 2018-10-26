@@ -18,12 +18,7 @@ This kind of system hardening must be done before the system is reachable from t
 
 _Motivation:_ Services and protocols that are not required for system operation increase the potential attack sur-face and thus the risk of the system being compromised. This risk is further increased by the fact that a security inspection and appropriate optimization of the configuration for unused services and protocols is not being done in most cases.
 
----
-
-[cols="1",width=100%,frame="topbot",grid="none"]
-|===
-| *Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-|===
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
    test
