@@ -1,0 +1,31 @@
+= SecReq 3.65 - Linux OS for Servers
+Markus Schumburg <markus.schumburg@telekom.de>
+v0.1, October 25, 2018: Draft
+
+//:sectnums:
+:sectlinks:
+=== 1. Basic Hardening
+
+[cols="10,90",frame="topbot",grid="none"]
+|===
+|*Req 1*
+|Unused services and protocols must be deactivated.
+|===
+
+After installation of systems and software products local or remote reachable services and protocols may be active, which are not necessarily needed for operation and functionality of the system. These include also services and protocols which may not be used in Deutsche Telekom Group networks due to known security vulnerabilities. Such services and protocols must be completely disabled on the system. Additionally, it is important that protocols and service are still deactivated after system re-boot.
+
+This kind of system hardening must be done before the system is reachable from the network. Otherwise an attacker has the possibility to attack and maybe compromise the unsecured system.
+
+_Motivation:_ Services and protocols that are not required for system operation increase the potential attack sur-face and thus the risk of the system being compromised. This risk is further increased by the fact that a security inspection and appropriate optimization of the configuration for unused services and protocols is not being done in most cases.
+
+*Implementation* +
+[cols="3*"]
+|===
+| 1
+| 2
+| 3
+|===
+[sidebar]
+--
+Test
+--
