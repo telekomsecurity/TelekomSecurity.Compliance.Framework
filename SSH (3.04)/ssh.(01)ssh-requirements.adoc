@@ -1,0 +1,503 @@
+= Telekom Security Compliance Framework
+:author_name: Markus Schumburg (Telekom Security)
+:author_email: security.automation@telekom.de
+:revnumber: 0.1
+:revdate: 26-10-2018
+:revremark: draft
+:imagesdir: ./images
+:toc:
+:toc-title: List of Requirements
+:toclevels: 4
+
+:sectlinks:
+
+== Secure Shell (SSH)
+=== 1.	Introduction
+
+SSH (Secure Shell) is a client/server application inclusive a network protocol that can be used to access systems on terminal level and to transfer data. As SSH is typically used for management access, this service has a high security demand. This document includes security requirements for SSH server, SFTP server and the SSH protocol. It is recommended to use OpenSSH as this is a well-known solution with a huge developer community.
+
+=== 2.	Security requirements
+
+[#req365-1]
+==== Req 1:	The SSH protocol version 2 must be used.
+
+SSHv1 must permanently be disabled in configuration of the SSH server. With OpenSSH 7.4 support for SSHv1 completely removed and must not longer be configured.
+
+_Motivation:_ SSH protocol version 1 has weaknesses and is obsolete today. With the use of SSHv1 the confidentiality and integrity of transmitted data cannot be guaranteed.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-2]
+==== Req 2:	SSH moduli smaller than 2048 must not be used.
+
+The file "/etc/ssh/moduli" contains pre-generated group parameters – named moduli - for Diffie-Hellman. Here are also moduli available that are not long enough to withstand known attacks. To avoid the use of short values moduli smaller than 2048 must be deleted from file " /etc/ssh/moduli ".
+
+_Motivation:_ If the DH moduli is to short the key exchange is not protected in an adequate way.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-3]
+==== Req 3:	Only approved key exchange algorithms must be used.
+
+For key exchange the following algorithms are allowed:
+
+*	curve25519-sha256@libssh.org
+*	diffie-hellman-group-exchange-sha256
+*	ecdh-sha2-nistp521
+*	ecdh-sha2-nistp384
+*	ecdh-sha2-nistp256
+
+_Motivation:_ An attacker can possibly break the encryption of transported data if weak ciphers and algorithms are used to access sensitive data.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-4]
+==== Req 4:	Only approved ciphers algorithms must be used.
+
+Outdated and insecure ciphers and algorithms must not be used. Use the following ciphers for SSH:
+
+*	chacha20-poly1305@openssh.com
+*	aes256-gcm@openssh.com
+*	aes128-gcm@openssh.com
+*	aes256-ctr
+*	aes192-ctr
+*	aes128-ctr
+
+_Motivation:_ An attacker can possibly break the encryption of transported data if weak ciphers and algorithms are used to access sensitive data.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-5]
+==== Req 5:	Only approved MAC algorithms must be used.
+
+It is important to avoid the use of insecure MAC algorithms for SSH. Examples of such outdated algorithms are MD5 and SHA1. The following MAC algorithms are allowed and must be configured for SSH daemon:
+
+*	hmac-sha2-512-etm@openssh.com
+*	hmac-sha2-256-etm@openssh.com
+*	hmac-sha2-512
+*	hmac-sha2-256
+
+_Motivation:_ An attacker can possibly break the encryption of transported data if weak ciphers and algorithms are used to access sensitive data.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-6]
+==== Req 6:	SSH logging must be enabled.
+
+Logging for SSH must be enabled. It is recommended to use level INFO to get important information but not to get a lot of useless events. If needed higher levels like VERBOSE can also be used.
+
+_Motivation:_ Logging security-relevant events is a basic requirement for detecting ongoing attacks as well as at-tacks that have already occurred. This is the only way in which suitable measures can be taken to maintain or restore system security. Logging data could be used as evidence to take legal steps against attackers.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-7]
+==== Req 7:	SSH LoginGraceTime must be set to one minute or less.
+
+The LoginGraceTime parameter restricts the time window for a successful authentication. The longer this period is the more open unauthenticated connections can be established. To avoid this a max time must be specified. Recommended is 60 seconds.
+
+_Motivation:_ An adequate time for LoginGraceTime parameter protects the system against unauthenticated SSH connections which waste system resources.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-8]
+==== Req 8:	SSH MaxAuthTries must be set to 5 or less.
+
+The MaxAuthTries parameter specifies the maximum number of authentication attempts permitted per connection. This value must be limited to 5 or less attempts.
+
+_Motivation:_ This parameter will minimize the risk of successful brute force attacks to the SSH server.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-9]
+==== Req 9:	SSH root login must be disabled.
+
+All users must have unique and personal user accounts. Constantly working as root is not permitted. To avoid remote login with user root the login over SSH must be disabled.
+
+IMPORTANT: It is also possible to achieve an adequate security level if only functional user ac-counts are used on a system. It must be guaranteed to share SSH keys over a central ac-count management system (e.g. ZAM) for the root user and to enroll them with a config-uration management system. Additionally, access must be done over a jump server with personalized accounts. The use of SSH keys for authentication is still mandatory (login with password over SSH is not allowed).
+
+_Motivation:_ It is a high risk to use user root on a Linux system and to allow remote login. If an attacker is able to compromise this account, the system is complete under control of the attacker.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-10]
+==== Req 10:	SSH strict mode must be enabled.
+
+SSH StrictModes must be enabled. This enables checks to ensure that SSH files and directories have the proper permissions and ownerships of the login user before allowing an SSH session to open.
+
+_Motivation:_ This feature blocks unwanted access to files and directories.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-11]
+==== Req 11:	SSH user authentication must be done with public keys.
+
+Authentication with public/private key must be used for SSH login.
+
+IMPORTANT: The private key of human beings must be protected with a passphrase.
+
+_Motivation:_ Passwords are usually attackable via Phishing, Keylogger and Brute Force attacks. An attacker who occupies a password can misuse the corresponding user account.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-12]
+==== Req 12:	SSH password authentication must be disabled.
+
+The login must be done with public/key authentication. Login with password only must be disabled for SSH.
+
+_Motivation:_ Passwords are usually attackable via Phishing, Keylogger and Brute Force attacks. Additionally, pass-words can be easily shared and a non-repudiation therefore is reasonable hard.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-13]
+==== Req 13:	SSH IgnoreRhosts must be enabled.
+
+_Motivation:_ If a trust relationship is configured with another system an attacker has direct access to all other trusted systems in case of an intrusion.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-14]
+==== Req 14:	SSH HostbasedAuthentication must be disabled.
+
+_Motivation:_ If a trust relationship is configured with another system an attacker has direct access to all other trusted systems in case of an intrusion.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-15]
+==== Req 15:	The usage of the SSH service must be restricted to dedicated groups or users.
+
+For easier and more secure system administration it is necessary to use dedicated users or groups (recommended) for SSH.
+
+_Motivation:_ The usage of dedicated users or groups makes user management for SSH more secure.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-16]
+==== Req 16:	The SSH Idle Timeout Interval must be configured to an adequate time.
+
+To specify the time how long inactive SSH session hold open the following two parameters must be configured:
+
+*	ClientAliveInterval: timeout interval in seconds (recommended 300) after session is terminated if no data is received.
+*	ClientAliveCountMax: number of client alive messages (recommendation 0) which may be sent without sshd receiving any messages back from the client.
+
+Example: if the ClientAliveInterval is 20 seconds and the ClientAliveCountMax is 3, the client SSH session will be terminated after 60 seconds of idle time.
+
+_Motivation:_ Open or unused sessions give the possibility to an unauthorized user for session high-jacking. This session
+can then be used to get access to the effected system and its data.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-17]
+==== Req 17:	SSH tunnel devices must be disabled.
+
+SSH can be used to tunnel services. For management service of Linux servers this is typically not used and can be disabled.
+
+_Motivation:_ SSH tunnel feature can be used by an attacker to tunnel traffic to own destinations.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-18]
+==== Req 18:	SSH TCP port forwarding must be disabled.
+
+TCP forwarding can be used to forward TCP connections through SSH. For management service of Linux servers this is typically not used and can be disabled.
+
+IMPORTANT: This requirement is not valid for Jump Servers!
+
+_Motivation:_ If this feature is not used in a controlled manner, it could be a security risk for servers.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-19]
+==== Req 19:	SSH agent forwarding must be disabled.
+
+SSH agent forwarding can be used to forward authentication requests to other systems over SSH. For management service of Linux servers this is typically not used and can be disabled.
+
+IMPORTANT: This requirement is not valid for Jump Servers!
+
+_Motivation:_ The server-side deactivation blocks the creation of a server-side agent forwarding socket, this socket consequently cannot be misused.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-20]
+==== Req 20:	SSH gateway ports must be disabled.
+
+SSH Gateway ports specifies whether remote hosts can connect to ports forwarded for the client. For management service of Linux servers this is typically not used and can be disabled.
+
+_Motivation:_ If this feature is not used in a controlled manner, it could be a security risk for servers.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-21]
+==== Req 21:	SSH X11 forwarding must be disabled.
+
+X11 is not used on Linux servers. The forwarding of X11 over SSH must be disabled.
+
+_Motivation:_ If this feature is not used in a controlled manner, it could be a security risk for servers.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-22]
+==== Req 22:	SSH PermitUserEnvironment must be disabled.
+
+The SSH PermitUserEnviroment parameter specifies if user defined environment variables are processed by sshd. This variable must be set to "no" to disable it.
+
+_Motivation:_ Enabling the processing environment variable may enable users to bypass SSH access restrictions.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-23]
+==== Req 23:	SSH PermitEmptyPasswords must be disabled.
+
+With the 'PermitEmptyPasswords' parameter can be configured the SSH server allows login to an account with an empty password. This must not be allowed.
+
+_Motivation:_ If login without a password remotely over SSH is possible unauthorized users can get access to the server.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
+
+[#req365-24]
+==== Req 24:		If SFTP is activated, internal server of OpenSSH must be used.
+
+OpenSSH has its own SFTP daemon. If SFTP should be used this function must be enabled and configured in a secure way.
+
+_Motivation:_ It is necessary to use the OpenSSH SFTP daemon to align the security configuration for all SSH based services and not to have different security levels.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>Compliance Check
+----
