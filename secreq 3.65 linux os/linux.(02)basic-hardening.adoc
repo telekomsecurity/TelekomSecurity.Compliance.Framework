@@ -21,25 +21,11 @@ This kind of system hardening must be done before the system is reachable from t
 
 _Motivation:_ Services and protocols that are not Required for system operation increase the potential attack sur-face and thus the risk of the system being compromised. This risk is further increased by the fact that a security inspection and appropriate optimization of the configuration for unused services and protocols is not being done in most cases.
 
-*Implementation* +
-[cols="20,80",width=100]
-|===
-a|
-* [x] Ubuntu LTS 14.04
-* [x] Ubuntu LTS16.04
-* [x] Ubuntu LTS 18.04
-* [*] RHEL 7.x
-* [x] SLES 12
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
-| This is a test  
-
-hshhsh
-sjjsj
-|===
-
-//----
-//   <tbd>implementation
-//----
+----
+   <tbd>implementation
+----
 
 *Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
@@ -58,6 +44,8 @@ Some services of a system, like management services, have only a limited and cle
 *	nftables
 
 _Motivation:_ Disabling services on network interfaces and the implementation of filters to limit the reachability can reduce the potential attack possibilities.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
    <tbd>implementation
@@ -92,6 +80,8 @@ IMPORTANT: It is not allowed to install software on a server that is not needed 
 
 _Motivation:_ Vulnerabilities in software offer an attack window for attackers to infiltrate the system. By uninstalling not needed software the attack surface and the risk of a successful compromise can be re-duced.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
 ----
    <tbd>implementation
 ----
@@ -118,6 +108,8 @@ Linux supports a lot of filesystem types. Most of them are not needed on a serve
 
 _Motivation:_ The availability of unneeded filesystem types increases the local attack surface of a server.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
 ----
    <tbd>implementation
 ----
@@ -142,6 +134,8 @@ In specific cases it could be necessary to use the following partitions:
 *	/home (for file servers with high number of users)
 
 _Motivation:_ A filled filesystem can stop operation of a server. This can be triggered by an attacker to effect avail-ability of a server.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
    <tbd>implementation
@@ -171,6 +165,8 @@ If separate partition exists also for:
 
 _Motivation:_ It must be avoided for such partitions that an attacker can execute files with suid, to store device files and to save and execute files from this partition.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
 ----
    <tbd>implementation
 ----
@@ -187,6 +183,8 @@ _Motivation:_ It must be avoided for such partitions that an attacker can execut
 Automounting of file systems must be disabled to avoid the automated mounting and use of external file systems like USB sticks and CD-ROMs.
 
 _Motivation:_ With automounting enabled any external file system will be mounted to the server and can possibly misused.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
    <tbd>implementation
@@ -205,6 +203,8 @@ The use of the tools 'cron' and 'at', that can be used to schedule automated exe
 
 _Motivation:_ Users can misuse these tools to execute jobs on a system.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
 ----
    <tbd>implementation
 ----
@@ -221,6 +221,8 @@ _Motivation:_ Users can misuse these tools to execute jobs on a system.
 This feature prevents the ability to delete or rename files in world writable directories (such as /tmp) that are owned by another user.
 
 _Motivation:_ Setting the sticky bit on world writable directories prevents users from deleting or renaming files in that directory that are not owned by them.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
    <tbd>implementation
@@ -239,6 +241,8 @@ World writable files are files that have write permission set for other. These f
 
 _Motivation:_ Data in world-writable files can be read, modified, and potentially compromised by any user on the system.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
 ----
    <tbd>implementation
 ----
@@ -255,6 +259,8 @@ _Motivation:_ Data in world-writable files can be read, modified, and potentiall
 Passwords must always be stored as hashes. Sha512-crypt with 640.000 rounds and Salt (96 Bit) must be used as a hashing algorithm to protect passwords.
 
 _Motivation:_ It an unauthorized person gets access to a password file, the password can be misused if not stored in a secure way.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
    <tbd>implementation
@@ -274,6 +280,8 @@ The setting of the umask defines which mode files or directories get when they a
 A umask of 027 is recommended. This defines the permissions 'read, write, execute' (0) for the user, 'read, execute' (2) for group and no permissions (7) for others.
 
 _Motivation:_ With a strict umask the manipulation of files by unauthorized users can be prevented.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
 
 ----
    <tbd>implementation
@@ -332,6 +340,8 @@ The following executables are allowed to run with SUID and SGID if not Posix cap
 
 _Motivation:_ Executables with SUID and SGID are a high risk for a system. If such an executable has a vulnerability it could possibly lead to compromise of the system.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
 ----
    <tbd>implementation
 ----
@@ -349,6 +359,18 @@ A core dump includes complete memory content of an executable program. It is use
 
 _Motivation:_ Core dumps can include some sensitive data. To avoid information leakage core dumps must be restricted.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-15]
 ==== Req 15:	Protection against buffer overflows must be enabled.
 
@@ -363,12 +385,36 @@ IMPORTANT: ASLR has some weaknesses. For servers with a high security demand it 
 
 _Motivation:_ Buffer overflow attacks can be used to unauthorizedly execute code on a system to influence availability or to get full access to a system.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-16]
 ==== Req 16:	Prelink must not be used.
 
 Prelink is a tool to modify ELF shared libraries and ELF dynamically linked binaries. This tool must be disabled on Linux based servers.
 
 _Motivation:_ Prelink must be disabled to use the ASLR feature PIE (Position-independent executable). Additionally, prelink increases the risk of a compromise to a common library such as libc.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
 
 [#req365-17]
 ==== Req 17:	IPv4 protocol stack must be securely configured.
@@ -391,6 +437,18 @@ If IPv4 is not used it must be completely disabled. Otherwise, the IPv4 stack on
 
 _Motivation:_ An unhardened IPv4 protocol stack is vulnerable against several attacks like denial of service, traffic high jacking.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-18]
 ==== Req 18:	IPv6 protocol stack must be securely configured.
 
@@ -405,6 +463,18 @@ If IPv6 is not used it must be completely disabled. Otherwise, the IPv6 stack on
 
 _Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several attacks like denial of service, traffic high jacking.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-19]
 ==== Req 19:	Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse.
 
@@ -414,12 +484,36 @@ IMPORTANT: It is mandatory to implement a patch management process covering the 
 
 _Motivation:_ Vulnerabilities increases the risk of successful exploitation by an attacker. The likelihood raises if de-tailed information and tools are available that help to exploit the vulnerability.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-20]
 ==== Req 20: GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured.
 
 GPG check must be enabled and keys must be configured properly to verify integrity during installation of software from a repository server. On RedHat Linux it is necessary to activate the gpgcheck globally.
 
 _Motivation:_ The GPG check is necessary to guarantee the authenticity of used source an integrity of software. Without this check an attacker could possibly manipulate software packets before installation.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
 
 [#req365-21]
 ==== Req 21:	User accounts must be used that allow unambiguous identification of the user.
@@ -432,6 +526,18 @@ _Motivation:_ Unambiguous user identification is mandatory to assign user rights
 tasks on the system. This is the only way to adequately control access to system data and services and to prevent
 misuse. Furthermore, it makes it possible to log activities and actions on a system and to assign them to individual users.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-22]
 ==== Req 22:	System accounts must be non-login.
 
@@ -440,6 +546,18 @@ On Linux servers, several users are available that are needed for functionality 
 IMPORTANT: The system accounts root, sync, shutdown and halt are excluded from this requirement!
 
 _Motivation:_ Accounts that are needed only for local functionality can be used to get unauthorized access to the system if not protected in a proper way.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
 
 [#req365-23]
 ==== Req 23:	User accounts must be protected against unauthorized usage by at least one authentication attribute.
@@ -459,6 +577,18 @@ In companies of Deutsche Telekom group where the MyCard or a comparable smartcar
 
 _Motivation:_ User accounts that are not protected with a secret authentication attribute can be used by an attacker to gain unauthorized access to a system and the data and applications stored on it.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-24]
 ==== Req 24:	User accounts with extensive rights must be protected with two authentication attributes.
 
@@ -473,6 +603,18 @@ In companies of Deutsche Telekom group where the MyCard or a comparable smartcar
 _Motivation:_ User accounts with extensive rights as used for system administration have a higher risk for system’s security.
 An attacker could get extensive rights by compromising such a user account and get access to wide parts of the system and stored data.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-25]
 ==== Req 25:	The system must be connected to a central system for user administration.
 
@@ -482,12 +624,36 @@ Exceptions to this Requirement are accounts that are used only internally by the
 
 _Motivation:_ Central administration of identity of accounts and their rights means that they only have to be maintained once instead of separately on each system. Regarding the aspect of security, the advantage is that a user account and its rights are only known on a single central site. This information can be transmitted from the central site to other systems (provisioning), central administrated (reconcilia-tion) and central deleted (deprovisioning). This reduces the risk of accounts being forgotten during changing or deletion since they are not configured on multiple systems. Faulty account management could give user inappropriate system rights or continued access to a system e.g. after leaving the company or changing the responsibility.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-26]
 ==== Req 26:	Authentication must be used for single user mode.
 
 For system recovery, the so called single user mode is used. This mode can also be manually selected from the bootloader during system boot. Authentication must be enabled for single user mode to protect this access. This is especially relevant, if the console of the machine can be reached remotely (e.g. via lights-out-management or via virtual console in case of virtual machines).
 
 _Motivation:_ Without authentication, an unauthorized user can gain root privileges by forcing a reboot.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
 
 [#req365-27]
 ==== Req 27: The management of the operating system must be done via a dedicated management network which is independent from the production network.
@@ -496,6 +662,18 @@ Management access to a server must be done via a separate management network. Th
 
 _Motivation:_ By restricting the accessibility to legitimate systems, the group of potential attackers can be reduced, and thus also the likeliness of a successful attack. Furthermore, systems must be manageable even in the case the customer or production network is down.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-28]
 ==== Req 28:	Management services must be bound to the management network.
 
@@ -503,9 +681,33 @@ The services used for server administration must be bound to an interface connec
 
 _Motivation:_ This Requirement ensures that management services are not reachable from untrusted networks and limits so the possibility of attacks.
 
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
+
 [#req365-29]
 ==== Req 29: Encrypted protocols must be used for management access to administrate the operating system.
 
 The used services and protocols for system management and administration must be encrypted. Only services like SSHv2 and HTTPS (TLS) are allowed.
 
 _Motivation:_ Management connections and access must be protected against eavesdropping of sensitive data and unauthorized access.
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----

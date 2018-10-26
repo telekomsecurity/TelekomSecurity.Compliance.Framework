@@ -1,0 +1,32 @@
+= Sec Req 3.65 - Linux OS for Servers
+:author_name: Markus Schumburg (Telekom Security)
+:author_email: security.automation@telekom.de
+:revnumber: 0.1
+:revdate: dd-mm-2018
+:revremark: draft
+:imagesdir: ./images
+:toc:
+:toc-title: List of Requirements
+:toclevels: 3
+
+:sectlinks:
+== X. Headline
+
+[#req365-x]
+==== Req x: <tbd>
+
+<tbd>
+
+_Motivation:_ <tbd>
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>implementation
+----
+
+*Audit* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+
+----
+   <tbd>audit
+----
