@@ -20,4 +20,5 @@ The [Telekom Security](https://security.telekom.com/) Compliance Framework gives
 
 ## Author Information
 Author: [Telekom Security](https://security.telekom.com/)
+
 E-Mail: security.automation@telekom.de
