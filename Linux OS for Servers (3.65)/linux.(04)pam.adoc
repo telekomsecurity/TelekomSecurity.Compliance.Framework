@@ -101,10 +101,10 @@ _Motivation:_ Sensitive data in motd can give attackers information that are hel
 ---
 === Content
 
-   1. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(01)introduction.adoc#1-introduction[Introduction]
-   2. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(02)basic-hardening.adoc[Basic Hardening]
-   3. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(03)Logging.adoc[Logging]
-   4. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(04)pam.adoc[Pluggable Authentication Modules]
-   5. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(05)iptables.adoc[IPTables]
-   6. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(06)mac.adoc[Mandatory Access Control]
-   7. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/secreq%203.65%20linux%20os/linux.(07)compliance-checks.adoc[Regular Compliance Checks]
+   1. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(01)introduction.adoc#1-introduction[Introduction]
+   2. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(02)basic-hardening.adoc[Basic Hardening]
+   3. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(03)Logging.adoc[Logging]
+   4. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(04)pam.adoc[Pluggable Authentication Modules]
+   5. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(05)iptables.adoc[IPTables]
+   6. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(06)mac.adoc[Mandatory Access Control]
+   7. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(07)compliance-checks.adoc[Regular Compliance Checks]
