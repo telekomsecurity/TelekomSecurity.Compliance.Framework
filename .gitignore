@@ -3,3 +3,4 @@
 # Global files for the entire tree
 *.bak
 *.tmp
+test*

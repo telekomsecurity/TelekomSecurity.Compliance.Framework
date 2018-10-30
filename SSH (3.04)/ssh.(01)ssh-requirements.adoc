@@ -19,7 +19,7 @@ SSH (Secure Shell) is a client/server application inclusive a network protocol t
 === 2.	Security requirements
 
 [#req365-1]
-==== Req 1:	The SSH protocol version 2 must be used.
+===== Req 1:	The SSH protocol version 2 must be used.
 
 SSHv1 must permanently be disabled in configuration of the SSH server. With OpenSSH 7.4 support for SSHv1 completely removed and must not longer be configured.
 
@@ -38,7 +38,7 @@ _Motivation:_ SSH protocol version 1 has weaknesses and is obsolete today. With 
 ----
 
 [#req365-2]
-==== Req 2:	SSH moduli smaller than 2048 must not be used.
+===== Req 2:	SSH moduli smaller than 2048 must not be used.
 
 The file "/etc/ssh/moduli" contains pre-generated group parameters – named moduli - for Diffie-Hellman. Here are also moduli available that are not long enough to withstand known attacks. To avoid the use of short values moduli smaller than 2048 must be deleted from file " /etc/ssh/moduli ".
 
@@ -57,7 +57,7 @@ _Motivation:_ If the DH moduli is to short the key exchange is not protected in 
 ----
 
 [#req365-3]
-==== Req 3:	Only approved key exchange algorithms must be used.
+===== Req 3:	Only approved key exchange algorithms must be used.
 
 For key exchange the following algorithms are allowed:
 
@@ -82,7 +82,7 @@ _Motivation:_ An attacker can possibly break the encryption of transported data 
 ----
 
 [#req365-4]
-==== Req 4:	Only approved ciphers algorithms must be used.
+===== Req 4:	Only approved ciphers algorithms must be used.
 
 Outdated and insecure ciphers and algorithms must not be used. Use the following ciphers for SSH:
 
@@ -108,7 +108,7 @@ _Motivation:_ An attacker can possibly break the encryption of transported data 
 ----
 
 [#req365-5]
-==== Req 5:	Only approved MAC algorithms must be used.
+===== Req 5:	Only approved MAC algorithms must be used.
 
 It is important to avoid the use of insecure MAC algorithms for SSH. Examples of such outdated algorithms are MD5 and SHA1. The following MAC algorithms are allowed and must be configured for SSH daemon:
 
@@ -132,7 +132,7 @@ _Motivation:_ An attacker can possibly break the encryption of transported data 
 ----
 
 [#req365-6]
-==== Req 6:	SSH logging must be enabled.
+===== Req 6:	SSH logging must be enabled.
 
 Logging for SSH must be enabled. It is recommended to use level INFO to get important information but not to get a lot of useless events. If needed higher levels like VERBOSE can also be used.
 
@@ -151,7 +151,7 @@ _Motivation:_ Logging security-relevant events is a basic requirement for detect
 ----
 
 [#req365-7]
-==== Req 7:	SSH LoginGraceTime must be set to one minute or less.
+===== Req 7:	SSH LoginGraceTime must be set to one minute or less.
 
 The LoginGraceTime parameter restricts the time window for a successful authentication. The longer this period is the more open unauthenticated connections can be established. To avoid this a max time must be specified. Recommended is 60 seconds.
 
@@ -170,7 +170,7 @@ _Motivation:_ An adequate time for LoginGraceTime parameter protects the system 
 ----
 
 [#req365-8]
-==== Req 8:	SSH MaxAuthTries must be set to 5 or less.
+===== Req 8:	SSH MaxAuthTries must be set to 5 or less.
 
 The MaxAuthTries parameter specifies the maximum number of authentication attempts permitted per connection. This value must be limited to 5 or less attempts.
 
@@ -189,7 +189,7 @@ _Motivation:_ This parameter will minimize the risk of successful brute force at
 ----
 
 [#req365-9]
-==== Req 9:	SSH root login must be disabled.
+===== Req 9:	SSH root login must be disabled.
 
 All users must have unique and personal user accounts. Constantly working as root is not permitted. To avoid remote login with user root the login over SSH must be disabled.
 
@@ -210,7 +210,7 @@ _Motivation:_ It is a high risk to use user root on a Linux system and to allow 
 ----
 
 [#req365-10]
-==== Req 10:	SSH strict mode must be enabled.
+===== Req 10:	SSH strict mode must be enabled.
 
 SSH StrictModes must be enabled. This enables checks to ensure that SSH files and directories have the proper permissions and ownerships of the login user before allowing an SSH session to open.
 
@@ -229,7 +229,7 @@ _Motivation:_ This feature blocks unwanted access to files and directories.
 ----
 
 [#req365-11]
-==== Req 11:	SSH user authentication must be done with public keys.
+===== Req 11:	SSH user authentication must be done with public keys.
 
 Authentication with public/private key must be used for SSH login.
 
@@ -250,7 +250,7 @@ _Motivation:_ Passwords are usually attackable via Phishing, Keylogger and Brute
 ----
 
 [#req365-12]
-==== Req 12:	SSH password authentication must be disabled.
+===== Req 12:	SSH password authentication must be disabled.
 
 The login must be done with public/key authentication. Login with password only must be disabled for SSH.
 
@@ -269,7 +269,7 @@ _Motivation:_ Passwords are usually attackable via Phishing, Keylogger and Brute
 ----
 
 [#req365-13]
-==== Req 13:	SSH IgnoreRhosts must be enabled.
+===== Req 13:	SSH IgnoreRhosts must be enabled.
 
 _Motivation:_ If a trust relationship is configured with another system an attacker has direct access to all other trusted systems in case of an intrusion.
 
@@ -286,7 +286,7 @@ _Motivation:_ If a trust relationship is configured with another system an attac
 ----
 
 [#req365-14]
-==== Req 14:	SSH HostbasedAuthentication must be disabled.
+===== Req 14:	SSH HostbasedAuthentication must be disabled.
 
 _Motivation:_ If a trust relationship is configured with another system an attacker has direct access to all other trusted systems in case of an intrusion.
 
@@ -303,7 +303,7 @@ _Motivation:_ If a trust relationship is configured with another system an attac
 ----
 
 [#req365-15]
-==== Req 15:	The usage of the SSH service must be restricted to dedicated groups or users.
+===== Req 15:	The usage of the SSH service must be restricted to dedicated groups or users.
 
 For easier and more secure system administration it is necessary to use dedicated users or groups (recommended) for SSH.
 
@@ -322,7 +322,7 @@ _Motivation:_ The usage of dedicated users or groups makes user management for S
 ----
 
 [#req365-16]
-==== Req 16:	The SSH Idle Timeout Interval must be configured to an adequate time.
+===== Req 16:	The SSH Idle Timeout Interval must be configured to an adequate time.
 
 To specify the time how long inactive SSH session hold open the following two parameters must be configured:
 
@@ -347,7 +347,7 @@ can then be used to get access to the effected system and its data.
 ----
 
 [#req365-17]
-==== Req 17:	SSH tunnel devices must be disabled.
+===== Req 17:	SSH tunnel devices must be disabled.
 
 SSH can be used to tunnel services. For management service of Linux servers this is typically not used and can be disabled.
 
@@ -366,7 +366,7 @@ _Motivation:_ SSH tunnel feature can be used by an attacker to tunnel traffic to
 ----
 
 [#req365-18]
-==== Req 18:	SSH TCP port forwarding must be disabled.
+===== Req 18:	SSH TCP port forwarding must be disabled.
 
 TCP forwarding can be used to forward TCP connections through SSH. For management service of Linux servers this is typically not used and can be disabled.
 
@@ -387,7 +387,7 @@ _Motivation:_ If this feature is not used in a controlled manner, it could be a 
 ----
 
 [#req365-19]
-==== Req 19:	SSH agent forwarding must be disabled.
+===== Req 19:	SSH agent forwarding must be disabled.
 
 SSH agent forwarding can be used to forward authentication requests to other systems over SSH. For management service of Linux servers this is typically not used and can be disabled.
 
@@ -408,7 +408,7 @@ _Motivation:_ The server-side deactivation blocks the creation of a server-side 
 ----
 
 [#req365-20]
-==== Req 20:	SSH gateway ports must be disabled.
+===== Req 20:	SSH gateway ports must be disabled.
 
 SSH Gateway ports specifies whether remote hosts can connect to ports forwarded for the client. For management service of Linux servers this is typically not used and can be disabled.
 
@@ -427,7 +427,7 @@ _Motivation:_ If this feature is not used in a controlled manner, it could be a 
 ----
 
 [#req365-21]
-==== Req 21:	SSH X11 forwarding must be disabled.
+===== Req 21:	SSH X11 forwarding must be disabled.
 
 X11 is not used on Linux servers. The forwarding of X11 over SSH must be disabled.
 
@@ -446,7 +446,7 @@ _Motivation:_ If this feature is not used in a controlled manner, it could be a 
 ----
 
 [#req365-22]
-==== Req 22:	SSH PermitUserEnvironment must be disabled.
+===== Req 22:	SSH PermitUserEnvironment must be disabled.
 
 The SSH PermitUserEnviroment parameter specifies if user defined environment variables are processed by sshd. This variable must be set to "no" to disable it.
 
@@ -465,7 +465,7 @@ _Motivation:_ Enabling the processing environment variable may enable users to b
 ----
 
 [#req365-23]
-==== Req 23:	SSH PermitEmptyPasswords must be disabled.
+===== Req 23:	SSH PermitEmptyPasswords must be disabled.
 
 With the 'PermitEmptyPasswords' parameter can be configured the SSH server allows login to an account with an empty password. This must not be allowed.
 
@@ -484,7 +484,7 @@ _Motivation:_ If login without a password remotely over SSH is possible unauthor
 ----
 
 [#req365-24]
-==== Req 24:		If SFTP is activated, internal server of OpenSSH must be used.
+===== Req 24:		If SFTP is activated, internal server of OpenSSH must be used.
 
 OpenSSH has its own SFTP daemon. If SFTP should be used this function must be enabled and configured in a secure way.
 
