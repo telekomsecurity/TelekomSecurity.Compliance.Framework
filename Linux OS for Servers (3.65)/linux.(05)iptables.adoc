@@ -11,15 +11,14 @@
 
 :sectlinks:
 
-== Linux OS for Servers
-=== 5	IPTables
+== Linux OS for Servers - 5	IPTables
 
 To restrict the reachability of listening TCP and UDP services on a system (as required with Req. 2) it is recommended to use IPTables. TCP Wrapper, as another solution for traffic control, has some major drawbacks and cannot be recommended.
 
 The following requirements are a minimal setup for IPTables. If needed additional rules must be con-figured.
 
 [#req365-48]
-===== Req 48:	If iptables is used, policies for loopback traffic must be configured.
+==== Req 48:	If iptables is used, policies for loopback traffic must be configured.
 
 Loopback traffic is used between server processes. A policy for traffic to the loopback network (127.0.0.0/8) must be configured for all other network interfaces.
 
@@ -40,7 +39,7 @@ _Motivation:_ To prevent spoofing attacks, the loopback network must be protecte
 
 
 [#req365-49]
-===== Req 49:	If iptables is used, policies for outbound and established connections must be configured.
+==== Req 49:	If iptables is used, policies for outbound and established connections must be configured.
 
 For outbound and established connections iptables policies must be configured.
 
@@ -59,7 +58,7 @@ _Motivation:_ Without rules for outbound and established connections all packets
 ----
 
 [#req365-50]
-===== Req 50:	If iptables is used, policies must exist for all ports in listening state.
+==== Req 50:	If iptables is used, policies must exist for all ports in listening state.
 
 It is necessary to configure iptables rules for all available services (ports) on a server. If a complete reachability is not needed (for example for management services like SSH) a restriction to source IP addresses or IP networks must be implemented.
 
@@ -78,7 +77,7 @@ _Motivation:_ A restriction of reachability of a network service minimizes the p
 ----
 
 [#req365-51]
-===== Req 51:	If iptables is used, the default policy must be configured to drop all traffic.
+==== Req 51:	If iptables is used, the default policy must be configured to drop all traffic.
 
 To reject connections to unconfigured network services, the default policy of iptables must be con-figured to DROP all packets not caught by other policies.
 

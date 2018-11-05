@@ -11,11 +11,10 @@ IMPORTANT:= Telekom Security Compliance Framework
 
 :sectlinks:
 
-== Linux OS for Servers
-=== 6	Mandatory Access Control
+== Linux OS for Servers - 6	Mandatory Access Control
 
 [#req365-52]
-===== Req 52:	If a system has Internet facing services or is a virtualization host, a MAC solution must be used.
+==== Req 52:	If a system has Internet facing services or is a virtualization host, a MAC solution must be used.
 
 Mandatory access control (MAC) enforces additional security policies for access. A MAC solution like SELinux or AppArmor must be used on systems with a higher security demand like:
 
@@ -39,7 +38,7 @@ _Motivation:_ The stricter access model of MAC protects services better as Linux
    <tbd>Compliance Check
 ----
 
-==== 6.1	SELinux
+=== 6.1	SELinux
 
 [#req365-53]
 ===== Req 53:	If SELinux is used, it must not be disabled in bootloader configuration.
@@ -136,7 +135,7 @@ _Motivation:_ Changes to SELinux files could indicate that an unauthorized user 
    <tbd>Compliance Check
 ----
 
-==== 6.2	AppArmor
+=== 6.2	AppArmor
 
 [#req365-58]
 ===== Req 58:	If AppArmor is used, it must not be disabled in bootloader configuration.

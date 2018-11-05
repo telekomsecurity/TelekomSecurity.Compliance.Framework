@@ -11,13 +11,12 @@
 
 :sectlinks:
 
-== Linux OS for Servers
-=== 4	Pluggable Authentication Modules
+== Linux OS for Servers - 4	Pluggable Authentication Modules
 
 PAM (Pluggable Authentication Modules) is a solution to provide independent modules for authentication schemes to programs. PAM is used by default in most common Linux distributions.
 
 [#req365-44]
-===== Req 44:	If PAM is used, an appropriate hashing function must be configured for password protection for PAM.
+==== Req 44:	If PAM is used, an appropriate hashing function must be configured for password protection for PAM.
 
 If PAM is used the hashing algorithm for password protection must be configured like the configuration in 'login.defs'. This means sha512-crypt with 640.000 rounds and Salt (96 Bit) must be used.
 
@@ -36,7 +35,7 @@ _Motivation:_ It an unauthorized person gets access to a password file, the pass
 ----
 
 [#req365-45]
-===== Req 45:	If PAM is used, password rules must be configured for PAM to force the use of passwords with a minimum length of 8 characters and a combination of three out of the following categories: upper cases, lower case, numbers and special characters.
+==== Req 45:	If PAM is used, password rules must be configured for PAM to force the use of passwords with a minimum length of 8 characters and a combination of three out of the following categories: upper cases, lower case, numbers and special characters.
 
 PAM must be configuration that only passwords that comply with the following complexity can be used on the system:
 
@@ -58,7 +57,7 @@ _Motivation:_ Passwords with the above complexity offer high robustness against 
 ----
 
 [#req365-46]
-===== Req 46:	If PAM is used, a protection against brute force and dictionary attacks that hinder pass-word guessing must be configured in PAM.
+==== Req 46:	If PAM is used, a protection against brute force and dictionary attacks that hinder pass-word guessing must be configured in PAM.
 
 Brute force and dictionary attacks aim to use automated guessing to passwords for user and machine accounts. To prevent these kind of attacks a limitation for invalid authentication reties must be con-figured in file " /etc/pam.d/common-auth".  It is recommended to lock an account after 5 retries for 10 minutes.
 
@@ -77,7 +76,7 @@ _Motivation:_ Without any protection mechanism, an attacker can possibly determi
 ----
 
 [#req365-47]
-===== Req 47:	If PAM is used , PAM must be configured that motd did not contain any sensitive data.
+==== Req 47:	If PAM is used , PAM must be configured that motd did not contain any sensitive data.
 
 Message of the day (motd) outputs must not contain any sensitive data like number of missing patches, used software or kernel version. The following files must be checked for such information:
 

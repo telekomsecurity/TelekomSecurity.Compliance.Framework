@@ -427,7 +427,7 @@ _Motivation:_ Prelink must be disabled to use the ASLR feature PIE (Position-ind
    <tbd>Compliance Check
 ----
 
-==== 2.1	Network Hardening
+=== 2.1	Network Hardening
 
 [#req365-17]
 ==== Req 17:	IPv4 protocol stack must be securely configured.
@@ -488,7 +488,7 @@ _Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several a
    <tbd>Compliance Check
 ----
 
-==== 2.2	System Update
+=== 2.2	System Update
 
 [#req365-19]
 ==== Req 19:	Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse.
@@ -530,7 +530,7 @@ _Motivation:_ The GPG check is necessary to guarantee the authenticity of used s
    <tbd>Compliance Check
 ----
 
-==== 2.3	User Authentication
+=== 2.3	User Authentication
 
 [#req365-21]
 ==== Req 21:	User accounts must be used that allow unambiguous identification of the user.
@@ -672,7 +672,7 @@ _Motivation:_ Without authentication, an unauthorized user can gain root privile
    <tbd>Compliance Check
 ----
 
-==== 2.4	System Management
+=== 2.4	System Management
 
 [#req365-27]
 ==== Req 27: The management of the operating system must be done via a dedicated management network which is independent from the production network.
