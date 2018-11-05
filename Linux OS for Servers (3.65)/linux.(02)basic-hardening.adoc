@@ -23,16 +23,26 @@ This kind of system hardening must be done before the system is reachable from t
 
 _Motivation:_ Services and protocols that are not Required for system operation increase the potential attack sur-face and thus the risk of the system being compromised. This risk is further increased by the fact that a security inspection and appropriate optimization of the configuration for unused services and protocols is not being done in most cases.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (all)
 
+Use the following command to disable services:
 ----
-   <tbd>implementation
+   $ systemctl disable _service_
+
+   Example: systemctl disable rpcbind
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+IMPORTANT: Services should be uninstalled (see Req 3) if permanently not needed on a system.
 
+*Compliance Check* (all)
+
+The output of the following commands must be checked for unwanted services:
 ----
-   <tbd>Compliance Check
+   TCP (IPv4 & v6):
+   $ ss -nlt 2>/dev/null | awk '($1 == "LISTEN" && $4 !~ /127.0.0.1:./ && $4 !~ /::1:./) {print $4}' | sed 's/.*://' | sort -nu
+
+   UDP (IPv4 & v6):
+   $ ss -nlu 2>/dev/null | awk '($1 == "UNCONN" && $4 !~ /127.0.0.1:./ && $4 !~ /::1:./) {print $4}' | sed 's/.*://' | sort -nu
 ----
 
 [#req365-2]

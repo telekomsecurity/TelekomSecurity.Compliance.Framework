@@ -22,6 +22,8 @@ The examples in this document are tested for the following Linux distributions:
    * [*] RedHat Enterprise Linux 7.x (RHEL)
    * [*] Suse Linux Enterprise Server 12 (SLES)
 
+IMPORTANT: Root privileges are needed to implement the configuration on a Linux system.
+
 ==== 1.1 Scope
 In scope of this is document are server systems with Linux OS. This includes the following types of servers:
 

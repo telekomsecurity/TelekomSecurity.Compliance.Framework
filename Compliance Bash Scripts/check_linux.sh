@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # -----------------------------------------------------------------------------
 # Telekom Security - Script for Compliance Check
 # Linux OS for Servers (3.65)
@@ -10,7 +11,7 @@
 # Variables
 # -----------------------------------------------------------------------------
 tcp_ports="22"
-udp_ports=""
+udp_ports=" "
 
 # Pre-Checks
 # -----------------------------------------------------------------------------
@@ -41,7 +42,7 @@ let "req_nr++"
 req_txt="Unused services and protocols must be deactivated."
 cnt_err=0
 
-echo "Req-$req_nr Test 1/2:">>$out_file
+# Test 1/2
 chk_tcp=`ss -nlt 2>/dev/null | awk '($1 == "LISTEN" && $4 !~ /127.0.0.1:./ && $4 !~ /::1:./) {print $4}' | sed 's/.*://' | sort -nu`
 cnt=0
 
@@ -49,19 +50,31 @@ for chk1 in $chk_tcp; do
   chk2=`echo $tcp_ports | grep -ow "$chk1"`;
   if [ "$chk1" != "$chk2" ]; then
     let "cnt++";
-    echo "Found open TCP port: $chk1!">>$out_file;
+    echo "[req-$req_nr: test 1/2] found open TCP port: $chk1">>$out_file;
   fi
 done
 if [ $cnt -gt "0" ]; then let "cnt_err++"; fi
 
-#<tbd>
+# Test 2/2
+chk_udp=`ss -nlu 2>/dev/null | awk '($1 == "UNCONN" && $4 !~ /127.0.0.1:./ && $4 !~ /::1:./) {print $4}' | sed 's/.*://' | sort -nu`
+cnt=0
+
+for chk1 in $chk_udp; do
+  chk2=`echo $udp_ports | grep -ow "$chk1"`;
+  if [ "$chk1" != "$chk2" ]; then
+    let "cnt++";
+    echo "[req-$req_nr: test 2/2] found open UDP port: $chk1">>$out_file;
+  fi
+done
+if [ $cnt -gt "0" ]; then let "cnt_err++"; fi
+
 case $cnt_err in
   0)
     echo -e "Req $req_nr, $req_txt, Compliant\r\n">>$out_file;;
-  1)
-    echo -e "Req $req_nr, $req_txt, Not Compliant\r\n">>$out_file;;
   *)
-    echo -e "Req $req_nr, $req_txt, Partly Compliant\r\n">>$out_file;;
+    echo -e "Req $req_nr, $req_txt, Not Compliant\r\n">>$out_file;;
+#  *)
+#    echo -e "Req $req_nr, $req_txt, Partly Compliant\r\n">>$out_file;;
 esac
 
 # Req 2: The reachability of services must be restricted.
