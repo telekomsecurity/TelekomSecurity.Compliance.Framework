@@ -46,7 +46,7 @@ The output of the following commands must be checked for unwanted services:
 ----
 
 [#req365-2]
-===== Req 2: The reachability of services must be restricted.
+==== Req 2: The reachability of services must be restricted.
 
 The available services of a server are enabled without any restrictions for network reachability by default on all available network interfaces. In most cases it is not needed that such services are re-motely reachable for anyone. To limit the attack surface services must be bound only to the network interfaces where they are needed.
 
@@ -70,7 +70,7 @@ _Motivation:_ Disabling services on network interfaces and the implementation of
 ----
 
 [#req365-3]
-===== Req 3: Unused software must not be installed or must be uninstalled.
+==== Req 3: Unused software must not be installed or must be uninstalled.
 
 Software could be installed during setup of Linux operating system which is not needed for the functionality of the server. Such software should not be installed or must be uninstalled after installation. Examples for software that is typically not needed on a server system are:
 
@@ -105,7 +105,7 @@ _Motivation:_ Vulnerabilities in software offer an attack window for attackers t
 ----
 
 [#req365-4]
-===== Req 4:	Unused filesystems must be disabled.
+==== Req 4:	Unused filesystems must be disabled.
 
 Linux supports a lot of filesystem types. Most of them are not needed on a server and must be disabled. Examples for filesystem types that are should not used on servers are:
 
@@ -133,7 +133,7 @@ _Motivation:_ The availability of unneeded filesystem types increases the local 
 ----
 
 [#req365-5]
-===== Req 5:	Dedicated partitions must be used for growing content that can influence the availability of the system.
+==== Req 5:	Dedicated partitions must be used for growing content that can influence the availability of the system.
 
 An own partition must be created for directories that are used to store dynamic content. It is recommended to use a dedicated partition for the directories:
 
@@ -160,7 +160,7 @@ _Motivation:_ A filled filesystem can stop operation of a server. This can be tr
 ----
 
 [#req365-6]
-===== Req 6:	Parameters nodev, nosuid and noexec must be set for partitions where this is applicable.
+==== Req 6:	Parameters nodev, nosuid and noexec must be set for partitions where this is applicable.
 
 The named mount options must be set for the following partitions if they exist:
 
@@ -190,7 +190,7 @@ _Motivation:_ It must be avoided for such partitions that an attacker can execut
 ----
 
 [#req365-7]
-===== Req 7:	Automounting must be disabled.
+==== Req 7:	Automounting must be disabled.
 
 Automounting of file systems must be disabled to avoid the automated mounting and use of external file systems like USB sticks and CD-ROMs.
 
@@ -209,7 +209,7 @@ _Motivation:_ With automounting enabled any external file system will be mounted
 ----
 
 [#req365-8]
-===== Req 8: The use of at/cron must be restricted to authorized users.
+==== Req 8: The use of at/cron must be restricted to authorized users.
 
 The use of the tools 'cron' and 'at', that can be used to schedule automated execution of jobs on a Linux system, must be restricted to authorized users.
 
@@ -228,7 +228,7 @@ _Motivation:_ Users can misuse these tools to execute jobs on a system.
 ----
 
 [#req365-9]
-===== Req 9: Sticky bit must be set on all world-writable directories.
+==== Req 9: Sticky bit must be set on all world-writable directories.
 
 This feature prevents the ability to delete or rename files in world writable directories (such as /tmp) that are owned by another user.
 
@@ -247,7 +247,7 @@ _Motivation:_ Setting the sticky bit on world writable directories prevents user
 ----
 
 [#req365-10]
-===== Req 10: No regular files that are world writable must exist.
+==== Req 10: No regular files that are world writable must exist.
 
 World writable files are files that have write permission set for other. These files are writable by any user of the server. Such files must be detected and if existing the rights of these files must be changed to an adequate level.
 
@@ -266,7 +266,7 @@ _Motivation:_ Data in world-writable files can be read, modified, and potentiall
 ----
 
 [#req365-11]
-===== Req 11:	Passwords must be protected with an appropriate hashing function.
+==== Req 11:	Passwords must be protected with an appropriate hashing function.
 
 Passwords must always be stored as hashes. Sha512-crypt with 640.000 rounds and Salt (96 Bit) must be used as a hashing algorithm to protect passwords.
 
@@ -285,7 +285,7 @@ _Motivation:_ It an unauthorized person gets access to a password file, the pass
 ----
 
 [#req365-12]
-===== Req 12: The default user umask must be 027 or more restrictive.
+==== Req 12: The default user umask must be 027 or more restrictive.
 
 The setting of the umask defines which mode files or directories get when they are created by a user. The default umask on most Linux systems is less strict. This is the reason why a stricter umask must be configured.
 
@@ -306,7 +306,7 @@ _Motivation:_ With a strict umask the manipulation of files by unauthorized user
 ----
 
 [#req365-13]
-===== Req 13:	Not needed SUID and SGID bits must be removed from executables.
+==== Req 13:	Not needed SUID and SGID bits must be removed from executables.
 
 Executables with SUID or SGID bits set run with extensive rights. Such executables pose a security risk. Therefore, executables with SUID and SGID bit set must be limited to the absolutly needed ones. From all others, the SUID and SGID bits must be removed. An alternative is to grant more granular permission for such commands with Posix capabilities. This solution allows to enable only needed system functions for a binary file and not full root privileges as with SUID/SGID. It is highly recommended where even possible to use Posix capabilities instead of SUID/SGID!
 
@@ -365,7 +365,7 @@ _Motivation:_ Executables with SUID and SGID are a high risk for a system. If su
 ----
 
 [#req365-14]
-===== Req 14:	Core dumps must be disabled.
+==== Req 14:	Core dumps must be disabled.
 
 A core dump includes complete memory content of an executable program. It is used to debug pro-gram crashes. Core dumps should be disabled during normal operation and only be enabled in case of debugging. On systems where core dumps are needed it is recommended to disable core dumps for setuid processes.
 
@@ -384,7 +384,7 @@ _Motivation:_ Core dumps can include some sensitive data. To avoid information l
 ----
 
 [#req365-15]
-===== Req 15:	Protection against buffer overflows must be enabled.
+==== Req 15:	Protection against buffer overflows must be enabled.
 
 A protection function against buffer overflow attacks must be used on Linux servers. The following solutions are available:
 
@@ -410,7 +410,7 @@ _Motivation:_ Buffer overflow attacks can be used to unauthorizedly execute code
 ----
 
 [#req365-16]
-===== Req 16:	Prelink must not be used.
+==== Req 16:	Prelink must not be used.
 
 Prelink is a tool to modify ELF shared libraries and ELF dynamically linked binaries. This tool must be disabled on Linux based servers.
 
@@ -431,7 +431,7 @@ _Motivation:_ Prelink must be disabled to use the ASLR feature PIE (Position-ind
 ==== 2.1	Network Hardening
 
 [#req365-17]
-===== Req 17:	IPv4 protocol stack must be securely configured.
+==== Req 17:	IPv4 protocol stack must be securely configured.
 
 If IPv4 is not used it must be completely disabled. Otherwise, the IPv4 stack on Linux servers must be hardened. For this the following configuration must be implemented:
 
@@ -464,7 +464,7 @@ _Motivation:_ An unhardened IPv4 protocol stack is vulnerable against several at
 ----
 
 [#req365-18]
-===== Req 18:	IPv6 protocol stack must be securely configured.
+==== Req 18:	IPv6 protocol stack must be securely configured.
 
 If IPv6 is not used it must be completely disabled. Otherwise, the IPv6 stack on Linux servers must be hardened. For this the following configuration must be implemented:
 
@@ -492,7 +492,7 @@ _Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several a
 ==== 2.2	System Update
 
 [#req365-19]
-===== Req 19:	Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse.
+==== Req 19:	Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse.
 
 The administrator must check before the installation of software on a server if vulnerabilities are known for the selected version. Software with known vulnerabilities must not be used. Excepted from this rule are components for which the vendor has already provided a measure to remedy the vulner-ability, e.g. a patch, update or workaround. In this case, the additional measure must be implement-ed on the server.
 
@@ -513,7 +513,7 @@ _Motivation:_ Vulnerabilities increases the risk of successful exploitation by a
 ----
 
 [#req365-20]
-===== Req 20: GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured.
+==== Req 20: GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured.
 
 GPG check must be enabled and keys must be configured properly to verify integrity during installation of software from a repository server. On RedHat Linux it is necessary to activate the gpgcheck globally.
 
@@ -534,7 +534,7 @@ _Motivation:_ The GPG check is necessary to guarantee the authenticity of used s
 ==== 2.3	User Authentication
 
 [#req365-21]
-===== Req 21:	User accounts must be used that allow unambiguous identification of the user.
+==== Req 21:	User accounts must be used that allow unambiguous identification of the user.
 
 Users must be identified unambiguously by the system. This can typically be achieved by using a unique user account per user. So, called group accounts, i.e. the use of one user account for several persons, must not be created and used for this purpose. This also means that the use of specific Linux accounts like 'root' by humans is not allowed.
 
@@ -557,7 +557,7 @@ misuse. Furthermore, it makes it possible to log activities and actions on a sys
 ----
 
 [#req365-22]
-===== Req 22:	System accounts must be non-login.
+==== Req 22:	System accounts must be non-login.
 
 On Linux servers, several users are available that are needed for functionality of applications. These users are not intended to provide a shell. To avoid that such accounts are used to login the shell pa-rameter in file '/etc/passwd' must be set to '/usr/sbin/nologin' or '/bin/false'.
 
@@ -578,7 +578,7 @@ _Motivation:_ Accounts that are needed only for local functionality can be used 
 ----
 
 [#req365-23]
-===== Req 23:	User accounts must be protected against unauthorized usage by at least one authentication attribute.
+==== Req 23:	User accounts must be protected against unauthorized usage by at least one authentication attribute.
 
 The various user and machine accounts on a system must be protected from misuse. To this end, an authentication attribute is typically used, which, when combined with the user name, enables unam-biguous authentication and identification of the authorized user.
 
@@ -608,7 +608,7 @@ _Motivation:_ User accounts that are not protected with a secret authentication 
 ----
 
 [#req365-24]
-===== Req 24:	User accounts with extensive rights must be protected with two authentication attributes.
+==== Req 24:	User accounts with extensive rights must be protected with two authentication attributes.
 
 Some user accounts, for example those used for administration, maintenance and troubleshooting, have extensive rights. Extensive rights mean that with an appropriate user account changes like writ-ing, reading etc. to system parameters and configurations are possible. Therefore, a simple protec-tion (e.g. using a password), as for normal user accounts with less rights, is not suitable. To get a higher protection level it is necessary to use two independent authentication attributes. For this a combination of an attribute that the user knows and an attribute that the user owns will often be used often. This kind of authentication is called as 2-factor authentication. Examples for 2-factor authentication are:
 
@@ -634,7 +634,7 @@ An attacker could get extensive rights by compromising such a user account and g
 ----
 
 [#req365-25]
-===== Req 25:	The system must be connected to a central system for user administration.
+==== Req 25:	The system must be connected to a central system for user administration.
 
 Systems must be connected to a central system for user administration. A solution for identity management should be preferred. Accounts and their rights must be administrated on central identity management systems (e.g. cIAM, WiW, ZAM) in Deutsche Telekom Group. The system must provide a central interface (e.g. LDAPs for authorization, Kerberos for authentication, revocation information for certificates) or decentralized mechanisms (e.g. public-key authentication) for the provisioning of authorization data. In areas where a central identity management system is not available a central system such as LDAP, TACACS+ or Radius server must be used for the administration of accounts and their authentication and authorization.
 
@@ -655,7 +655,7 @@ _Motivation:_ Central administration of identity of accounts and their rights me
 ----
 
 [#req365-26]
-===== Req 26:	Authentication must be used for single user mode.
+==== Req 26:	Authentication must be used for single user mode.
 
 For system recovery, the so called single user mode is used. This mode can also be manually selected from the bootloader during system boot. Authentication must be enabled for single user mode to protect this access. This is especially relevant, if the console of the machine can be reached remotely (e.g. via lights-out-management or via virtual console in case of virtual machines).
 
@@ -676,7 +676,7 @@ _Motivation:_ Without authentication, an unauthorized user can gain root privile
 ==== 2.4	System Management
 
 [#req365-27]
-===== Req 27: The management of the operating system must be done via a dedicated management network which is independent from the production network.
+==== Req 27: The management of the operating system must be done via a dedicated management network which is independent from the production network.
 
 Management access to a server must be done via a separate management network. The access must be limited to legitimate systems. The reachability of the management services must be limited to single IP addresses or small IP address ranges of subnets.
 
@@ -695,7 +695,7 @@ _Motivation:_ By restricting the accessibility to legitimate systems, the group 
 ----
 
 [#req365-28]
-===== Req 28:	Management services must be bound to the management network.
+==== Req 28:	Management services must be bound to the management network.
 
 The services used for server administration must be bound to an interface connected to a management network or an IP address of the management network.
 
@@ -714,7 +714,7 @@ _Motivation:_ This Requirement ensures that management services are not reachabl
 ----
 
 [#req365-29]
-===== Req 29: Encrypted protocols must be used for management access to administrate the operating system.
+==== Req 29: Encrypted protocols must be used for management access to administrate the operating system.
 
 The used services and protocols for system management and administration must be encrypted. Only services like SSHv2 and HTTPS (TLS) are allowed.
 
