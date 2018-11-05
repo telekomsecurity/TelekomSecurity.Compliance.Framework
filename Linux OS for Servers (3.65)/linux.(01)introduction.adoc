@@ -5,6 +5,14 @@
 :revdate: 26-10-2018
 :revremark: draft
 :imagesdir: ./images
+ifdef::env-github[]
+:imagesdir: ./images
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
 :sectlinks:
 
@@ -22,7 +30,7 @@ The examples in this document are tested for the following Linux distributions:
    * [*] RedHat Enterprise Linux 7.x (RHEL)
    * [*] Suse Linux Enterprise Server 12 (SLES)
 
-IMPORTANT: Root privileges are needed to implement the configuration on a Linux system.
+TIP: Root privileges are needed to implement the configuration on a Linux system.
 
 ==== 1.1 Scope
 In scope of this is document are server systems with Linux OS. This includes the following types of servers:

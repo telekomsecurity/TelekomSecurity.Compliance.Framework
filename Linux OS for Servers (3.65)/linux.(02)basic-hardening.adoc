@@ -4,6 +4,14 @@
 :revnumber: 0.1
 :revdate: 26-10-2018
 :revremark: draft
+ifdef::env-github[]
+:imagesdir: ./images
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 :toc:
 :toc-title: List of Requirements
 :toclevels: 5
@@ -30,7 +38,7 @@ Use the following command to disable services:
    Example: systemctl disable rpcbind
 ----
 
-IMPORTANT: Services should be uninstalled (see Req 3) if permanently not needed on a system.
+TIP: Services should be uninstalled (see Req 3) if permanently not needed on a system.
 
 *Compliance Check* (all)
 
