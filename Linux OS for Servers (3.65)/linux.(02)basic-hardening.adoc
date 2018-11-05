@@ -11,8 +11,7 @@
 
 :sectlinks:
 
-== Linux OS for Servers
-=== 2. Basic Hardening
+== Linux OS for Servers - 2. Basic Hardening
 
 [#req365-1]
 ==== Req 1: Unused services and protocols must be deactivated.
