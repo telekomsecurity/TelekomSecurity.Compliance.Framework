@@ -16,6 +16,8 @@ endif::[]
 :toc:
 :toc-title: *List of Requirements*
 :toclevels: 5
+:toc-placement!:
+toc::[]
 
 :sectlinks:
 
