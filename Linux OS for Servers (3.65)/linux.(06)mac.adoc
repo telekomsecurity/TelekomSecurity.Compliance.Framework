@@ -1,13 +1,20 @@
-IMPORTANT:= Telekom Security Compliance Framework
+TIP:= Telekom Security Compliance Framework
 :author_name: Markus Schumburg (Telekom Security)
 :author_email: security.automation@telekom.de
 :revnumber: 0.1
 :revdate: 26-10-2018
 :revremark: draft
+ifdef::env-github[]
 :imagesdir: ./images
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 :toc:
-:toc-title: List of Requirements
-:toclevels: 4
+:toclevels: 5
+
 
 :sectlinks:
 
@@ -22,7 +29,7 @@ Mandatory access control (MAC) enforces additional security policies for access.
 *	Host systems for hypervisor virtualization
 *	Host systems for container solutions
 
-IMPORTANT: On Debian based Linux (e.g. Ubuntu) and Suse Enterprise Linux AppArmor is used by default. On RedHat based Linux (e.g. RHEL, Oracle Linux, CentOS) SELinux is used. It is recommended to use the pre-installed MAC solution of the used Linux OS.
+TIP: On Debian based Linux (e.g. Ubuntu) and Suse Enterprise Linux AppArmor is used by default. On RedHat based Linux (e.g. RHEL, Oracle Linux, CentOS) SELinux is used. It is recommended to use the pre-installed MAC solution of the used Linux OS.
 
 _Motivation:_ The stricter access model of MAC protects services better as Linux did it by default. In case of a suc-cessful compromise of a service the attacker is limited in accessing the system.
 

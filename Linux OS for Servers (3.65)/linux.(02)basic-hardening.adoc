@@ -13,7 +13,6 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 :toc:
-:toc-title: List of Requirements
 :toclevels: 5
 
 :sectlinks:
@@ -94,7 +93,7 @@ Software could be installed during setup of Linux operating system which is not 
 *	rsh server/client
 
 
-IMPORTANT: It is not allowed to install software on a server that is not needed for operation, maintenance or general functionality!
+TIP: It is not allowed to install software on a server that is not needed for operation, maintenance or general functionality!
 
 _Motivation:_ Vulnerabilities in software offer an attack window for attackers to infiltrate the system. By uninstalling not needed software the attack surface and the risk of a successful compromise can be re-duced.
 
@@ -174,7 +173,7 @@ The named mount options must be set for the following partitions if they exist:
 *	/var/tmp (nodev, nosuid, noexec)
 *	/home (nodev)
 
-IMPORTANT: For installation reasons it could be necessary to remove 'noexec' from partition '/tmp' as this is used sometimes for script execution during software installation.
+TIP: For installation reasons it could be necessary to remove 'noexec' from partition '/tmp' as this is used sometimes for script execution during software installation.
 
 If separate partition exists also for:
 
@@ -399,7 +398,7 @@ A protection function against buffer overflow attacks must be used on Linux serv
 *
 NoExecute (NX)/ eXecute Disable (XD) must be activated in system bios for the functionality of buffer overflow protection solutions.
 
-IMPORTANT: ASLR has some weaknesses. For servers with a high security demand it is recommended to use Exec Shield as buffer overflow protection solution.
+TIP: ASLR has some weaknesses. For servers with a high security demand it is recommended to use Exec Shield as buffer overflow protection solution.
 
 _Motivation:_ Buffer overflow attacks can be used to unauthorizedly execute code on a system to influence availability or to get full access to a system.
 
@@ -502,7 +501,7 @@ _Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several a
 
 The administrator must check before the installation of software on a server if vulnerabilities are known for the selected version. Software with known vulnerabilities must not be used. Excepted from this rule are components for which the vendor has already provided a measure to remedy the vulner-ability, e.g. a patch, update or workaround. In this case, the additional measure must be implement-ed on the server.
 
-IMPORTANT: It is mandatory to implement a patch management process covering the complete life cycle of the server to guarantee that upcoming vulnerabilities will be fixed as soon as possible.
+TIP: It is mandatory to implement a patch management process covering the complete life cycle of the server to guarantee that upcoming vulnerabilities will be fixed as soon as possible.
 
 _Motivation:_ Vulnerabilities increases the risk of successful exploitation by an attacker. The likelihood raises if de-tailed information and tools are available that help to exploit the vulnerability.
 
@@ -567,7 +566,7 @@ misuse. Furthermore, it makes it possible to log activities and actions on a sys
 
 On Linux servers, several users are available that are needed for functionality of applications. These users are not intended to provide a shell. To avoid that such accounts are used to login the shell pa-rameter in file '/etc/passwd' must be set to '/usr/sbin/nologin' or '/bin/false'.
 
-IMPORTANT: The system accounts root, sync, shutdown and halt are excluded from this requirement!
+TIP: The system accounts root, sync, shutdown and halt are excluded from this requirement!
 
 _Motivation:_ Accounts that are needed only for local functionality can be used to get unauthorized access to the system if not protected in a proper way.
 
