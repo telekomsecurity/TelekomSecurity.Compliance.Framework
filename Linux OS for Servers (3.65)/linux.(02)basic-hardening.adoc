@@ -15,7 +15,7 @@
 === 2. Basic Hardening
 
 [#req365-1]
-===== Req 1: Unused services and protocols must be deactivated.
+==== Req 1: Unused services and protocols must be deactivated.
 
 After installation of systems and software products local or remote reachable services and protocols may be active, which are not necessarily needed for operation and functionality of the system. These include also services and protocols which may not be used in Deutsche Telekom Group networks due to known security vulnerabilities. Such services and protocols must be completely disabled on the system. Additionally, it is important that protocols and service are still deactivated after system re-boot.
 
