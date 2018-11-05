@@ -14,7 +14,6 @@ ifdef::env-github[]
 endif::[]
 
 :toc:
-:toclevels: 5
 :toc-placement!:
 toc::[]
 
