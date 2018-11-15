@@ -2,7 +2,7 @@
 :author_name: Markus Schumburg (Telekom Security)
 :author_email: security.automation@telekom.de
 :revnumber: 0.1
-:revdate: 26-10-2018
+:revdate: 15-11-2018
 :revremark: draft
 ifdef::env-github[]
 :imagesdir: ./images
@@ -28,13 +28,28 @@ This kind of system hardening must be done before the system is reachable from t
 
 _Motivation:_ Services and protocols that are not Required for system operation increase the potential attack sur-face and thus the risk of the system being compromised. This risk is further increased by the fact that a security inspection and appropriate optimization of the configuration for unused services and protocols is not being done in most cases.
 
-*Implementation* (all)
+*Implementation* (Ubuntu 14.04)
 
-Use the following command to disable services:
+Use the following command to disable services permanently:
 ----
-   $ systemctl disable _service_
+   $ update-rc.d -f _service-name_ remove
+
+   Example: update-rc.d -f rpcbind remove
+
+   This takes only effect after a reboot. To stop services immediately use:
+    $ service _service-name_ stop
+----
+
+*Implementation* (Ubuntu 16.04/18.04, RHEL 7.x, SLES 12)
+
+Use the following command to disable services permanently:
+----
+   $ systemctl disable _service-name_
 
    Example: systemctl disable rpcbind
+
+   This takes only effect after a reboot. To stop services immediately use:
+    $ service _service-name_ stop
 ----
 
 TIP: Services should be uninstalled (see Req 3) if permanently not needed on a system.
@@ -44,10 +59,10 @@ TIP: Services should be uninstalled (see Req 3) if permanently not needed on a s
 The output of the following commands must be checked for unwanted services:
 ----
    TCP (IPv4 & v6):
-   $ ss -nlt 2>/dev/null | awk '($1 == "LISTEN" && $4 !~ /127.0.0.1:./ && $4 !~ /::1:./) {print $4}' | sed 's/.*://' | sort -nu
+   $ ss -nlt 2>/dev/null | awk '($1 == "LISTEN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu
 
    UDP (IPv4 & v6):
-   $ ss -nlu 2>/dev/null | awk '($1 == "UNCONN" && $4 !~ /127.0.0.1:./ && $4 !~ /::1:./) {print $4}' | sed 's/.*://' | sort -nu
+   $ ss -nlu 2>/dev/null | awk '($1 == "UNCONN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu
 ----
 
 [#req365-2]
