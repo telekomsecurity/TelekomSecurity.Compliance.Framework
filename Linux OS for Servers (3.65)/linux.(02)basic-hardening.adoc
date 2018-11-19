@@ -32,7 +32,7 @@ _Motivation:_ Services and protocols that are not Required for system operation 
 
 Use the following command to disable services permanently:
 ----
-   $ update-rc.d -f _service-name_ remove
+   $ update-rc.d -f <service-name> remove
 
    Example: update-rc.d -f rsync remove
 
@@ -44,12 +44,12 @@ Use the following command to disable services permanently:
 
 Use the following command to disable services permanently:
 ----
-   $ systemctl disable _service-name_
+   $ systemctl disable <service-name>
 
    Example: systemctl disable rsync    (or 'rsyncd' for RedHad based Linux)
 
    This takes only effect after a reboot. To stop services immediately use:
-    $ service _service-name_ stop
+    $ service <service-name> stop
 ----
 
 TIP: Services should be uninstalled (see Req 3) if permanently not needed on a system.
@@ -77,13 +77,13 @@ Some services of a system, like management services, have only a limited and cle
 
 _Motivation:_ Disabling services on network interfaces and the implementation of filters to limit the reachability can reduce the potential attack possibilities.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x/ CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04, RHEL 7.x/ CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x/ CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04, RHEL 7.x/ CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -112,40 +112,40 @@ TIP: It is not allowed to install software on a server that is not needed for op
 
 _Motivation:_ Vulnerabilities in software offer an attack window for attackers to infiltrate the system. By uninstalling not needed software the attack surface and the risk of a successful compromise can be re-duced.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04))
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04)
 
 Use the following command to uninstall a software package:
 ----
-   $ apt purge _package-name_
+   $ apt purge
 ----
 
 *Implementation* (RHEL 7.x/CentOS 7.x)
 
 Use the following command to uninstall a software package:
 ----
-  $ yum remove _package-name_
+  $ yum remove <package-name>
 ----
 
 *Implementation* (SLES 12)
 
 Use the following command to uninstall a software package:
 ----
-   $ zypper remove _package-name_
+   $ zypper remove <package-name>
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04))
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04)
 
 Use the following commands to search for an installed software:
 ----
-   $ dpkg -l | grep _package-name_
-   Alternative use: $ apt list --installed | grep _package-name_
+   $ dpkg -l | grep <package-name>
+   Alternative use: $ apt list --installed | grep <package-name>
 ----
 
 *Compliance Check* (RHEL 7.x/CentOS 7.x, SLES 12)
 
 Use the following commands to search for an installed software:
 ----
-   $ rpm -qa | grep _package-name_
+   $ rpm -qa | grep <package-name>
 ----
 
 [#req365-4]
@@ -164,13 +164,13 @@ Linux supports a lot of filesystem types. Most of them are not needed on a serve
 
 _Motivation:_ The availability of unneeded filesystem types increases the local attack surface of a server.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -191,13 +191,13 @@ In specific cases it could be necessary to use the following partitions:
 
 _Motivation:_ A filled filesystem can stop operation of a server. This can be triggered by an attacker to effect avail-ability of a server.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -221,13 +221,13 @@ If separate partition exists also for:
 
 _Motivation:_ It must be avoided for such partitions that an attacker can execute files with suid, to store device files and to save and execute files from this partition.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -240,13 +240,13 @@ Automounting of file systems must be disabled to avoid the automated mounting an
 
 _Motivation:_ With automounting enabled any external file system will be mounted to the server and can possibly misused.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -259,13 +259,13 @@ The use of the tools 'cron' and 'at', that can be used to schedule automated exe
 
 _Motivation:_ Users can misuse these tools to execute jobs on a system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -278,13 +278,13 @@ This feature prevents the ability to delete or rename files in world writable di
 
 _Motivation:_ Setting the sticky bit on world writable directories prevents users from deleting or renaming files in that directory that are not owned by them.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -297,13 +297,13 @@ World writable files are files that have write permission set for other. These f
 
 _Motivation:_ Data in world-writable files can be read, modified, and potentially compromised by any user on the system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -316,13 +316,13 @@ Passwords must always be stored as hashes. Sha512-crypt with 640.000 rounds and 
 
 _Motivation:_ It an unauthorized person gets access to a password file, the password can be misused if not stored in a secure way.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -337,13 +337,13 @@ A umask of 027 is recommended. This defines the permissions 'read, write, execut
 
 _Motivation:_ With a strict umask the manipulation of files by unauthorized users can be prevented.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -396,13 +396,13 @@ The following executables are allowed to run with SUID and SGID if not Posix cap
 
 _Motivation:_ Executables with SUID and SGID are a high risk for a system. If such an executable has a vulnerability it could possibly lead to compromise of the system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -415,13 +415,13 @@ A core dump includes complete memory content of an executable program. It is use
 
 _Motivation:_ Core dumps can include some sensitive data. To avoid information leakage core dumps must be restricted.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -441,13 +441,13 @@ TIP: ASLR has some weaknesses. For servers with a high security demand it is rec
 
 _Motivation:_ Buffer overflow attacks can be used to unauthorizedly execute code on a system to influence availability or to get full access to a system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -460,13 +460,13 @@ Prelink is a tool to modify ELF shared libraries and ELF dynamically linked bina
 
 _Motivation:_ Prelink must be disabled to use the ASLR feature PIE (Position-independent executable). Additionally, prelink increases the risk of a compromise to a common library such as libc.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -495,13 +495,13 @@ If IPv4 is not used it must be completely disabled. Otherwise, the IPv4 stack on
 
 _Motivation:_ An unhardened IPv4 protocol stack is vulnerable against several attacks like denial of service, traffic high jacking.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -521,13 +521,13 @@ If IPv6 is not used it must be completely disabled. Otherwise, the IPv6 stack on
 
 _Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several attacks like denial of service, traffic high jacking.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -544,13 +544,13 @@ TIP: It is mandatory to implement a patch management process covering the comple
 
 _Motivation:_ Vulnerabilities increases the risk of successful exploitation by an attacker. The likelihood raises if de-tailed information and tools are available that help to exploit the vulnerability.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -563,13 +563,13 @@ GPG check must be enabled and keys must be configured properly to verify integri
 
 _Motivation:_ The GPG check is necessary to guarantee the authenticity of used source an integrity of software. Without this check an attacker could possibly manipulate software packets before installation.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -588,13 +588,13 @@ _Motivation:_ Unambiguous user identification is mandatory to assign user rights
 tasks on the system. This is the only way to adequately control access to system data and services and to prevent
 misuse. Furthermore, it makes it possible to log activities and actions on a system and to assign them to individual users.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -609,13 +609,13 @@ TIP: The system accounts root, sync, shutdown and halt are excluded from this re
 
 _Motivation:_ Accounts that are needed only for local functionality can be used to get unauthorized access to the system if not protected in a proper way.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -639,13 +639,13 @@ In companies of Deutsche Telekom group where the MyCard or a comparable smartcar
 
 _Motivation:_ User accounts that are not protected with a secret authentication attribute can be used by an attacker to gain unauthorized access to a system and the data and applications stored on it.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -665,13 +665,13 @@ In companies of Deutsche Telekom group where the MyCard or a comparable smartcar
 _Motivation:_ User accounts with extensive rights as used for system administration have a higher risk for system’s security.
 An attacker could get extensive rights by compromising such a user account and get access to wide parts of the system and stored data.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -686,13 +686,13 @@ Exceptions to this Requirement are accounts that are used only internally by the
 
 _Motivation:_ Central administration of identity of accounts and their rights means that they only have to be maintained once instead of separately on each system. Regarding the aspect of security, the advantage is that a user account and its rights are only known on a single central site. This information can be transmitted from the central site to other systems (provisioning), central administrated (reconcilia-tion) and central deleted (deprovisioning). This reduces the risk of accounts being forgotten during changing or deletion since they are not configured on multiple systems. Faulty account management could give user inappropriate system rights or continued access to a system e.g. after leaving the company or changing the responsibility.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -705,13 +705,13 @@ For system recovery, the so called single user mode is used. This mode can also 
 
 _Motivation:_ Without authentication, an unauthorized user can gain root privileges by forcing a reboot.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -726,13 +726,13 @@ Management access to a server must be done via a separate management network. Th
 
 _Motivation:_ By restricting the accessibility to legitimate systems, the group of potential attackers can be reduced, and thus also the likeliness of a successful attack. Furthermore, systems must be manageable even in the case the customer or production network is down.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -745,13 +745,13 @@ The services used for server administration must be bound to an interface connec
 
 _Motivation:_ This Requirement ensures that management services are not reachable from untrusted networks and limits so the possibility of attacks.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
@@ -764,13 +764,13 @@ The used services and protocols for system management and administration must be
 
 _Motivation:_ Management connections and access must be protected against eavesdropping of sensitive data and unauthorized access.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04),  RHEL 7.x/CentOS 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 12)
 
 ----
    <tbd>Compliance Check
