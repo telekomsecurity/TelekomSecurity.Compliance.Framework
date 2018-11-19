@@ -37,7 +37,7 @@ Use the following command to disable services permanently:
    Example: update-rc.d -f rsync remove
 
    This takes only effect after a reboot. To stop services immediately use:
-    $ service _service-name_ stop
+    $ service <service-name> stop
 ----
 
 *Implementation* (Ubuntu 16.04/18.04, RHEL 7.x/CentOS 7.x, SLES 12)
