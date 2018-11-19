@@ -4,7 +4,7 @@
 # Telekom Security - Script for Compliance Check
 # Linux OS for Servers (3.65)
 # Version: 0.1
-# Date: 05-11-18
+# Date: 19-11-18
 # Author: Markus Schumburg (security.automation@telekom.de)
 # -----------------------------------------------------------------------------
 
@@ -12,6 +12,8 @@
 # -----------------------------------------------------------------------------
 TCP_PORTS="22"
 UDP_PORTS=" "
+CLIENTS="rsh-redone-client rsh-client talk telnet ldap-utilsi samba"
+SERVERS="openbsd-inetd inetutils-inetd xinetd xserver-xorg-core nfs-kernel-server vsftpd ftpd dovecot-core dovecot-pop3d dovecot-imapd isc-dhcp-server nis avahi-daemon cups snmpd"
 
 # Pre-Checks
 # -----------------------------------------------------------------------------
@@ -76,9 +78,9 @@ CNT=0
 for CHK in $CHK_TCP; do
   if [ "$CHK" != `echo $TCP_PORTS | grep -ow "$CHK"` ]; then
     let "CNT++";
-    echo "[req-$REQ_NR: test 1/2] failed! found open TCP port: $CHK";
+    echo "[req-$REQ_NR: test 1/2] check open tcp ports: failed! (found port $CHK)";
   else
-    echo "[req-$REQ_NR: test 1/2] passed!";
+    echo "[req-$REQ_NR: test 1/2] check open tcp ports: passed!";
   fi
 done
 if [ $CNT -gt "0" ]; then let "CNT_ERR++"; fi
@@ -90,9 +92,9 @@ CNT=0
 for CHK in $CHK_UDP; do
   if [ "$CHK" != "`echo $UDP_PORTS | grep -ow "$CHK"`" ]; then
     let "CNT++";
-    echo "[req-$REQ_NR: test 2/2] failed! found open UDP port: $CHK";
+    echo "[req-$REQ_NR: test 2/2] check open udp ports: failed! (found port $CHK)";
   else
-    echo "[req-$REQ_NR: test 2/2] passed!";
+    echo "[req-$REQ_NR: test 2/2] check open udp ports: passed!";
   fi
 done
 if [ $CNT -gt "0" ]; then let "CNT_ERR++"; fi
@@ -109,8 +111,6 @@ esac
 #REQ_TXT="The reachability of services must be restricted."
 #CNT_ERR=0
 
-
-
 #case $CNT_ERR in
 #  0)
 #    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
@@ -125,14 +125,22 @@ let "REQ_NR++"
 REQ_TXT="Unused software must not be installed or must be uninstalled."
 CNT_ERR=0
 
-CLIENTS="rsh-redone-client rsh-client talk telnet ldap-utilsi samba"
+for CHK in $SERVERS; do
+  if [ `$PACKAGE | grep -ow $CHK | wc -l` -ne "0" ]; then
+    let "CNT++";
+    echo "[req-$REQ_NR: test 1/2] check installed client: failed! (found  $CHK)";
+  else
+    echo "[req-$REQ_NR: test 1/2] check installed client: passed!";
+  fi
+done
+if [ $CNT -gt "0" ]; then let "CNT_ERR++"; fi
 
 for CHK in $CLIENTS; do
   if [ `$PACKAGE | grep -ow $CHK | wc -l` -ne "0" ]; then
     let "CNT++";
-    echo "[req-$REQ_NR: test 1/2] failed! found installed software: $CHK";
+    echo "[req-$REQ_NR: test 2/2] check installed server: failed! (found  $CHK)";
   else
-    echo "[req-$REQ_NR: test 1/2] passed!";
+    echo "[req-$REQ_NR: test 2/2] check installed client: passed!";
   fi
 done
 if [ $CNT -gt "0" ]; then let "CNT_ERR++"; fi
