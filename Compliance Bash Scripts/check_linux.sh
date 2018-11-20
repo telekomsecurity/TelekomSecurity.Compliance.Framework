@@ -4,20 +4,22 @@
 # Telekom Security - Script for Compliance Check
 # Linux OS for Servers (3.65)
 # Version: 0.1
-# Date: 19-11-18
+# Date: 20-11-18
 # Author: Markus Schumburg (security.automation@telekom.de)
 # -----------------------------------------------------------------------------
 
+# -----------------------------------------------------------------------------
 # Variables
 # -----------------------------------------------------------------------------
 TCP_PORTS="22"
 UDP_PORTS=" "
 CLIENTS="rsh-redone-client rsh-client talk telnet ldap-utilsi samba"
-SERVERS="openbsd-inetd inetutils-inetd xinetd xserver-xorg-core nfs-kernel-server \
- vsftpd ftpd dovecot-core dovecot-pop3d dovecot-imapd isc-dhcp-server nis \
- avahi-daemon cups snmpd"
+SERVERS="openbsd-inetd inetutils-inetd xinetd xserver-xorg-core vsftpd \
+ nfs-kernel-server ftpd dovecot-core dovecot-pop3d dovecot-imapd nis \
+ isc-dhcp-server avahi-daemon cups snmpd"
 FILESYS="cramfs freevxfs jffs2 hfs hfsplus squashfs udf vfat"
 
+# -----------------------------------------------------------------------------
 # Pre-Checks
 # -----------------------------------------------------------------------------
 if [ "$EUID" -ne 0 ]; then
@@ -49,6 +51,7 @@ if [ "$ERR" == "1" ]; then
   exit
 fi
 
+# -----------------------------------------------------------------------------
 # Output File
 # -----------------------------------------------------------------------------
 DAY=`date +"%d%m%y"`
@@ -66,6 +69,7 @@ echo -e "-----------------------------------------------------------------------
 exec 3>$OUT_CSV
 echo ReqNo.,Requirement,Statement of Compliance>&3
 
+# -----------------------------------------------------------------------------
 # Start Compliance Checks
 # -----------------------------------------------------------------------------
 REQ_NR=0
@@ -113,8 +117,9 @@ else
 fi
 
 # Req 2: The reachability of services must be restricted.
-#let "REQ_NR++"
-#REQ_TXT="The reachability of services must be restricted."
+let "REQ_NR++"
+REQ_TXT="The reachability of services must be restricted."
+#<tbd>
 
 # Req 3: Unused software must not be installed or must be uninstalled.
 let "REQ_NR++"
@@ -126,7 +131,7 @@ PASS=0
 for CHK in $SERVERS; do
   if [ "`$PACKAGE | grep -ow $CHK | wc -l`" -ne "0" ]; then
     FAIL=1;
-    echo "[req-$REQ_NR: test 1/2] check installed client: FAILED (found  $CHK)";
+    echo "[req-$REQ_NR: test 1/2] check installed client: FAILED (found $CHK)";
   else
     PASS=1;
     echo "[req-$REQ_NR: test 1/2] check installed client: PASSED";
@@ -137,7 +142,7 @@ done
 for CHK in $CLIENTS; do
   if [ "`$PACKAGE | grep -ow $CHK | wc -l`" -ne "0" ]; then
     FAIL=1;
-    echo "[req-$REQ_NR: test 2/2] check installed server: FAILED (found  $CHK)";
+    echo "[req-$REQ_NR: test 2/2] check installed server: FAILED (found $CHK)";
   else
     PASS=1
     echo "[req-$REQ_NR: test 2/2] check installed server: PASSED";
@@ -164,7 +169,7 @@ PASS=0
 for CHK in $FILESYS; do
   if [ "`lsmod | grep -o $CHK | sort -u | wc -l`" -ne "0" ]; then
     FAIL=1;
-    echo "[req-$REQ_NR: test 1/1] check loaded filesystems: FAILED (found  $CHK)";
+    echo "[req-$REQ_NR: test 1/1] check loaded filesystems: FAILED (found $CHK)";
   else
     PASS=1
     echo "[req-$REQ_NR: test 1/1] check loaded filesystems: PASSED";
@@ -181,13 +186,17 @@ else
    fi
 fi
 
-# Req 5: Dedicated partitions must be used for growing content that can influence the availability of the system.
+# Req 5: Dedicated partitions must be used for growing content that can influence
+# the availability of the system.
 let "REQ_NR++"
 REQ_TXT="Dedicated partitions must be used for growing content that can influence the availability of the system."
+#<tbd>
 
-# Req 6: Parameters nodev, nosuid and noexec must be set for partitions where this is applicable.
+# Req 6: Parameters nodev, nosuid and noexec must be set for partitions where
+# this is applicable.
 let "REQ_NR++"
 REQ_TXT="Parameters nodev, nosuid and noexec must be set for partitions where this is applicable."
+#<tbd>
 
 # Req 7: Automounting must be disabled.
 let "REQ_NR++"
@@ -203,89 +212,135 @@ else
 fi
 
 # Req 8: The use of at/cron must be restricted to authorized users.
-#let "REQ_NR++"
-#REQ_TXT="The use of at/cron must be restricted to authorized users."
+let "REQ_NR++"
+REQ_TXT="The use of at/cron must be restricted to authorized users."
+FAIL=0
+PASS=0
+
+# Test 1/2
+for CHK in at cron; do
+  if [ -f "/etc/$CHK.deny" ]; then
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/2] check for $CHK.deny file: FAILED (found $CHK.deny)";
+  else
+    PASS=1
+    echo "[req-$REQ_NR: test 1/2] check for $CHK.deny file: PASSED";
+  fi
+done
+
+# Test 1/2
+for CHK in at cron; do
+  if [ -f "/etc/$CHK.allow" ]; then
+    if [ "`stat -L -c "%a %u %g" /etc/$CHK.allow | grep -o ".00 0 0"`" != "" ]; then
+      PASS=1
+      echo "[req-$REQ_NR: test 2/2] check for $CHK.allow file: PASSED";
+    else
+      FAIL=1
+      echo "[req-$REQ_NR: test 2/2] check for $CHK.allow file: FAILED (wrong permissions)";
+    fi
+  else
+    FAIL=1
+    echo "[req-$REQ_NR: test 2/2] check for $CHK.allow file: FAILED (file not found)";
+  fi
+done
+
+if [ $FAIL -eq 0 ]; then
+  echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+  if [ $PASS -ne 0 ]; then
+     echo -e "Req $REQ_NR,$REQ_TXT,Partly Compliant">&3;
+   else
+     echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+   fi
+fi
 
 # Req 9: Sticky bit must be set on all world-writable directories.
-#let "REQ_NR++"
-#REQ_TXT="Sticky bit must be set on all world-writable directories."
+let "REQ_NR++"
+REQ_TXT="Sticky bit must be set on all world-writable directories."
 
 # Req 10: No regular files that are world writable must exist.
-#let "REQ_NR++"
-#REQ_TXT="No regular files that are world writable must exist."
+let "REQ_NR++"
+REQ_TXT="No regular files that are world writable must exist."
 
 # Req 11: Passwords must be protected with an appropriate hashing function.
-#let "REQ_NR++"
-#REQ_TXT="Passwords must be protected with an appropriate hashing function."
+let "REQ_NR++"
+REQ_TXT="Passwords must be protected with an appropriate hashing function."
 
 # Req 12: The default user umask must be 027 or more restrictive.
-#let "REQ_NR++"
-#REQ_TXT="The default user umask must be 027 or more restrictive."
+let "REQ_NR++"
+REQ_TXT="The default user umask must be 027 or more restrictive."
 
 # Req 13: Not needed SUID and SGID bits must be removed from executables.
-#let "REQ_NR++"
-#REQ_TXT="Not needed SUID and SGID bits must be removed from executables."
+let "REQ_NR++"
+REQ_TXT="Not needed SUID and SGID bits must be removed from executables."
 
 # Req 14: Core dumps must be disabled.
-#let "REQ_NR++"
-#REQ_TXT="Core dumps must be disabled."
+let "REQ_NR++"
+REQ_TXT="Core dumps must be disabled."
 
 # Req 15: Protection against buffer overflows must be enabled.
-#let "REQ_NR++"
-#REQ_TXT="Protection against buffer overflows must be enabled."
+let "REQ_NR++"
+REQ_TXT="Protection against buffer overflows must be enabled."
 
 # Req 16: Prelink must not be used.
-#let "REQ_NR++"
-#REQ_TXT="Prelink must not be used"
+let "REQ_NR++"
+REQ_TXT="Prelink must not be used"
 
 # Req 17: IPv4 protocol stack must be securely configured.
-#let "REQ_NR++"
-#REQ_TXT="IPv4 protocol stack must be securely configured."
+let "REQ_NR++"
+REQ_TXT="IPv4 protocol stack must be securely configured."
 
 # Req 18: IPv6 protocol stack must be securely configured.
-#let "REQ_NR++"
-#REQ_TXT="IPv6 protocol stack must be securely configured."
+let "REQ_NR++"
+REQ_TXT="IPv6 protocol stack must be securely configured."
 
-# Req 19: Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse.
-#let "REQ_NR++"
-#REQ_TXT="Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse."
+# Req 19: Emerged vulnerabilities in software and hardware of a system must be
+# fixed or protected against misuse.
+let "REQ_NR++"
+REQ_TXT="Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse."
 
-# Req 20: GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured.
-#let "REQ_NR++"
-#REQ_TXT="GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured."
+# Req 20: GPG check for repository server must be activated and corresponding
+# keys for trustable repositories must be configured.
+let "REQ_NR++"
+REQ_TXT="GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured."
 
-# Req 21: User accounts must be used that allow unambiguous identification of the user.
-#let "REQ_NR++"
-#REQ_TXT="User accounts must be used that allow unambiguous identification of the user."
+# Req 21: User accounts must be used that allow unambiguous identification of
+# the user.
+let "REQ_NR++"
+REQ_TXT="User accounts must be used that allow unambiguous identification of the user."
 
 # Req 22: System accounts must be non-login.
-#let "REQ_NR++"
-#REQ_TXT="System accounts must be non-login."
+let "REQ_NR++"
+REQ_TXT="System accounts must be non-login."
 
-# Req 23: User accounts must be protected against unauthorized usage by at least one authentication attribute.
-#let "REQ_NR++"
-#REQ_TXT="User accounts must be protected against unauthorized usage by at least one authentication attribute."
+# Req 23: User accounts must be protected against unauthorized usage by at least
+# one authentication attribute.
+let "REQ_NR++"
+REQ_TXT="User accounts must be protected against unauthorized usage by at least one authentication attribute."
 
-# Req 24: User accounts with extensive rights must be protected with two authentication attributes.
-#let "REQ_NR++"
-#REQ_TXT="User accounts with extensive rights must be protected with two authentication attributes."
+# Req 24: User accounts with extensive rights must be protected with two
+# authentication attributes.
+let "REQ_NR++"
+REQ_TXT="User accounts with extensive rights must be protected with two authentication attributes."
 
 # Req 25: The system must be connected to a central system for user administration.
-#let "REQ_NR++"
-#REQ_TXT="The system must be connected to a central system for user administration."
+let "REQ_NR++"
+REQ_TXT="The system must be connected to a central system for user administration."
 
 # Req 26: Authentication must be used for single user mode.
-#let "REQ_NR++"
-#REQ_TXT="Authentication must be used for single user mode."
+let "REQ_NR++"
+REQ_TXT="Authentication must be used for single user mode."
 
-# Req 27: The management of the operating system must be done via a dedicated management network which is independent from the production network.
-#let "REQ_NR++"
-#REQ_TXT="The management of the operating system must be done via a dedicated management network which is independent from the production network."
+# Req 27: The management of the operating system must be done via a dedicated
+# management network which is independent from the production network.
+let "REQ_NR++"
+REQ_TXT="The management of the operating system must be done via a dedicated management network which is independent from the production network."
 
 # Req 28: Management services must be bound to the management network.
-#let "REQ_NR++"
-#REQ_TXT="Management services must be bound to the management network."
+let "REQ_NR++"
+REQ_TXT="Management services must be bound to the management network."
 
-# Req 29: Encrypted protocols must be used for management access to administrate the operating system.
-#let "REQ_NR++"
-#REQ_TXT="Encrypted protocols must be used for management access to administrate the operating system."
+# Req 29: Encrypted protocols must be used for management access to administrate
+# the operating system.
+let "REQ_NR++"
+REQ_TXT="Encrypted protocols must be used for management access to administrate the operating system."
