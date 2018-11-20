@@ -13,7 +13,10 @@
 TCP_PORTS="22"
 UDP_PORTS=" "
 CLIENTS="rsh-redone-client rsh-client talk telnet ldap-utilsi samba"
-SERVERS="openbsd-inetd inetutils-inetd xinetd xserver-xorg-core nfs-kernel-server vsftpd ftpd dovecot-core dovecot-pop3d dovecot-imapd isc-dhcp-server nis avahi-daemon cups snmpd"
+SERVERS="openbsd-inetd inetutils-inetd xinetd xserver-xorg-core nfs-kernel-server \
+ vsftpd ftpd dovecot-core dovecot-pop3d dovecot-imapd isc-dhcp-server nis \
+ avahi-daemon cups snmpd"
+FILESYS="cramfs freevxfs jffs2 hfs hfsplus squashfs udf vfat"
 
 # Pre-Checks
 # -----------------------------------------------------------------------------
@@ -23,10 +26,11 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 if [ -f /etc/os-release ]; then
-   OS=`awk -F\" '/^ID=/ {print $2}' /etc/os-release`
-   if [ "$OS" == "centos" ] || [ "$OS" == "redhat" ]; then
+   OS=`awk -F\" '/^NAME=/ {print $2}' /etc/os-release | awk '{print $1}'`
+   if [ "$OS" == "Amazon" ] || [ "$OS" == "Red" ] || \
+   [ "$OS" == "CentOS" ] || [ "$OS" == "SLES" ]; then
       PACKAGE="rpm -qa"
-   elif [ "$OS" == "ubuntu" ]; then
+   elif [ "$OS" == "Ubuntu" ]; then
       PACKAGE="dpkg -l"
    else
      ERR="1"
@@ -69,502 +73,219 @@ REQ_NR=0
 # Req 1: Unused services and protocols must be deactivated.
 let "REQ_NR++"
 REQ_TXT="Unused services and protocols must be deactivated."
-CNT_ERR=0
+FAIL=0
+PASS=0
 
 # Test 1/2
 CHK_TCP=`ss -nlt 2>/dev/null | awk '($1 == "LISTEN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu`
-CNT=0
 
 for CHK in $CHK_TCP; do
-  if [ "$CHK" != `echo $TCP_PORTS | grep -ow "$CHK"` ]; then
-    let "CNT++";
-    echo "[req-$REQ_NR: test 1/2] check open tcp ports: failed! (found port $CHK)";
+  if [ "$CHK" != "`echo $TCP_PORTS | grep -ow "$CHK"`" ]; then
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/2] check open tcp ports: FAILED (found port $CHK)";
   else
-    echo "[req-$REQ_NR: test 1/2] check open tcp ports: passed!";
+    PASS=1
+    echo "[req-$REQ_NR: test 1/2] check open tcp ports: PASSED";
   fi
 done
-if [ $CNT -gt "0" ]; then let "CNT_ERR++"; fi
 
 # Test 2/2
 CHK_UDP=`ss -nlu 2>/dev/null | awk '($1 == "UNCONN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu`
-CNT=0
 
 for CHK in $CHK_UDP; do
   if [ "$CHK" != "`echo $UDP_PORTS | grep -ow "$CHK"`" ]; then
-    let "CNT++";
-    echo "[req-$REQ_NR: test 2/2] check open udp ports: failed! (found port $CHK)";
+    FAIL=1;
+    echo "[req-$REQ_NR: test 2/2] check open udp ports: FAILED (found port $CHK)";
   else
-    echo "[req-$REQ_NR: test 2/2] check open udp ports: passed!";
+    PASS=1;
+    echo "[req-$REQ_NR: test 2/2] check open udp ports: PASSED";
   fi
 done
-if [ $CNT -gt "0" ]; then let "CNT_ERR++"; fi
 
-case $CNT_ERR in
-  0)
-    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-  *)
-    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-esac
+if [ $FAIL -eq 0 ]; then
+  echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+  if [ $PASS -ne 0 ]; then
+     echo -e "Req $REQ_NR,$REQ_TXT,Partly Compliant">&3;
+   else
+     echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+   fi
+fi
 
 # Req 2: The reachability of services must be restricted.
 #let "REQ_NR++"
 #REQ_TXT="The reachability of services must be restricted."
-#CNT_ERR=0
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 3: Unused software must not be installed or must be uninstalled.
 let "REQ_NR++"
 REQ_TXT="Unused software must not be installed or must be uninstalled."
-CNT_ERR=0
+FAIL=0
+PASS=0
 
+# Test 1/2
 for CHK in $SERVERS; do
-  if [ `$PACKAGE | grep -ow $CHK | wc -l` -ne "0" ]; then
-    let "CNT++";
-    echo "[req-$REQ_NR: test 1/2] check installed client: failed! (found  $CHK)";
+  if [ "`$PACKAGE | grep -ow $CHK | wc -l`" -ne "0" ]; then
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/2] check installed client: FAILED (found  $CHK)";
   else
-    echo "[req-$REQ_NR: test 1/2] check installed client: passed!";
+    PASS=1;
+    echo "[req-$REQ_NR: test 1/2] check installed client: PASSED";
   fi
 done
-if [ $CNT -gt "0" ]; then let "CNT_ERR++"; fi
 
+# Test 2/2
 for CHK in $CLIENTS; do
-  if [ `$PACKAGE | grep -ow $CHK | wc -l` -ne "0" ]; then
-    let "CNT++";
-    echo "[req-$REQ_NR: test 2/2] check installed server: failed! (found  $CHK)";
+  if [ "`$PACKAGE | grep -ow $CHK | wc -l`" -ne "0" ]; then
+    FAIL=1;
+    echo "[req-$REQ_NR: test 2/2] check installed server: FAILED (found  $CHK)";
   else
-    echo "[req-$REQ_NR: test 2/2] check installed client: passed!";
+    PASS=1
+    echo "[req-$REQ_NR: test 2/2] check installed server: PASSED";
   fi
 done
-if [ $CNT -gt "0" ]; then let "CNT_ERR++"; fi
 
-case $CNT_ERR in
-  0)
-    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-  *)
-    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-esac
+if [ $FAIL -eq 0 ]; then
+  echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+  if [ $PASS -ne 0 ]; then
+     echo -e "Req $REQ_NR,$REQ_TXT,Partly Compliant">&3;
+   else
+     echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+   fi
+fi
 
 # Req 4: Unused filesystems must be disabled.
-#let "REQ_NR++"
-#REQ_TXT="Unused filesystems must be disabled."
-#CNT_ERR=0
+let "REQ_NR++"
+REQ_TXT="Unused filesystems must be disabled."
+FAIL=0
+PASS=0
 
+# Test 1/1
+for CHK in $FILESYS; do
+  if [ "`lsmod | grep -o $CHK | sort -u | wc -l`" -ne "0" ]; then
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/1] check loaded filesystems: FAILED (found  $CHK)";
+  else
+    PASS=1
+    echo "[req-$REQ_NR: test 1/1] check loaded filesystems: PASSED";
+  fi
+done
 
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
+if [ $FAIL -eq 0 ]; then
+  echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+  if [ $PASS -ne 0 ]; then
+     echo -e "Req $REQ_NR,$REQ_TXT,Partly Compliant">&3;
+   else
+     echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+   fi
+fi
 
 # Req 5: Dedicated partitions must be used for growing content that can influence the availability of the system.
 #let "REQ_NR++"
 #REQ_TXT="Dedicated partitions must be used for growing content that can influence the availability of the system."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 6: Parameters nodev, nosuid and noexec must be set for partitions where this is applicable.
 #let "REQ_NR++"
 #REQ_TXT="Parameters nodev, nosuid and noexec must be set for partitions where this is applicable."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 7: Automounting must be disabled.
-#let "REQ_NR++"
-#REQ_TXT="Automounting must be disabled."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
+let "REQ_NR++"
+REQ_TXT="Automounting must be disabled."
+ 
+# Test 1/1
+if [ "`$PACKAGE | grep -ow autofs | wc -l`" -ne "0" ]; then
+    echo "[req-$REQ_NR: test 1/1] check installed autofs: FAILED (found autofs)";
+    echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+else
+    echo "[req-$REQ_NR: test 1/1] check installed autofs: PASSED";
+    echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+fi
 
 # Req 8: The use of at/cron must be restricted to authorized users.
 #let "REQ_NR++"
 #REQ_TXT="The use of at/cron must be restricted to authorized users."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 9: Sticky bit must be set on all world-writable directories.
 #let "REQ_NR++"
 #REQ_TXT="Sticky bit must be set on all world-writable directories."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 10: No regular files that are world writable must exist.
 #let "REQ_NR++"
 #REQ_TXT="No regular files that are world writable must exist."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 11: Passwords must be protected with an appropriate hashing function.
 #let "REQ_NR++"
 #REQ_TXT="Passwords must be protected with an appropriate hashing function."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 12: The default user umask must be 027 or more restrictive.
 #let "REQ_NR++"
 #REQ_TXT="The default user umask must be 027 or more restrictive."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 13: Not needed SUID and SGID bits must be removed from executables.
 #let "REQ_NR++"
 #REQ_TXT="Not needed SUID and SGID bits must be removed from executables."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 14: Core dumps must be disabled.
 #let "REQ_NR++"
 #REQ_TXT="Core dumps must be disabled."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 15: Protection against buffer overflows must be enabled.
 #let "REQ_NR++"
 #REQ_TXT="Protection against buffer overflows must be enabled."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 16: Prelink must not be used.
 #let "REQ_NR++"
 #REQ_TXT="Prelink must not be used"
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 17: IPv4 protocol stack must be securely configured.
 #let "REQ_NR++"
 #REQ_TXT="IPv4 protocol stack must be securely configured."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 18: IPv6 protocol stack must be securely configured.
 #let "REQ_NR++"
 #REQ_TXT="IPv6 protocol stack must be securely configured."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 19: Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse.
 #let "REQ_NR++"
 #REQ_TXT="Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 20: GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured.
 #let "REQ_NR++"
 #REQ_TXT="GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 21: User accounts must be used that allow unambiguous identification of the user.
 #let "REQ_NR++"
 #REQ_TXT="User accounts must be used that allow unambiguous identification of the user."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 22: System accounts must be non-login.
 #let "REQ_NR++"
 #REQ_TXT="System accounts must be non-login."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 23: User accounts must be protected against unauthorized usage by at least one authentication attribute.
 #let "REQ_NR++"
 #REQ_TXT="User accounts must be protected against unauthorized usage by at least one authentication attribute."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 24: User accounts with extensive rights must be protected with two authentication attributes.
 #let "REQ_NR++"
 #REQ_TXT="User accounts with extensive rights must be protected with two authentication attributes."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 25: The system must be connected to a central system for user administration.
 #let "REQ_NR++"
 #REQ_TXT="The system must be connected to a central system for user administration."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 26: Authentication must be used for single user mode.
 #let "REQ_NR++"
 #REQ_TXT="Authentication must be used for single user mode."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 27: The management of the operating system must be done via a dedicated management network which is independent from the production network.
 #let "REQ_NR++"
 #REQ_TXT="The management of the operating system must be done via a dedicated management network which is independent from the production network."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 28: Management services must be bound to the management network.
 #let "REQ_NR++"
 #REQ_TXT="Management services must be bound to the management network."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac
 
 # Req 29: Encrypted protocols must be used for management access to administrate the operating system.
-
 #let "REQ_NR++"
 #REQ_TXT="Encrypted protocols must be used for management access to administrate the operating system."
-#CNT_ERR=0
-
-
-
-#case $CNT_ERR in
-#  0)
-#    echo -e "Req $REQ_NR,$REQ_TXT, Compliant">&3;;
-#  <tbd>)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Not  Compliant">&3;;
-#  *)
-#    echo -e "Req $REQ_NR,$REQ_TXT,Partly  Compliant">&3;;
-#esac

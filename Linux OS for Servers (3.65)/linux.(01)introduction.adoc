@@ -28,7 +28,7 @@ The examples in this document are tested for the following Linux distributions:
    * [*] Ubuntu LTS 16.04
    * [*] Ubuntu LTS 18.04
    * [*] RedHat Enterprise Linux 7.x (RHEL)
-   * [*] Suse Linux Enterprise Server 12 (SLES)
+   * [*] Suse Linux Enterprise Server 15 (SLES)
 
 TIP: Root privileges are needed to implement the configuration on a Linux system.
 
