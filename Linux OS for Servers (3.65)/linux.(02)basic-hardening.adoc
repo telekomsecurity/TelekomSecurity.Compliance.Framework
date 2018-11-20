@@ -38,7 +38,7 @@ _Motivation:_ Services and protocols that are not Required for system operation
 increase the potential attack sur-face and thus the risk of the system being
 compromised. This risk is further increased by the fact that a security
 inspection and appropriate optimization of the configuration for unused services
- and protocols is not being done in most cases.
+and protocols is not being done in most cases.
 
 *Implementation* (Ubuntu 14.04)
 
@@ -47,9 +47,11 @@ Use the following command to disable services permanently:
    $ update-rc.d -f <service-name> remove
 
    Example: update-rc.d -f rsync remove
+----
 
-   This takes only effect after a reboot. To stop services immediately use:
-    $ service <service-name> stop
+This takes only effect after a reboot. To stop services immediately use:
+----
+   $ service <service-name> stop
 ----
 
 *Implementation* (Ubuntu 16.04/18.04, RHEL 7.x/CentOS 7.x, SLES 15)
@@ -59,9 +61,11 @@ Use the following command to disable services permanently:
    $ systemctl disable <service-name>
 
    Example: systemctl disable rsync    (or 'rsyncd' for RedHad based Linux)
+----
 
-   This takes only effect after a reboot. To stop services immediately use:
-    $ service <service-name> stop
+This takes only effect after a reboot. To stop services immediately use:
+----
+   $ service <service-name> stop
 ----
 
 TIP: Services should be uninstalled (see Req 3) if permanently not needed on
@@ -70,25 +74,38 @@ a system.
 *Compliance Check* (all)
 
 The output of the following commands must be checked for unwanted services:
-----
-   TCP (IPv4 & v6):
-   $ ss -nlt 2>/dev/null | awk '($1 == "LISTEN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu
 
-   UDP (IPv4 & v6):
+TCP (IPv4 & v6):
+----
+   $ ss -nlt 2>/dev/null | awk '($1 == "LISTEN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu
+----
+
+UDP (IPv4 & v6):
+----
    $ ss -nlu 2>/dev/null | awk '($1 == "UNCONN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu
 ----
+
+Compare the results with your communication matrix to identify open and not
+needed TCP and UDP ports.
 
 [#req365-2]
 ==== Req 2: The reachability of services must be restricted.
 
-The available services of a server are enabled without any restrictions for network reachability by default on all available network interfaces. In most cases it is not needed that such services are re-motely reachable for anyone. To limit the attack surface services must be bound only to the network interfaces where they are needed.
+The available services of a server are enabled without any restrictions for
+network reachability by default on all available network interfaces. In most
+cases it is not needed that such services are re-motely reachable for anyone.
+To limit the attack surface services must be bound only to the network
+interfaces where they are needed.
 
-Some services of a system, like management services, have only a limited and clearly defined set of needed communication partners. The reachability of such services must be restricted to IP addresses of legitimated communication partners. To limit the reachability a local firewall solution must be used in case no external solution to control the reachability (e.g. dedicated firewall, OpenStack secu-rity groups) in front of the system is available. Examples for local firewall solutions are:
+Some services of a system, like management services, have only a limited and
+clearly defined set of needed communication partners. The reachability of such
+services must be restricted to IP addresses of legitimated communication partners. To limit the reachability a local firewall solution must be used in case no external solution to control the reachability (e.g. dedicated firewall, OpenStack secu-rity groups) in front of the system is available. Examples for local firewall solutions are:
 
 *	iptables (see chapter 5 for more details)
 *	nftables
 
-_Motivation:_ Disabling services on network interfaces and the implementation of filters to limit the reachability can reduce the potential attack possibilities.
+_Motivation:_ Disabling services on network interfaces and the implementation
+of filters to limit the reachability can reduce the potential attack possibilities.
 
 *Implementation* (Ubuntu LTS  14.04/16.04/18.04, RHEL 7.x/ CentOS 7.x, SLES 15)
 
@@ -105,7 +122,10 @@ _Motivation:_ Disabling services on network interfaces and the implementation of
 [#req365-3]
 ==== Req 3: Unused software must not be installed or must be uninstalled.
 
-Software could be installed during setup of Linux operating system which is not needed for the functionality of the server. Such software should not be installed or must be uninstalled after installation. Examples for software that is typically not needed on a server system are:
+Software could be installed during setup of Linux operating system which is not
+needed for the functionality of the server. Such software should not be installed
+or must be uninstalled after installation. Examples for software that is typically
+not needed on a server system are:
 
 *	inetd
 *	xinetd
@@ -121,50 +141,57 @@ Software could be installed during setup of Linux operating system which is not 
 *	rsh server/client
 
 
-TIP: It is not allowed to install software on a server that is not needed for operation, maintenance or general functionality!
+TIP: It is not allowed to install software on a server that is not needed for
+operation, maintenance or general functionality!
 
-_Motivation:_ Vulnerabilities in software offer an attack window for attackers to infiltrate the system. By uninstalling not needed software the attack surface and the risk of a successful compromise can be re-duced.
+_Motivation:_ Vulnerabilities in software offer an attack window for attackers
+to infiltrate the system. By uninstalling not needed software the attack surface
+and the risk of a successful compromise can be reduced.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04)
+*Implementation* (Ubuntu)
 
 Use the following command to uninstall a software package:
 ----
-   $ apt purge
+   $ apt purge <package-name>
 ----
 
-*Implementation* (RHEL 7.x/CentOS 7.x)
+*Implementation* (RedHat)
 
 Use the following command to uninstall a software package:
 ----
   $ yum remove <package-name>
 ----
 
-*Implementation* (SLES 15)
+*Implementation* (Suse)
 
 Use the following command to uninstall a software package:
 ----
    $ zypper remove <package-name>
 ----
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04)
+*Compliance Check* (Ubuntu)
 
 Use the following commands to search for an installed software:
 ----
    $ dpkg -l | grep <package-name>
    Alternative use: $ apt list --installed | grep <package-name>
 ----
+Estimated output: 'none'
 
-*Compliance Check* (RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (RedHat, Suse)
 
 Use the following commands to search for an installed software:
 ----
    $ rpm -qa | grep <package-name>
 ----
+Estimated output: 'none'
 
 [#req365-4]
 ==== Req 4:	Unused filesystems must be disabled.
 
-Linux supports a lot of filesystem types. Most of them are not needed on a server and must be disabled. Examples for filesystem types that are should not used on servers are:
+Linux supports a lot of filesystem types. Most of them are not needed on a server
+and must be disabled. Examples for filesystem types that are should not used on
+servers are:
 
 *	cramfs
 *	freevxfs
@@ -175,24 +202,40 @@ Linux supports a lot of filesystem types. Most of them are not needed on a serve
 *	udf
 *	vfat
 
-_Motivation:_ The availability of unneeded filesystem types increases the local attack surface of a server.
+_Motivation:_ The availability of unneeded filesystem types increases the local
+attack surface of a server.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (all)
+
+Generate the file '/etc/modprobe.d/disable.conf' and add the following line
+for any module that should not be loadable:
+----
+   install <filesystem> /bin/true
+----
+
+Use the following command to unload running kernel modules:
+----
+   $ rmmod <filesystem>
+----
+
+*Compliance Check* (all)
+
+Use the following commands to search for running kernel modules:
+----
+  $ modprobe -n -v <filesystem>
+----
+Eestimated output: 'install /bin/true'
 
 ----
-   <tbd>implementation
+  $ lsmod | grep <filesystem>
 ----
-
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>Compliance Check
-----
+Estimated output: 'none'
 
 [#req365-5]
 ==== Req 5:	Dedicated partitions must be used for growing content that can influence the availability of the system.
 
-An own partition must be created for directories that are used to store dynamic content. It is recommended to use a dedicated partition for the directories:
+An own partition must be created for directories that are used to store dynamic
+content. It is recommended to use a dedicated partition for the directories:
 
 *	/tmp
 *	/var
@@ -202,11 +245,13 @@ In specific cases it could be necessary to use the following partitions:
 *	/var/log and /var/tmp (instead of /var)
 *	/home (for file servers with high number of users)
 
-_Motivation:_ A filled filesystem can stop operation of a server. This can be triggered by an attacker to effect avail-ability of a server.
+_Motivation:_ A filled filesystem can stop operation of a server. This can be
+triggered by an attacker to effect avail-ability of a server.
 
 *Implementation* (all)
 
-TIP: Partitions should be generated during the installation of Linux operating system!
+TIP: Partitions should be generated during the installation of Linux operating
+system!
 
 *Compliance Check* (all)
 
@@ -224,45 +269,72 @@ The named mount options must be set for the following partitions if they exist:
 *	/var/tmp (nodev, nosuid, noexec)
 *	/home (nodev)
 
-TIP: For installation reasons it could be necessary to remove 'noexec' from partition '/tmp' as this is used sometimes for script execution during software installation.
+TIP: For installation reasons it could be necessary to remove 'noexec' from
+partition '/tmp' as this is used sometimes for script execution during software
+installation.
 
 If separate partition exists also for:
 
 *	/dev/shm (RHEL, SLES) (nodev, nosuid, noexec)
 *	/run/shm (Ubuntu) (nodev, nosuid, noexec)
 
-_Motivation:_ It must be avoided for such partitions that an attacker can execute files with suid, to store device files and to save and execute files from this partition.
+_Motivation:_ It must be avoided for such partitions that an attacker can execute
+files with suid, to store device files and to save and execute files from this
+partition.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (all)
 
+Add the correct values to the entry of the partition  in the file '/etc/fstab':
 ----
-   <tbd>implementation
+  Example:
+  tmpfs on /tmp type tmpfs (default,nosuid,nodev)
 ----
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Use the following command to search for partition in file '/etc/fstab':
 ----
-   <tbd>Compliance Check
+   $ mount | grep <partition>
 ----
 
 [#req365-7]
 ==== Req 7:	Automounting must be disabled.
 
-Automounting of file systems must be disabled to avoid the automated mounting and use of external file systems like USB sticks and CD-ROMs.
+Automounting of file systems must be disabled to avoid the automated mounting
+and use of external file systems like USB sticks and CD-ROMs.
 
-_Motivation:_ With automounting enabled any external file system will be mounted to the server and can possibly misused.
+_Motivation:_ With automounting enabled any external file system will be mounted
+to the server and can possibly misused.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (Ubuntu 14.04)
 
+Comment out or remove all start lines in file '/etc/init/autofs.conf':
 ----
-   <tbd>implementation
+   #start on runlevel [2345]
 ----
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (Ubuntu > 14.04, RedHat, Suse)
 
+Use the following command to disable autofs:
 ----
-   <tbd>Compliance Check
+   $ systemctl disable autofs
 ----
+
+*Compliance Check* (Ubuntu 14.04)
+
+Use the following command to check if autofs is enabled:
+----
+   $ initctl show-config autofs
+----
+Estimated output: only 'autofs' and no start conditions must be shown
+
+*Compliance Check* (Ubuntu > 14.04, RedHat, Suse)
+
+Use the following command to check if autofs is enabled:
+----
+   $ systemctl is-enabled autofs
+----
+Estimated output: 'disabled'
 
 [#req365-8]
 ==== Req 8: The use of at/cron must be restricted to authorized users.
@@ -271,17 +343,41 @@ The use of the tools 'cron' and 'at', that can be used to schedule automated exe
 
 _Motivation:_ Users can misuse these tools to execute jobs on a system.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (all)
 
+If exist delete the following files:
 ----
-   <tbd>implementation
+   $ rm /etc/cron.deny
+   $ rm /etc/at.deny
+----
+
+Generate the following files, change permissions and add them to root user
+and group:
+----
+   $ touch /etc/cron.allow
+   $ chmod og-rwx /etc/cron.allow
+   $ chown root:root /etc/cron.allow
+
+   $ touch /etc/at.allow
+   $ chmod og-rwx /etc/at.allow
+   $ chown root:root /etc/at.allow
 ----
 
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
+Check if the following files exists:
 ----
-   <tbd>Compliance Check
+   $ stat /etc/cron.deny
+   $ stat /etc/at.deny
 ----
+Estimated output: stat: cannot stat `/etc/<file>.deny': No such file or directory
+
+----
+   $ stat /etc/cron.allow
+   $ stat /etc/at.allow
+----
+Estimated output:
+Access: (0600/-rw-------)  Uid: (    0/    root)   Gid: (    0/    root)
 
 [#req365-9]
 ==== Req 9: Sticky bit must be set on all world-writable directories.

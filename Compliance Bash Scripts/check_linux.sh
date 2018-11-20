@@ -182,17 +182,17 @@ else
 fi
 
 # Req 5: Dedicated partitions must be used for growing content that can influence the availability of the system.
-#let "REQ_NR++"
-#REQ_TXT="Dedicated partitions must be used for growing content that can influence the availability of the system."
+let "REQ_NR++"
+REQ_TXT="Dedicated partitions must be used for growing content that can influence the availability of the system."
 
 # Req 6: Parameters nodev, nosuid and noexec must be set for partitions where this is applicable.
-#let "REQ_NR++"
-#REQ_TXT="Parameters nodev, nosuid and noexec must be set for partitions where this is applicable."
+let "REQ_NR++"
+REQ_TXT="Parameters nodev, nosuid and noexec must be set for partitions where this is applicable."
 
 # Req 7: Automounting must be disabled.
 let "REQ_NR++"
 REQ_TXT="Automounting must be disabled."
- 
+
 # Test 1/1
 if [ "`$PACKAGE | grep -ow autofs | wc -l`" -ne "0" ]; then
     echo "[req-$REQ_NR: test 1/1] check installed autofs: FAILED (found autofs)";
