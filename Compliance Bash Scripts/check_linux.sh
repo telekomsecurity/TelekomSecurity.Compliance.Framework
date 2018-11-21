@@ -18,6 +18,18 @@ SERVERS="openbsd-inetd inetutils-inetd xinetd xserver-xorg-core vsftpd \
  nfs-kernel-server ftpd dovecot-core dovecot-pop3d dovecot-imapd nis \
  isc-dhcp-server avahi-daemon cups snmpd"
 FILESYS="cramfs freevxfs jffs2 hfs hfsplus squashfs udf vfat"
+PARTITIONS="/tmp /var" # add more if needed: /var/tmp, /var/log instead of /var
+SUID_FILES="/bin/ping /sbin/pam_timestamp_check /sbin/unix_chkpwd /usr/bin/at \
+ /usr/bin/gpasswd /usr/bin/locate /usr/bin/newgrp /usr/bin/passwd /bin/ping6 \
+ /usr/bin/ssh-agent /usr/sbin/lockdev /sbin/mount.nfs /sbin/umount.nfs \
+ /usr/sbin/sendmail.sendmail /usr/bin/expiry /usr/libexec/utempter/utempter \
+ /usr/bin/traceroute6.iputils /sbin/mount.nfs4 /sbin/umount.nfs4 /usr/bin/crontab \
+ /usr/bin/wall /usr/bin/write /usr/bin/screen /usr/bin/mlocate /usr/bin/chage \
+ /usr/bin/chfn /usr/bin/chsh /bin/fusermount /usr/bin/pkexec /usr/bin/sudo \
+ /usr/bin/sudoedit /usr/sbin/postdrop /usr/sbin/postqueue /usr/sbin/suexec \
+ /usr/lib/squid/ncsa_auth /usr/lib/squid/pam_auth /usr/kerberos/bin/ksu \
+ /usr/sbin/ccreds_validate /usr/lib/dbus-1.0/dbus-daemon-launch-helper \
+ /usr/lib/policykit-1/polkit-agent-helper-1"
 
 # -----------------------------------------------------------------------------
 # Pre-Checks
@@ -45,9 +57,9 @@ fi
 
 if [ "$ERR" == "1" ]; then
   clear
-  echo -e "\r\n   -- Important! -----------------------------------------\r\n" >&2
-  echo -e "      $ERR_TXT\r\n" >&2
-  echo -e "   -------------------------------------------------------\r\n" >&2
+  echo -e "\r\n   -- Important! -----------------------------------------\r\n\r\n" >&2
+  echo -e "      $ERR_TXT\r\n\r\n" >&2
+  echo -e "   -------------------------------------------------------\r\n\r\n" >&2
   exit
 fi
 
@@ -131,10 +143,10 @@ PASS=0
 for CHK in $SERVERS; do
   if [ "`$PACKAGE | grep -ow $CHK | wc -l`" -ne "0" ]; then
     FAIL=1;
-    echo "[req-$REQ_NR: test 1/2] check installed client: FAILED (found $CHK)";
+    echo "[req-$REQ_NR: test 1/2] check unused client ($CHK): FAILED (present)";
   else
     PASS=1;
-    echo "[req-$REQ_NR: test 1/2] check installed client: PASSED";
+    echo "[req-$REQ_NR: test 1/2] check unused client ($CHK): PASSED";
   fi
 done
 
@@ -142,10 +154,10 @@ done
 for CHK in $CLIENTS; do
   if [ "`$PACKAGE | grep -ow $CHK | wc -l`" -ne "0" ]; then
     FAIL=1;
-    echo "[req-$REQ_NR: test 2/2] check installed server: FAILED (found $CHK)";
+    echo "[req-$REQ_NR: test 2/2] check unused server ($CHK): FAILED (present)";
   else
     PASS=1
-    echo "[req-$REQ_NR: test 2/2] check installed server: PASSED";
+    echo "[req-$REQ_NR: test 2/2] check unused server ($CHK): PASSED";
   fi
 done
 
@@ -169,10 +181,10 @@ PASS=0
 for CHK in $FILESYS; do
   if [ "`lsmod | grep -o $CHK | sort -u | wc -l`" -ne "0" ]; then
     FAIL=1;
-    echo "[req-$REQ_NR: test 1/1] check loaded filesystems: FAILED (found $CHK)";
+    echo "[req-$REQ_NR: test 1/1] check unused filesystem ($CHK): FAILED (present)";
   else
     PASS=1
-    echo "[req-$REQ_NR: test 1/1] check loaded filesystems: PASSED";
+    echo "[req-$REQ_NR: test 1/1] check unused filesystems ($CHK): PASSED";
   fi
 done
 
@@ -190,7 +202,29 @@ fi
 # the availability of the system.
 let "REQ_NR++"
 REQ_TXT="Dedicated partitions must be used for growing content that can influence the availability of the system."
-#<tbd>
+FAIL=0
+PASS=0
+
+# Test 1/1
+for CHK in $PARTITIONS; do
+  if [ "`grep -o $CHK /etc/fstab | sort -u | wc -l`" -eq "0" ]; then
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/1] check needed partition ($CHK): FAILED (not found)";
+  else
+    PASS=1
+    echo "[req-$REQ_NR: test 1/1] check needed partition ($CHK): PASSED";
+  fi
+done
+
+if [ $FAIL -eq 0 ]; then
+  echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+  if [ $PASS -ne 0 ]; then
+     echo -e "Req $REQ_NR,$REQ_TXT,Partly Compliant">&3;
+   else
+     echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+   fi
+fi
 
 # Req 6: Parameters nodev, nosuid and noexec must be set for partitions where
 # this is applicable.
@@ -204,10 +238,10 @@ REQ_TXT="Automounting must be disabled."
 
 # Test 1/1
 if [ "`$PACKAGE | grep -ow autofs | wc -l`" -ne "0" ]; then
-    echo "[req-$REQ_NR: test 1/1] check installed autofs: FAILED (found autofs)";
+    echo "[req-$REQ_NR: test 1/1] check if autofs is installed: FAILED (present)";
     echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
 else
-    echo "[req-$REQ_NR: test 1/1] check installed autofs: PASSED";
+    echo "[req-$REQ_NR: test 1/1] check if autofs is installed: PASSED";
     echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
 fi
 
@@ -221,7 +255,7 @@ PASS=0
 for CHK in at cron; do
   if [ -f "/etc/$CHK.deny" ]; then
     FAIL=1;
-    echo "[req-$REQ_NR: test 1/2] check for $CHK.deny file: FAILED (found $CHK.deny)";
+    echo "[req-$REQ_NR: test 1/2] check for $CHK.deny file: FAILED (present)";
   else
     PASS=1
     echo "[req-$REQ_NR: test 1/2] check for $CHK.deny file: PASSED";
@@ -240,7 +274,7 @@ for CHK in at cron; do
     fi
   else
     FAIL=1
-    echo "[req-$REQ_NR: test 2/2] check for $CHK.allow file: FAILED (file not found)";
+    echo "[req-$REQ_NR: test 2/2] check for $CHK.allow file: FAILED (absent)";
   fi
 done
 
@@ -258,21 +292,87 @@ fi
 let "REQ_NR++"
 REQ_TXT="Sticky bit must be set on all world-writable directories."
 
+# Test 1/1
+SRCH=`df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 \! -perm -1000 2>/dev/null`
+CHK=`echo "$SRCH" | wc -l`
+
+if [ "$CHK" -eq "0" ]; then
+    echo "[req-$REQ_NR: test 1/1] check for world-writable directory: PASSED";
+    echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+    echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+    for DIR in $SRCH; do
+      echo "[req-$REQ_NR: test 1/1] check for world-writable directory: FAILED (found $DIR)";
+    done
+fi
+
 # Req 10: No regular files that are world writable must exist.
 let "REQ_NR++"
 REQ_TXT="No regular files that are world writable must exist."
+
+# Test 1/1
+SRCH=`df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002 2>/dev/null`
+CHK=`echo "$SRCH" | wc -l`
+
+if [ "$CHK" -eq "0" ]; then
+    echo "[req-$REQ_NR: test 1/1] check for world-writable files: PASSED";
+    echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+    echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+    for FILE in $SRCH; do
+      echo "[req-$REQ_NR: test 1/1] check for world-writable files: FAILED (found $FILE)";
+    done
+fi
 
 # Req 11: Passwords must be protected with an appropriate hashing function.
 let "REQ_NR++"
 REQ_TXT="Passwords must be protected with an appropriate hashing function."
 
+# Test 1/1
+if [ "`grep -i "^ENCRYPT_METHOD SHA512" /etc/login.defs`" ] && \
+   [ "`grep -i "^SHA_CRYPT_MIN_ROUNDS 640000" /etc/login.defs`" ] && \
+   [ "`grep -i "^SHA_CRYPT_MAX_ROUNDS 640000" /etc/login.defs`" ]; then
+    echo "[req-$REQ_NR: test 1/1] check password encryption: PASSED";
+    echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+    echo "[req-$REQ_NR: test 1/1] check password encryption: FAILED (wrong config)";
+    echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+fi
+
 # Req 12: The default user umask must be 027 or more restrictive.
 let "REQ_NR++"
 REQ_TXT="The default user umask must be 027 or more restrictive."
 
+# Test 1/1
+if [ "`grep -i "^UMASK 027" /etc/login.defs`" ]; then
+    echo "[req-$REQ_NR: test 1/1] check umask: PASSED";
+    echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+    echo "[req-$REQ_NR: test 1/1] check password encryption: FAILED (wrong umask)";
+    echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+fi
+
 # Req 13: Not needed SUID and SGID bits must be removed from executables.
 let "REQ_NR++"
 REQ_TXT="Not needed SUID and SGID bits must be removed from executables."
+FAIL=0
+
+# Test 1/1
+CHK_FILES=`df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f \( -perm -4000 -o -perm -2000 \) -print`
+
+for CHK in $CHK_FILES; do
+  if [ "$CHK" != "`echo $SUID_FILES | grep -ow "$CHK"`" ]; then
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/1] check not allowed files with SUID: FAILED ($CHK)";
+  fi
+done
+
+if [ $FAIL -eq 0 ]; then
+  echo "[req-$REQ_NR: test 1/1] check not allowed files with SUID: PASSED";
+  echo -e "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+else
+   echo -e "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+fi
 
 # Req 14: Core dumps must be disabled.
 let "REQ_NR++"

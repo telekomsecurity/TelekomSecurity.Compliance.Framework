@@ -40,53 +40,53 @@ compromised. This risk is further increased by the fact that a security
 inspection and appropriate optimization of the configuration for unused services
 and protocols is not being done in most cases.
 
-*Implementation* (Ubuntu 14.04)
-
-Use the following command to disable services permanently:
-----
-   $ update-rc.d -f <service-name> remove
-
-   Example: update-rc.d -f rsync remove
-----
-
-This takes only effect after a reboot. To stop services immediately use:
-----
-   $ service <service-name> stop
-----
-
-*Implementation* (Ubuntu > 14.04, RedHat, Suse)
-
-Use the following command to disable services permanently:
-----
-   $ systemctl disable <service-name>
-
-   Example: systemctl disable rsync    (or 'rsyncd' for RedHad based Linux)
-----
-
-This takes only effect after a reboot. To stop services immediately use:
-----
-   $ service <service-name> stop
-----
-
-TIP: Services should be uninstalled (see Req 3) if permanently not needed on
-a system.
-
 *Compliance Check* (all)
 
 The output of the following commands must be checked for unwanted services:
 
 TCP (IPv4 & v6):
 ----
-   $ ss -nlt 2>/dev/null | awk '($1 == "LISTEN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu
+   # ss -nlt 2>/dev/null | awk '(#1 == "LISTEN" && #4 !~ /127.0.0.*.:./ && #4 !~ /::*.:./) {print #4}' | sed 's/.*://' | sort -nu
 ----
 
 UDP (IPv4 & v6):
 ----
-   $ ss -nlu 2>/dev/null | awk '($1 == "UNCONN" && $4 !~ /127.0.0.*.:./ && $4 !~ /::*.:./) {print $4}' | sed 's/.*://' | sort -nu
+   # ss -nlu 2>/dev/null | awk '(#1 == "UNCONN" && #4 !~ /127.0.0.*.:./ && #4 !~ /::*.:./) {print #4}' | sed 's/.*://' | sort -nu
 ----
 
 Compare the results with your communication matrix to identify open and not
 needed TCP and UDP ports.
+
+*Implementation* (Ubuntu 14.04)
+
+Use the following command to disable services permanently:
+----
+   # update-rc.d -f <service-name> remove
+
+   Example: update-rc.d -f rsync remove
+----
+
+This takes only effect after a reboot. To stop services immediately use:
+----
+   # service <service-name> stop
+----
+
+*Implementation* (Ubuntu > 14.04, RedHat, Suse)
+
+Use the following command to disable services permanently:
+----
+   # systemctl disable <service-name>
+
+   Example: systemctl disable rsync    (or 'rsyncd' for RedHad based Linux)
+----
+
+This takes only effect after a reboot. To stop services immediately use:
+----
+   # service <service-name> stop
+----
+
+TIP: Services should be uninstalled (see Req 3) if permanently not needed on
+a system.
 
 [#req365-2]
 ==== Req 2: The reachability of services must be restricted.
@@ -107,16 +107,16 @@ services must be restricted to IP addresses of legitimated communication partner
 _Motivation:_ Disabling services on network interfaces and the implementation
 of filters to limit the reachability can reduce the potential attack possibilities.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04, RHEL 7.x/ CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04, RHEL 7.x/ CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04, RHEL 7.x/ CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-3]
@@ -148,43 +148,43 @@ _Motivation:_ Vulnerabilities in software offer an attack window for attackers
 to infiltrate the system. By uninstalling not needed software the attack surface
 and the risk of a successful compromise can be reduced.
 
+*Compliance Check* (Ubuntu)
+
+Use the following commands to search for an installed software:
+----
+   # dpkg -l | grep <package-name>
+   Alternative use: # apt list --installed | grep <package-name>
+----
+Expected output: 'none'
+
+*Compliance Check* (RedHat, Suse)
+
+Use the following commands to search for an installed software:
+----
+   # rpm -qa | grep <package-name>
+----
+Expected output: 'none'
+
 *Implementation* (Ubuntu)
 
 Use the following command to uninstall a software package:
 ----
-   $ apt purge <package-name>
+   # apt purge <package-name>
 ----
 
 *Implementation* (RedHat)
 
 Use the following command to uninstall a software package:
 ----
-  $ yum remove <package-name>
+  # yum remove <package-name>
 ----
 
 *Implementation* (Suse)
 
 Use the following command to uninstall a software package:
 ----
-   $ zypper remove <package-name>
+   # zypper remove <package-name>
 ----
-
-*Compliance Check* (Ubuntu)
-
-Use the following commands to search for an installed software:
-----
-   $ dpkg -l | grep <package-name>
-   Alternative use: $ apt list --installed | grep <package-name>
-----
-Estimated output: 'none'
-
-*Compliance Check* (RedHat, Suse)
-
-Use the following commands to search for an installed software:
-----
-   $ rpm -qa | grep <package-name>
-----
-Estimated output: 'none'
 
 [#req365-4]
 ==== Req 4:	Unused filesystems must be disabled.
@@ -205,6 +205,19 @@ servers are:
 _Motivation:_ The availability of unneeded filesystem types increases the local
 attack surface of a server.
 
+*Compliance Check* (all)
+
+Use the following commands to search for running kernel modules:
+----
+  # modprobe -n -v <filesystem>
+----
+Eexpected output: 'install /bin/true'
+
+----
+  # lsmod | grep <filesystem>
+----
+Expected output: 'none'
+
 *Implementation* (all)
 
 Generate the file '/etc/modprobe.d/disable.conf' and add the following line
@@ -215,21 +228,8 @@ for any module that should not be loadable:
 
 Use the following command to unload running kernel modules:
 ----
-   $ rmmod <filesystem>
+   # rmmod <filesystem>
 ----
-
-*Compliance Check* (all)
-
-Use the following commands to search for running kernel modules:
-----
-  $ modprobe -n -v <filesystem>
-----
-Eestimated output: 'install /bin/true'
-
-----
-  $ lsmod | grep <filesystem>
-----
-Estimated output: 'none'
 
 [#req365-5]
 ==== Req 5:	Dedicated partitions must be used for growing content that can influence the availability of the system.
@@ -248,17 +248,17 @@ In specific cases it could be necessary to use the following partitions:
 _Motivation:_ A filled filesystem can stop operation of a server. This can be
 triggered by an attacker to effect avail-ability of a server.
 
-*Implementation* (all)
-
-TIP: Partitions should be generated during the installation of Linux operating
-system!
-
 *Compliance Check* (all)
 
 Use the following command to search for partitions:
 ----
-   $ mount | grep <partition>
+   # mount | grep <partition>
 ----
+
+*Implementation* (all)
+
+TIP: Partitions should be generated during the installation of Linux operating
+system!
 
 [#req365-6]
 ==== Req 6:	Parameters nodev, nosuid and noexec must be set for partitions where this is applicable.
@@ -282,19 +282,19 @@ _Motivation:_ It must be avoided for such partitions that an attacker can execut
 files with suid, to store device files and to save and execute files from this
 partition.
 
+*Compliance Check* (all)
+
+Use the following command to search for partition in file '/etc/fstab':
+----
+   # mount | grep <partition>
+----
+
 *Implementation* (all)
 
 Add the correct values to the entry of the partition  in the file '/etc/fstab':
 ----
   Example:
   tmpfs on /tmp type tmpfs (default,nosuid,nodev)
-----
-
-*Compliance Check* (all)
-
-Use the following command to search for partition in file '/etc/fstab':
-----
-   $ mount | grep <partition>
 ----
 
 [#req365-7]
@@ -305,6 +305,22 @@ and use of external file systems like USB sticks and CD-ROMs.
 
 _Motivation:_ With automounting enabled any external file system will be mounted
 to the server and can possibly misused.
+
+*Compliance Check* (Ubuntu 14.04)
+
+Use the following command to check if autofs is enabled:
+----
+   # initctl show-config autofs
+----
+Expected output: only 'autofs' and no start conditions must be shown
+
+*Compliance Check* (Ubuntu > 14.04, RedHat, Suse)
+
+Use the following command to check if autofs is enabled:
+----
+   # systemctl is-enabled autofs
+----
+Expected output: 'disabled'
 
 *Implementation* (Ubuntu 14.04)
 
@@ -317,24 +333,8 @@ Comment out or remove all start lines in file '/etc/init/autofs.conf':
 
 Use the following command to disable autofs:
 ----
-   $ systemctl disable autofs
+   # systemctl disable autofs
 ----
-
-*Compliance Check* (Ubuntu 14.04)
-
-Use the following command to check if autofs is enabled:
-----
-   $ initctl show-config autofs
-----
-Estimated output: only 'autofs' and no start conditions must be shown
-
-*Compliance Check* (Ubuntu > 14.04, RedHat, Suse)
-
-Use the following command to check if autofs is enabled:
-----
-   $ systemctl is-enabled autofs
-----
-Estimated output: 'disabled'
 
 [#req365-8]
 ==== Req 8: The use of at/cron must be restricted to authorized users.
@@ -343,41 +343,41 @@ The use of the tools 'cron' and 'at', that can be used to schedule automated exe
 
 _Motivation:_ Users can misuse these tools to execute jobs on a system.
 
+*Compliance Check* (all)
+
+Check if the following files exists:
+----
+   # stat /etc/cron.deny
+   # stat /etc/at.deny
+----
+Expected output: stat: cannot stat `/etc/<file>.deny': No such file or directory
+
+----
+   # stat /etc/cron.allow
+   # stat /etc/at.allow
+----
+Expected output:
+Access: (0600/-rw-------)  Uid: (    0/    root)   Gid: (    0/    root)
+
 *Implementation* (all)
 
 If exist delete the following files:
 ----
-   $ rm /etc/cron.deny
-   $ rm /etc/at.deny
+   # rm /etc/cron.deny
+   # rm /etc/at.deny
 ----
 
 Generate the following files, change permissions and add them to root user
 and group:
 ----
-   $ touch /etc/cron.allow
-   $ chmod og-rwx /etc/cron.allow
-   $ chown root:root /etc/cron.allow
+   # touch /etc/cron.allow
+   # chmod og-rwx /etc/cron.allow
+   # chown root:root /etc/cron.allow
 
-   $ touch /etc/at.allow
-   $ chmod og-rwx /etc/at.allow
-   $ chown root:root /etc/at.allow
+   # touch /etc/at.allow
+   # chmod og-rwx /etc/at.allow
+   # chown root:root /etc/at.allow
 ----
-
-*Compliance Check* (all)
-
-Check if the following files exists:
-----
-   $ stat /etc/cron.deny
-   $ stat /etc/at.deny
-----
-Estimated output: stat: cannot stat `/etc/<file>.deny': No such file or directory
-
-----
-   $ stat /etc/cron.allow
-   $ stat /etc/at.allow
-----
-Estimated output:
-Access: (0600/-rw-------)  Uid: (    0/    root)   Gid: (    0/    root)
 
 [#req365-9]
 ==== Req 9: Sticky bit must be set on all world-writable directories.
@@ -389,16 +389,19 @@ _Motivation:_ Setting the sticky bit on world writable directories prevents
 users from deleting or renaming files in that directory that are not owned by
 them.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Use the following command to find world-writable directories:
 ----
-   <tbd>implementation
+   # df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 \! -perm -1000
 ----
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (all)
 
+Use the following command to set the sticky bit on world-writable
+directories:
 ----
-   <tbd>Compliance Check
+   # chmod o+t <world-writable-directory>
 ----
 
 [#req365-10]
@@ -411,16 +414,18 @@ existing the rights of these files must be changed to an adequate level.
 _Motivation:_ Data in world-writable files can be read, modified, and potentially
 compromised by any user on the system.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
+Use the following command to find world-writable files:
 ----
-   <tbd>Compliance Check
+   # df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+Use the following command to set correct permission to files:
+----
+   # chmod o-w <world-writable-file>
 ----
 
 [#req365-11]
@@ -432,16 +437,28 @@ Salt (96 Bit) must be used as a hashing algorithm to protect passwords.
 _Motivation:_ It an unauthorized person gets access to a password file, the
 password can be misused if not stored in a secure way.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
+
+Check the file '/etc/login.defs' for the correct entries for password encryption
+(sha-512) and max/min rounds (640.000):
+----
+   # grep -i "^ENCRYPT_METHOD" /etc/login.defs
+----
+Expected output: 'ENCRYPT_METHOD SHA512'
 
 ----
-   <tbd>implementation
+   # grep -i "^SHA_CRYPT_MIN_ROUNDS" /etc/login.defs
+   # grep -i "^SHA_CRYPT_MAX_ROUNDS" /etc/login.defs
 ----
+Expected output: 'SHA_CRYPT_MAX_ROUNDS 640000' and 'SHA_CRYPT_MIN_ROUNDS 640000'
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (all)
 
+Add or change the following entries in the file '/etc/login.defs':
 ----
-   <tbd>Compliance Check
+   ENCRYPT_METHOD SHA512
+   SHA_CRYPT_MIN_ROUNDS 640000
+   SHA_CRYPT_MAX_ROUNDS 640000
 ----
 
 [#req365-12]
@@ -458,16 +475,19 @@ for others.
 _Motivation:_ With a strict umask the manipulation of files by unauthorized users
 can be prevented.
 
+*Compliance Check* (all)
+
+Check the file '/etc/login.defs' for correct umask:
+----
+   # grep -i "^UMASK" /etc/login.defs
+----
+Expected output: 'UMASK 027'
+
 *Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
+Add or change the following entry in the file '/etc/login.defs':
 ----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>Compliance Check
+   UMASK 027
 ----
 
 [#req365-13]
@@ -520,17 +540,21 @@ _Motivation:_ Executables with SUID and SGID are a high risk for a system. If
 such an executable has a vulnerability it could possibly lead to compromise of
 the system.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Use the following command to find files with SUID or SGID:
 ----
-   <tbd>implementation
+   # df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f \( -perm -4000 -o -perm -2000 \) -print 2
 ----
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (all)
 
+Use the following command to set correct permission to files:
 ----
-   <tbd>Compliance Check
+   chmod a-s <file>
 ----
+
+TIP: See requirement for whitelist of files were SUID/SGID is allowed!
 
 [#req365-14]
 ==== Req 14:	Core dumps must be disabled.
@@ -543,16 +567,39 @@ are needed it is recommended to disable core dumps for setuid processes.
 _Motivation:_ Core dumps can include some sensitive data. To avoid information
 leakage core dumps must be restricted.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Check all files in directory '/etc/security/limits.d/':
 ----
-   <tbd>implementation
+   # grep -i "soft core 0" /etc/security/limits.d/*
+   # grep -i "hard core 0" /etc/security/limits.d/*
+----
+Expected output: '* soft core 0' and '* hard core 0'
+
+Use the following commands to check the kernel parameter:
+----
+   # sysctl fs.suid_dumpable
+   # grep "fs\.suid_dumpable" /etc/sysctl.conf /etc/sysctl.d/*
+----
+Expected output for both commands: 'fs.suid_dumpable = 0'
+
+*Implementation* (all)
+
+If not exist create a file (e.g. '10.hardcore.conf') in the directory
+'/etc/security/limits.d/'. Add the following entries to this file:
+----
+   * soft core 0
+   * hard core 0
 ----
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
+Set the following parameter in the file '/etc/sysctl.conf':
 ----
-   <tbd>Compliance Check
+   fs.suid_dumpable = 0
+----
+
+Use the following command to set the kernel parameter:
+----
+   # sysctl -w fs.suid_dumpable=0
 ----
 
 [#req365-15]
@@ -573,16 +620,33 @@ recommended to use Exec Shield as buffer overflow protection solution.
 _Motivation:_ Buffer overflow attacks can be used to unauthorizedly execute code
 on a system to influence availability or to get full access to a system.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+First must be checked if NoExecute (NX)/ eXecute Disable (XD) is activated
+in system bios with the following command:
 ----
-   <tbd>implementation
+   # dmesg | awk -F' ' '{if ($3 == "NX") print $7}'
+----
+Expected output: 'active'
+
+Use the following command to check if buffer overflow protection is configured
+and activated in running kernel:
+----
+   # sysctl kernel.randomize_va_space
+   # grep "kernel\.randomize_va_space" /etc/sysctl.conf /etc/sysctl.d/*
+----
+Expected output for both commands: kernel.randomize_va_space = 2
+
+*Implementation* (all)
+
+Set the following parameter in the file '/etc/sysctl.conf':
+----
+   kernel.randomize_va_space = 2
 ----
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
+Use the following command to set the kernel parameter:
 ----
-   <tbd>Compliance Check
+   # sysctl -w kernel.randomize_va_space=2
 ----
 
 [#req365-16]
@@ -595,16 +659,24 @@ _Motivation:_ Prelink must be disabled to use the ASLR feature PIE (Position-
 independent executable). Additionally, prelink increases the risk of a compromise
 to a common library such as libc.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (RedHat, Suse)
 
-----
-   <tbd>implementation
-----
+TIP: From RedHat 7 (and Linux distribution based on RedHat 7) and Suse 15 prelink
+is deprecated and no longer part of the distributions.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (Ubuntu)
 
+Check if prelink is installed with the following command:
 ----
-   <tbd>Compliance Check
+   # dpkg -l | grep -io "prelink"
+----
+Expected output: 'prelink'
+
+*Implementation* (Ubuntu)
+
+If prelink is installed uninstall it with the following command:
+----
+   # apt purge prelink
 ----
 
 === 2.1	Network Hardening
@@ -633,16 +705,16 @@ implemented:
 _Motivation:_ An unhardened IPv4 protocol stack is vulnerable against several
 attacks like denial of service, traffic high jacking.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-18]
@@ -662,16 +734,16 @@ implemented:
 _Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several
 attacks like denial of service, traffic high jacking.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 === 2.2	System Update
@@ -690,16 +762,16 @@ _Motivation:_ Vulnerabilities increases the risk of successful exploitation by
 an attacker. The likelihood raises if de-tailed information and tools are
 available that help to exploit the vulnerability.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-20]
@@ -713,16 +785,16 @@ _Motivation:_ The GPG check is necessary to guarantee the authenticity of used
 source an integrity of software. Without this check an attacker could possibly
 manipulate software packets before installation.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 === 2.3	User Authentication
@@ -747,16 +819,16 @@ that are necessary to perform the Required tasks on the system. This is the only
 way to adequately control access to system data and services and to prevent misuse.
 Furthermore, it makes it possible to log activities and actions on a system and to assign them to individual users.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-22]
@@ -773,16 +845,16 @@ requirement!
 _Motivation:_ Accounts that are needed only for local functionality can be used
 to get unauthorized access to the system if not protected in a proper way.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-23]
@@ -813,16 +885,16 @@ _Motivation:_ User accounts that are not protected with a secret authentication
 attribute can be used by an attacker to gain unauthorized access to a system and
 the data and applications stored on it.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-24]
@@ -851,16 +923,16 @@ administration have a higher risk for system’s security. An attacker could get
 extensive rights by compromising such a user account and get access to wide parts
 of the system and stored data.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-25]
@@ -893,16 +965,16 @@ they are not configured on multiple systems. Faulty account management could
 give user inappropriate system rights or continued access to a system e.g. after
 leaving the company or changing the responsibility.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-26]
@@ -917,16 +989,16 @@ lights-out-management or via virtual console in case of virtual machines).
 _Motivation:_ Without authentication, an unauthorized user can gain root
 privileges by forcing a reboot.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 === 2.4	System Management
@@ -944,16 +1016,16 @@ of potential attackers can be reduced, and thus also the likeliness of a
 successful attack. Furthermore, systems must be manageable even in the case the
 customer or production network is down.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-28]
@@ -965,16 +1037,16 @@ connected to a management network or an IP address of the management network.
 _Motivation:_ This Requirement ensures that management services are not
 reachable from untrusted networks and limits so the possibility of attacks.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-29]
@@ -988,14 +1060,16 @@ eavesdropping of sensitive data and unauthorized access.
 
 *Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
-----
-   <tbd>implementation
-----
-
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 ---
