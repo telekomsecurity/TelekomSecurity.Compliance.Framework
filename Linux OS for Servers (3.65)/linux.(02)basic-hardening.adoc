@@ -1169,7 +1169,7 @@ of the system and stored data.
 
 *Compliance Check & Implementation* (all)
 
-NOTE: The implementation of this requirement depends on the used 2-factor 
+NOTE: The implementation of this requirement depends on the used 2-factor
 authentication and service that should be protected. This is very often SSH
 with public key authentication. For more details how to configure 2-factor
 authentication for SSH see Security Requirement Document 3.04 "SSH").
@@ -1224,7 +1224,7 @@ privileges by forcing a reboot.
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
-   <tbd>Compliance Check
+   <tbd>Compliance Check  
 ----
 
 *Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
