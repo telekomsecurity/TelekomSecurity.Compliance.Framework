@@ -929,8 +929,6 @@ _Motivation:_ The GPG check is necessary to guarantee the authenticity of used
 source an integrity of software. Without this check an attacker could possibly
 manipulate software packets before installation.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
 *Compliance Check* (Ubuntu)
 
 Use the following command to check if the correct repositories are configured.
@@ -953,7 +951,7 @@ Use the following commands to check the GPG key configuration:
 ----
 Expected output (example):
 /etc/apt/trusted.gpg
-\--------------------
+'--------------------
 pub   1024D/437D05B5 2004-09-12
 uid                  Ubuntu Archive Automatic Signing Key
 
@@ -1224,7 +1222,7 @@ privileges by forcing a reboot.
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 ----
-   <tbd>Compliance Check  
+   <tbd>Compliance Check
 ----
 
 *Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
