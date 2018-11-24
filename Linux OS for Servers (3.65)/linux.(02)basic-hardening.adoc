@@ -949,15 +949,11 @@ Use the following commands to check the GPG key configuration:
 ----
    # apt-key list
 ----
-Expected output (example):
-
-/etc/apt/trusted.gpg
-
-'--------------------
-pub   1024D/437D05B5 2004-09-12
-
-uid                  Ubuntu Archive Automatic Signing Key
-
+Expected output (example): +
+/etc/apt/trusted.gpg +
+-------------------- +
+pub   1024D/437D05B5 2004-09-12 +
+uid                  Ubuntu Archive Automatic Signing Key +
 
 *Compliance Check* (RedHat)
 
