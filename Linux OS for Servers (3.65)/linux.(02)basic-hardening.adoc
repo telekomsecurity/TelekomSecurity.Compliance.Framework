@@ -693,7 +693,7 @@ implemented:
 *	Secure IPv4 redirects must not be accepted.
 *	IPv4 packet redirect sending must be disabled.
 *	IPv4 source routed packets must not be accepted.
-*	Suspicious packets must be logged
+*	Suspicious packets must be logged.
 *	Broadcast ICMP Requests must be ignored.
 *	Bogus ICMP responses must be ignored.
 *	Reverse Path Filtering must be enabled.
@@ -705,16 +705,75 @@ implemented:
 _Motivation:_ An unhardened IPv4 protocol stack is vulnerable against several
 attacks like denial of service, traffic high jacking.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Use the following commands to verify the running configuration:
 ----
-   <tbd>Compliance Check
+   # sysctl <ipv4-setting>
+   # grep "<ipv4-setting>" /etc/sysctl.conf /etc/sysctl.d/*
 ----
+Expected output for both commands: <ipv4-setting> = <value>
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+Use the following IPv4 settings and corresponding values:
 
+* <ipv4-setting> = <value>
+
+IPv4 forwarding must be disabled:
+* net.ipv4.ip_forward = 0
+
+IPv4 redirects must not be accepted:
+* net.ipv4.conf.all.accept_redirects = 0
+* net.ipv4.conf.default.accept_redirects = 0
+
+Secure IPv4 redirects must not be accepted:
+* net.ipv4.conf.all.secure_redirects = 1
+* net.ipv4.conf.default.secure_redirects = 1
+
+IPv4 packet redirect sending must be disabled:
+* net.ipv4.conf.all.send_redirects = 0
+* net.ipv4.conf.default.send_redirects = 0
+
+IPv4 source routed packets must not be accepted:
+* net.ipv4.conf.all.accept_source_route = 0
+* net.ipv4.conf.default.accept_source_route = 0
+
+Suspicious packets must be logged:
+* net.ipv4.conf.all.log_martians = 1
+* net.ipv4.conf.default.log_martians = 1
+
+Broadcast ICMP Requests must be ignored:
+* net.ipv4.icmp_echo_ignore_broadcasts = 1
+
+Bogus ICMP responses must be ignored:
+* net.ipv4.icmp_ignore_bogus_error_responses = 1
+
+Reverse Path Filtering must be enabled:
+* net.ipv4.conf.all.rp_filter = 1
+* net.ipv4.conf.default.rp_filter = 1
+
+TCP SYN Cookies must be enabled:
+* net.ipv4.tcp_syncookies = 1
+
+An ICMP ratelimit must be configured:
+* nett.ipv4.icmp_ratelimit = 100
+* net.ipv4.icmp_ratemask = 88089
+
+Timestamp must be disabled:
+* net.ipv4.tcp_timestamps = 0
+
+ARP must be restricted:
+* net.ipv4.conf.all.arp_ignore = 2
+* net.ipv4.conf.all.arp_announce = 2
+* net.ipv4.conf.all.arp_notify = 0
+* net.ipv4.conf.all.arp_accept = 0
+
+*Implementation* (all)
+
+First add the above listed IPv4 settings and values with in the file '/etc/sysctl.conf'.
+Than use the following command to set these for IPv4 settings for the running
+system:
 ----
-   <tbd>implementation
+   # sysctl -w <ipv4-setting>=<value>
 ----
 
 [#req365-18]
@@ -729,21 +788,72 @@ implemented:
 *	IPv6 source routed packets must not be accepted.
 *	IPv6 router advertisements must not be accepted.
 *	IPv6 router solicitations messages must not be accepted.
-*	IPv6 autoconfiguration must be disabled
+*	IPv6 autoconfiguration must be disabled.
 
 _Motivation:_ An un-hardened IPv6 protocol stack is vulnerable against several
 attacks like denial of service, traffic high jacking.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Use the following commands to verify the running configuration:
 ----
-   <tbd>Compliance Check
+   # sysctl <ipv6-setting>
+   # grep "<ipv6-setting>" /etc/sysctl.conf /etc/sysctl.d/*
 ----
+Expected output for both commands: <ipv6-setting> = <value>
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+Use the following IPv6 settings and corresponding values:
 
+* <ipv6-setting> = <value>
+
+If IPv6 is not used it must be completely disabled with:
+* net.ipv6.conf.all.disable_ipv6: 1
+* net.ipv6.conf.default.disable_ipv6: 1
+
+If IPv6 is used enable it and set the following parameters:
+
+* net.ipv6.conf.all.disable_ipv6: 0
+* net.ipv6.conf.default.disable_ipv6: 0
+
+IPv6 forwarding must be disabled:
+* net.ipv6.conf.all.forwarding: 0
+* net.ipv6.conf.default.forwarding: 0
+
+IPv6 redirects must not be accepted:
+* net.ipv6.conf.all.accept_redirects: 0
+* net.ipv6.conf.default.accept_redirects: 0
+
+IPv6 source routed packets must not be accepted:
+* net.ipv6.conf.all.accept_source_route: 0
+* net.ipv6.conf.default.accept_source_route: 0
+
+IPv6 router advertisements must not be accepted:
+* net.ipv6.conf.all.accept_ra: 0
+* net.ipv6.conf.default.accept_ra: 0
+* net.ipv6.conf.all.accept_ra_rtr_pref: 0
+* net.ipv6.conf.default.accept_ra_rtr_pref: 0
+* net.ipv6.conf.all.accept_ra_pinfo: 0
+* net.ipv6.conf.default.accept_ra_pinfo: 0
+* net.ipv6.conf.all.accept_ra_defrtr: 0
+* net.ipv6.conf.default.accept_ra_defrtr: 0
+
+IPv6 router solicitations messages must not be accepted:
+* net.ipv6.conf.all.router_solicitations: 0
+* net.ipv6.conf.default.router_solicitations: 0
+* net.ipv6.conf.all.dad_transmits: 0
+* net.ipv6.conf.default.dad_transmits: 0
+
+IPv6 autoconfiguration must be disabled:
+* net.ipv6.conf.all.autoconf: 0
+* net.ipv6.conf.default.autoconf: 0
+
+*Implementation* (all)
+
+First add the above listed IPv6 settings and values with in the file '/etc/sysctl.conf'.
+Than use the following command to set these for IPv4 settings for the running
+system:
 ----
-   <tbd>implementation
+   # sysctl -w <ipv6-setting>=<value>
 ----
 
 === 2.2	System Update
@@ -762,16 +872,50 @@ _Motivation:_ Vulnerabilities increases the risk of successful exploitation by
 an attacker. The likelihood raises if de-tailed information and tools are
 available that help to exploit the vulnerability.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (Ubuntu)
 
+Use the following commands to first update the repository and second show
+all available upgrades:
 ----
-   <tbd>Compliance Check
+   # apt update
+   # apt list --upgradable
 ----
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (RedHat)
 
+Use the following command to search for available updates:
 ----
-   <tbd>implementation
+   # yum check-update
+----
+
+*Compliance Check* (Suse)
+
+Use the following commands to first update the repository and second show
+all available upgrades:
+----
+   # zypper refresh -s
+   # zypper list-updates
+----
+
+*Implementation* (Ubuntu)
+
+Use the following command to update the operating system:
+----
+   # apt upgrade
+----
+
+*Implementation* (RedHat)
+
+Use the following command to update the operating system:
+----
+   # yum update
+----
+
+*Implementation* (Suse)
+
+Use the following command to update the operating system:
+----
+   # zypper update
 ----
 
 [#req365-20]
@@ -787,14 +931,90 @@ manipulate software packets before installation.
 
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
+*Compliance Check* (Ubuntu)
+
+Use the following command to check if the correct repositories are configured.
+This is especially important if internal own operated repository servers are
+used.
 ----
-   <tbd>Compliance Check
+   # apt-cache policy
 ----
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
+Check that the file 'sources.list' not include the parameter '[trusted=yes] '.
+This will disable the GPG check for repositories and must not be used:
 ----
-   <tbd>implementation
+grep "trusted=yes" /etc/apt/sources.list
+----
+If compliant the command gives nothing back.
+
+Use the following commands to check the GPG key configuration:
+----
+   # apt-key list
+----
+Expected output (example):
+/etc/apt/trusted.gpg
+\--------------------
+pub   1024D/437D05B5 2004-09-12
+uid                  Ubuntu Archive Automatic Signing Key
+
+*Compliance Check* (RedHat)
+
+Use the following command to check if the correct repositories are configured.
+This is especially important if internal own operated satellite servers are
+used.
+----
+   # yum repolist
+----
+
+Use the following command to check if GPG check is enabled:
+----
+   # grep ^gpgcheck /etc/yum.conf
+----
+Expected output: 'gpgcheck=1' or none
+
+Use the following commands to check the GPG key configuration:
+----
+   # rpm -q gpg-pubkey --qf '%{name}-%{version}-%{release} --> %{summary}\n'
+----
+Expected output (example):
+gpg-pubkey-fd431d51-4ae0493b --> gpg(Red Hat, Inc. (release key 2)
+gpg-pubkey-2fa658e0-45700c69 --> gpg(Red Hat, Inc. (auxiliary key)
+
+*Compliance Check* (Suse)
+
+Use the following command to check if the correct repositories are configured.
+This is especially important if internal own operated repository servers are
+used.
+----
+   # zypper repos
+----
+Use the following command to check if GPG check is enabled:
+----
+   # grep ^gpgcheck /etc/zypp/zypp.conf
+----
+Expected output: 'gpgcheck=1' or none
+
+Use the following commands to check the GPG key configuration:
+----
+   # rpm -q gpg-pubkey --qf '%{name}-%{version}-%{release} --> %{summary}\n'
+----
+Expected output (example):
+gpg-pubkey-307e3d54-5aaa90a5 --> gpg(SuSE Package Signing Key)
+gpg-pubkey-39db7c82-5847eb1f --> gpg(SuSE Package Signing Key)
+
+*Implementation* (Ubuntu)
+
+Use the following command to add or update GPG keys:
+----
+   # apt-key add <key-file>
+   # apt-key update
+----
+
+*Implementation* (RedHat, Suse)
+
+Use the following command to add GPG keys:
+----
+   # rpm --import /path/<key-file>
 ----
 
 === 2.3	User Authentication
@@ -819,17 +1039,28 @@ that are necessary to perform the Required tasks on the system. This is the only
 way to adequately control access to system data and services and to prevent misuse.
 Furthermore, it makes it possible to log activities and actions on a system and to assign them to individual users.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (Ubuntu)
 
+Use the following command to search for not needed and prohibited user accounts on
+the system:
 ----
-   <tbd>Compliance Check
+   # awk -F':' '{ if ( $3 >= 1000 && $7 != "/usr/sbin/nologin" ) print $1 }' /etc/passwd
 ----
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Use the following command to search for not needed and prohibited user accounts on
+the system:
 ----
-   <tbd>implementation
+   # awk -F':' '{ if ( $3 >= 1000 && $7 != "/sbin/nologin" ) print $1 }' /etc/passwd
 ----
+
+*Implementation* (all)
+
+TIP: Make sure that you have an approved authentication concept that describes
+and guarantees how to administrate individual user accounts. Delete all group
+account that violate this requirement (# userdel <user>)!
+
 
 [#req365-22]
 ==== Req 22:	System accounts must be non-login.
@@ -845,21 +1076,30 @@ requirement!
 _Motivation:_ Accounts that are needed only for local functionality can be used
 to get unauthorized access to the system if not protected in a proper way.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Use the following command to search for system accounts with login option:
 ----
-   <tbd>Compliance Check
+   # awk -F':' '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $3<1000 && $7=="/bin/bash") {print $1}' /etc/passwd
+----
+Expected output: none (if system accounts are configured correct)
+
+*Implementation* (Ubuntu)
+
+Use the following command to set system accounts to no-login:
+----
+   # /usr/sbin/usermod -s /usr/sbin/nologin <system-account>
 ----
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (RedHat, Suse)
 
+Use the following command to set system accounts to no-login:
 ----
-   <tbd>implementation
+   # /usr/sbin/usermod -s /sbin/nologin <system-account>
 ----
 
 [#req365-23]
-==== Req 23:	User accounts must be protected against unauthorized usage by at
-least one authentication attribute.
+==== Req 23:	User accounts must be protected against unauthorized usage by at least one authentication attribute.
 
 The various user and machine accounts on a system must be protected from misuse. To this end, an authentication attribute is typically used, which, when combined with the user name, enables unam-biguous authentication and identification of the authorized user.
 
@@ -885,16 +1125,20 @@ _Motivation:_ User accounts that are not protected with a secret authentication
 attribute can be used by an attacker to gain unauthorized access to a system and
 the data and applications stored on it.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
 ----
-   <tbd>Compliance Check
+   # awk -F":" '($2 == "" && $2 != "!" && $2 !="*") {print $1}' /etc/shadow
 ----
+Expected output: none (or only users that use alternatively 2-factor
+authentication like public-key authentication + passphrase (see req 24)).
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (all)
 
+If you have identified user accounts with adequate protection you can lock
+the account using the following command:
 ----
-   <tbd>implementation
+   # passwd -l <user-account>
 ----
 
 [#req365-24]
@@ -923,17 +1167,12 @@ administration have a higher risk for system’s security. An attacker could get
 extensive rights by compromising such a user account and get access to wide parts
 of the system and stored data.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check & Implementation* (all)
 
-----
-   <tbd>Compliance Check
-----
-
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
+NOTE: The implementation of this requirement depends on the used 2-factor 
+authentication and service that should be protected. This is very often SSH
+with public key authentication. For more details how to configure 2-factor
+authentication for SSH see Security Requirement Document 3.04 "SSH").
 
 [#req365-25]
 ==== Req 25:	The system must be connected to a central system for user administration.
@@ -965,17 +1204,10 @@ they are not configured on multiple systems. Faulty account management could
 give user inappropriate system rights or continued access to a system e.g. after
 leaving the company or changing the responsibility.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check & Implementation* (all)
 
-----
-   <tbd>Compliance Check
-----
-
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
-----
-   <tbd>implementation
-----
+NOTE: Implementation depends on the used solution (e.g. LDAP, Kerberos).
+Examples are planed for further versions of this document.
 
 [#req365-26]
 ==== Req 26:	Authentication must be used for single user mode.
