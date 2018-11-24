@@ -717,56 +717,54 @@ Expected output for both commands: <ipv4-setting> = <value>
 
 Use the following IPv4 settings and corresponding values:
 
-* <ipv4-setting> = <value> +
+IPv4 forwarding must be disabled: ::
+* net.ipv4.ip_forward = 0
 
-IPv4 forwarding must be disabled: +
-* net.ipv4.ip_forward = 0 +
+IPv4 redirects must not be accepted: ::
+* net.ipv4.conf.all.accept_redirects = 0
+* net.ipv4.conf.default.accept_redirects = 0
 
-IPv4 redirects must not be accepted: +
-* net.ipv4.conf.all.accept_redirects = 0 +
-* net.ipv4.conf.default.accept_redirects = 0 +
+Secure IPv4 redirects must not be accepted: ::
+* net.ipv4.conf.all.secure_redirects = 1
+* net.ipv4.conf.default.secure_redirects = 1
 
-Secure IPv4 redirects must not be accepted: +
-* net.ipv4.conf.all.secure_redirects = 1 +
-* net.ipv4.conf.default.secure_redirects = 1 +
+IPv4 packet redirect sending must be disabled: ::
+* net.ipv4.conf.all.send_redirects = 0
+* net.ipv4.conf.default.send_redirects = 0
 
-IPv4 packet redirect sending must be disabled: +
-* net.ipv4.conf.all.send_redirects = 0 +
-* net.ipv4.conf.default.send_redirects = 0 +
+IPv4 source routed packets must not be accepted: ::
+* net.ipv4.conf.all.accept_source_route = 0
+* net.ipv4.conf.default.accept_source_route = 0
 
-IPv4 source routed packets must not be accepted: +
-* net.ipv4.conf.all.accept_source_route = 0 +
-* net.ipv4.conf.default.accept_source_route = 0 +
+Suspicious packets must be logged: ::
+* net.ipv4.conf.all.log_martians = 1
+* net.ipv4.conf.default.log_martians = 1
 
-Suspicious packets must be logged: +
-* net.ipv4.conf.all.log_martians = 1 +
-* net.ipv4.conf.default.log_martians = 1 +
+Broadcast ICMP Requests must be ignored: ::
+* net.ipv4.icmp_echo_ignore_broadcasts = 1
 
-Broadcast ICMP Requests must be ignored: +
-* net.ipv4.icmp_echo_ignore_broadcasts = 1 +
+Bogus ICMP responses must be ignored: ::
+* net.ipv4.icmp_ignore_bogus_error_responses = 1
 
-Bogus ICMP responses must be ignored: +
-* net.ipv4.icmp_ignore_bogus_error_responses = 1 +
+Reverse Path Filtering must be enabled: ::
+* net.ipv4.conf.all.rp_filter = 1
+* net.ipv4.conf.default.rp_filter = 1
 
-Reverse Path Filtering must be enabled: +
-* net.ipv4.conf.all.rp_filter = 1 +
-* net.ipv4.conf.default.rp_filter = 1 +
+TCP SYN Cookies must be enabled: ::
+* net.ipv4.tcp_syncookies = 1
 
-TCP SYN Cookies must be enabled: +
-* net.ipv4.tcp_syncookies = 1 +
+An ICMP ratelimit must be configured: ::
+* nett.ipv4.icmp_ratelimit = 100
+* net.ipv4.icmp_ratemask = 88089
 
-An ICMP ratelimit must be configured: +
-* nett.ipv4.icmp_ratelimit = 100 +
-* net.ipv4.icmp_ratemask = 88089 +
+Timestamp must be disabled: ::
+* net.ipv4.tcp_timestamps = 0
 
-Timestamp must be disabled: +
-* net.ipv4.tcp_timestamps = 0 +
-
-ARP must be restricted: +
-* net.ipv4.conf.all.arp_ignore = 2 +
-* net.ipv4.conf.all.arp_announce = 2 +
-* net.ipv4.conf.all.arp_notify = 0 +
-* net.ipv4.conf.all.arp_accept = 0 +
+ARP must be restricted: ::
+* net.ipv4.conf.all.arp_ignore = 2
+* net.ipv4.conf.all.arp_announce = 2
+* net.ipv4.conf.all.arp_notify = 0
+* net.ipv4.conf.all.arp_accept = 0
 
 *Implementation* (all)
 
@@ -805,47 +803,45 @@ Expected output for both commands: <ipv6-setting> = <value>
 
 Use the following IPv6 settings and corresponding values:
 
-* <ipv6-setting> = <value> +
-
 If IPv6 is not used it must be completely disabled with: ::
 * net.ipv6.conf.all.disable_ipv6: 1
 * net.ipv6.conf.default.disable_ipv6: 1
 
-If IPv6 is used enable it and set the following parameters: +
-* net.ipv6.conf.all.disable_ipv6: 0 +
-* net.ipv6.conf.default.disable_ipv6: 0 +
+If IPv6 is used enable it and set the following parameters: ::
+* net.ipv6.conf.all.disable_ipv6: 0
+* net.ipv6.conf.default.disable_ipv6: 0
 
-IPv6 forwarding must be disabled: +
-* net.ipv6.conf.all.forwarding: 0 +
-* net.ipv6.conf.default.forwarding: 0 +
+IPv6 forwarding must be disabled: ::
+* net.ipv6.conf.all.forwarding: 0
+* net.ipv6.conf.default.forwarding: 0
 
-IPv6 redirects must not be accepted: +
-* net.ipv6.conf.all.accept_redirects: 0 +
-* net.ipv6.conf.default.accept_redirects: 0 +
+IPv6 redirects must not be accepted: ::
+* net.ipv6.conf.all.accept_redirects: 0
+* net.ipv6.conf.default.accept_redirects: 0
 
-IPv6 source routed packets must not be accepted: +
-* net.ipv6.conf.all.accept_source_route: 0 +
-* net.ipv6.conf.default.accept_source_route: 0 +
+IPv6 source routed packets must not be accepted: ::
+* net.ipv6.conf.all.accept_source_route: 0
+* net.ipv6.conf.default.accept_source_route: 0
 
-IPv6 router advertisements must not be accepted: +
-* net.ipv6.conf.all.accept_ra: 0 +
-* net.ipv6.conf.default.accept_ra: 0 +
-* net.ipv6.conf.all.accept_ra_rtr_pref: 0 +
-* net.ipv6.conf.default.accept_ra_rtr_pref: 0 +
-* net.ipv6.conf.all.accept_ra_pinfo: 0 +
-* net.ipv6.conf.default.accept_ra_pinfo: 0 +
-* net.ipv6.conf.all.accept_ra_defrtr: 0 +
-* net.ipv6.conf.default.accept_ra_defrtr: 0 +
+IPv6 router advertisements must not be accepted: ::
+* net.ipv6.conf.all.accept_ra: 0
+* net.ipv6.conf.default.accept_ra: 0
+* net.ipv6.conf.all.accept_ra_rtr_pref: 0
+* net.ipv6.conf.default.accept_ra_rtr_pref: 0
+* net.ipv6.conf.all.accept_ra_pinfo: 0
+* net.ipv6.conf.default.accept_ra_pinfo: 0
+* net.ipv6.conf.all.accept_ra_defrtr: 0
+* net.ipv6.conf.default.accept_ra_defrtr: 0
 
-IPv6 router solicitations messages must not be accepted: +
-* net.ipv6.conf.all.router_solicitations: 0 +
-* net.ipv6.conf.default.router_solicitations: 0 +
-* net.ipv6.conf.all.dad_transmits: 0 +
-* net.ipv6.conf.default.dad_transmits: 0 +
+IPv6 router solicitations messages must not be accepted: ::
+* net.ipv6.conf.all.router_solicitations: 0
+* net.ipv6.conf.default.router_solicitations: 0
+* net.ipv6.conf.all.dad_transmits: 0
+* net.ipv6.conf.default.dad_transmits: 0
 
-IPv6 autoconfiguration must be disabled: +
-* net.ipv6.conf.all.autoconf: 0 +
-* net.ipv6.conf.default.autoconf: 0 +
+IPv6 autoconfiguration must be disabled: ::
+* net.ipv6.conf.all.autoconf: 0
+* net.ipv6.conf.default.autoconf: 0
 
 *Implementation* (all)
 
