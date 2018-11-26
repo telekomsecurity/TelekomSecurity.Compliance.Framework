@@ -85,7 +85,7 @@ This takes only effect after a reboot. To stop services immediately use:
    # service <service-name> stop
 ----
 
-TIP: Services should be uninstalled (see Req 3) if permanently not needed on
+NOTE: Services should be uninstalled (see Req 3) if permanently not needed on
 a system.
 
 [#req365-2]
@@ -141,7 +141,7 @@ not needed on a server system are:
 *	rsh server/client
 
 
-TIP: It is not allowed to install software on a server that is not needed for
+NOTE: It is not allowed to install software on a server that is not needed for
 operation, maintenance or general functionality!
 
 _Motivation:_ Vulnerabilities in software offer an attack window for attackers
@@ -257,7 +257,7 @@ Use the following command to search for partitions:
 
 *Implementation* (all)
 
-TIP: Partitions should be generated during the installation of Linux operating
+NOTE: Partitions should be generated during the installation of Linux operating
 system!
 
 [#req365-6]
@@ -269,7 +269,7 @@ The named mount options must be set for the following partitions if they exist:
 *	/var/tmp (nodev, nosuid, noexec)
 *	/home (nodev)
 
-TIP: For installation reasons it could be necessary to remove 'noexec' from
+NOTE: For installation reasons it could be necessary to remove 'noexec' from
 partition '/tmp' as this is used sometimes for script execution during software
 installation.
 
@@ -555,7 +555,7 @@ Use the following command to set correct permission to files:
    chmod a-s <file>
 ----
 
-TIP: See requirement for whitelist of files were SUID/SGID is allowed!
+NOTE: See requirement for whitelist of files were SUID/SGID is allowed!
 
 [#req365-14]
 ==== Req 14:	Core dumps must be disabled.
@@ -615,7 +615,7 @@ servers. The following solutions are available:
 NoExecute (NX)/ eXecute Disable (XD) must be activated in system bios for the
 functionality of buffer overflow protection solutions.
 
-TIP: ASLR has some weaknesses. For servers with a high security demand it is
+NOTE: ASLR has some weaknesses. For servers with a high security demand it is
 recommended to use Exec Shield as buffer overflow protection solution.
 
 _Motivation:_ Buffer overflow attacks can be used to unauthorizedly execute code
@@ -662,7 +662,7 @@ to a common library such as libc.
 
 *Compliance Check* (RedHat, Suse)
 
-TIP: From RedHat 7 (and Linux distribution based on RedHat 7) and Suse 15 prelink
+NOTE: From RedHat 7 (and Linux distribution based on RedHat 7) and Suse 15 prelink
 is deprecated and no longer part of the distributions.
 
 *Compliance Check* (Ubuntu)
@@ -860,7 +860,7 @@ system:
 The administrator must check before the installation of software on a server if
 vulnerabilities are known for the selected version. Software with known vulnerabilities must not be used. Excepted from this rule are components for which the vendor has already provided a measure to remedy the vulner-ability, e.g. a patch, update or workaround. In this case, the additional measure must be implement-ed on the server.
 
-TIP: It is mandatory to implement a patch management process covering the
+NOTE: It is mandatory to implement a patch management process covering the
 complete life cycle of the server to guarantee that upcoming vulnerabilities
 will be fixed as soon as possible.
 
@@ -1051,7 +1051,7 @@ the system:
 
 *Implementation* (all)
 
-TIP: Make sure that you have an approved authentication concept that describes
+NOTE: Make sure that you have an approved authentication concept that describes
 and guarantees how to administrate individual user accounts. Delete all group
 account that violate this requirement (# userdel <user>)!
 
@@ -1064,7 +1064,7 @@ of applications. These users are not intended to provide a shell. To avoid that
 such accounts are used to login the shell pa-rameter in file '/etc/passwd' must
 be set to '/usr/sbin/nologin' or '/bin/false'.
 
-TIP: The system accounts root, sync, shutdown and halt are excluded from this
+NOTE: The system accounts root, sync, shutdown and halt are excluded from this
 requirement!
 
 _Motivation:_ Accounts that are needed only for local functionality can be used
@@ -1175,12 +1175,12 @@ Systems must be connected to a central system for user administration. A solutio
 for identity management should be preferred. Accounts and their rights must be
 administrated on central identity management systems (e.g. cIAM, WiW, ZAM) in
 Deutsche Telekom Group. The system must provide a central interface (e.g. LDAPs
-  for authorization, Kerberos for authentication, revocation information for
-  certificates) or decentralized mechanisms (e.g. public-key authentication) for
-  the provisioning of authorization data. In areas where a central identity
-  management system is not available a central system such as LDAP, TACACS+ or
-  Radius server must be used for the administration of accounts and their
-  authentication and authorization.
+or authorization, Kerberos for authentication, revocation information for
+certificates) or decentralized mechanisms (e.g. public-key authentication) for
+the provisioning of authorization data. In areas where a central identity
+management system is not available a central system such as LDAP, TACACS+ or
+Radius server must be used for the administration of accounts and their
+authentication and authorization.
 
 Exceptions to this Requirement are accounts that are used only internally by the
 system involved and that are Required for one or more applications on the system
@@ -1215,16 +1215,46 @@ lights-out-management or via virtual console in case of virtual machines).
 _Motivation:_ Without authentication, an unauthorized user can gain root
 privileges by forcing a reboot.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (Ubuntu)
 
+On Ubuntu Linux the user 'root' is not used and has no password set. As a result
+login without any authentication after a reboot is possible. Use the following
+command to check if a password is configured for user 'root':
 ----
-   <tbd>Compliance Check
+   # grep "^root:[*\!]:" /etc/shadow
+----
+If this command gives no output the user 'root' has no password set.
+
+*Compliance Check* (RedHat, Suse)
+
+Use the following commands to search for relevant entry in files:
+----
+   # grep "^ExecStart=" /usr/lib/systemd/system/rescue.service
+   # grep "^ExecStart=" /usr/lib/systemd/system/emergency.service
+----
+Expected output:
+ExecStart=-/bin/sh -c "/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
+
+*Implementation* (Ubuntu)
+
+To activate single user mode on Ubuntu Linux a password must be set for this
+user.
+
+NOTE: The password must be hold confidential as the user 'root' is not allowed
+to be used by employees to login. The user 'root' must only be used for emergency
+reasons!
+
+Set a password for user 'root'
+----
+   # passwd root
 ----
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (RedHat, Suse)
 
+Add the following line to the files '/usr/lib/systemd/system/rescue.service' and
+'/usr/lib/systemd/system/emergency.service' to enable single user mode:
 ----
-   <tbd>implementation
+   ExecStart=-/bin/sh -c "/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
 ----
 
 === 2.4	System Management
@@ -1242,17 +1272,25 @@ of potential attackers can be reduced, and thus also the likeliness of a
 successful attack. Furthermore, systems must be manageable even in the case the
 customer or production network is down.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (Ubuntu)
 
+Use the following command to check the interfaces and IP addresses:
 ----
-   <tbd>Compliance Check
+   # ifconfig -a
 ----
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (RedHat, Suse)
 
+Use the following command to check the interfaces and IP addresses:
 ----
-   <tbd>implementation
+   # ip addr
 ----
+
+*Implementation* (all)
+
+Two physical or virtual (VLAN, VxLAN etc.) interfaces must be configured. One
+for the connection to management network and another one to production
+network.
 
 [#req365-28]
 ==== Req 28:	Management services must be bound to the management network.
@@ -1263,16 +1301,59 @@ connected to a management network or an IP address of the management network.
 _Motivation:_ This Requirement ensures that management services are not
 reachable from untrusted networks and limits so the possibility of attacks.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+This must be checked for all management services. Check open ports to find
+all services (tcp: ss -nlt; udp: ss -nlu). The following section gives only
+some examples for most common management services:
+
+Example for OpenSSH:
 ----
-   <tbd>Compliance Check
+   # grep "^ListenAddress" /etc/ssh/sshd_config
+----
+Expected output: ListenAddress <ip-address-of-mgmt-network>
+
+Example for NTP:
+----
+   # grep "^interface listen" /etc/ntp.conf
+----
+Expected output: interface listen <ip-address-of-mgmt-network>
+
+Example for Chrony:
+----
+   # grep "^bindaddress" /etc/chrony.conf
+----
+Expected output: bindaddress <ip-address-of-mgmt-network>
+
+Example for rsyslog:
+----
+   # grep "^$UDPServerAddress" /etc/rsyslog.conf/
+----
+Expected output: $UDPServerAddress <ip-address-of-mgmt-network>
+
+*Implementation* (all)
+
+The services itself must be configured to use the correct interface intended
+for management reasons.
+
+OpenSSH: add the following line to file '/etc/ssh/ssd_conf':
+----
+   ListenAddress <ip-address-of-mgmt-network>
 ----
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
-
+NTP: add the following line to file '/etc/ntp.conf':
 ----
-   <tbd>implementation
+   interface listen <ip-address-of-mgmt-network>
+----
+
+Chrony: add the following line to file /etc/chrony.conf
+----
+   bindaddress <ip-address-of-mgmt-network
+----
+
+rsyslog: add the following line to file /etc/rsyslog.conf/
+----
+   $UDPServerAddress <ip-address-of-mgmt-network>
 ----
 
 [#req365-29]
@@ -1283,8 +1364,6 @@ be encrypted. Only services like SSHv2 and HTTPS (TLS) are allowed.
 
 _Motivation:_ Management connections and access must be protected against
 eavesdropping of sensitive data and unauthorized access.
-
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
 *Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
 
