@@ -93,7 +93,7 @@ a system.
 
 The available services of a server are enabled without any restrictions for
 network reachability by default on all available network interfaces. In most
-cases it is not needed that such services are re-motely reachable for anyone.
+cases it is not needed that such services are remotely reachable for anyone.
 To limit the attack surface services must be bound only to the network
 interfaces where they are needed.
 
@@ -101,23 +101,25 @@ Some services of a system, like management services, have only a limited and
 clearly defined set of needed communication partners. The reachability of such
 services must be restricted to IP addresses of legitimated communication partners. To limit the reachability a local firewall solution must be used in case no external solution to control the reachability (e.g. dedicated firewall, OpenStack secu-rity groups) in front of the system is available. Examples for local firewall solutions are:
 
-*	iptables (see chapter 5 for more details)
+*	iptables (see link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(05)iptables.adoc[IPTables] for more details)
 *	nftables
 
 _Motivation:_ Disabling services on network interfaces and the implementation
 of filters to limit the reachability can reduce the potential attack possibilities.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04, RHEL 7.x/ CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
+Use the following commands to check if reachability of services are restricted
+with IPTables were needed:
 ----
-   <tbd>Compliance Check
+   # sudo iptables -L
 ----
+Expected output: command shows a table of all IPTables rules.
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04, RHEL 7.x/ CentOS 7.x, SLES 15)
+*Implementation* (all)
 
-----
-   <tbd>implementation
-----
+See req-50 (link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(05)iptables.adoc[IPTables])
+how to configure IPTables rules for listening services.
 
 [#req365-3]
 ==== Req 3: Unused software must not be installed or must be uninstalled.
@@ -1365,19 +1367,19 @@ be encrypted. Only services like SSHv2 and HTTPS (TLS) are allowed.
 _Motivation:_ Management connections and access must be protected against
 eavesdropping of sensitive data and unauthorized access.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check & Implementation* (all)
 
-----
-   <tbd>Compliance Check
-----
+Use only encrypted protocols like the following for system Management:
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+* SSH
+* SFTP
+* HTTPS
+* SYSLOG-NG
 
-----
-   <tbd>implementation
-----
+NOTE: As syslog-ng is not available on all operating systems as an exception
+standard syslog can be used.
 
----
+
 === Content
 
    1. link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework/blob/master/Linux%20OS%20for%20Servers%20(3.65)/linux.(01)introduction.adoc[Introduction]
