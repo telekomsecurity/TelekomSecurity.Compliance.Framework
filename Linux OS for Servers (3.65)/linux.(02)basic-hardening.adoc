@@ -582,7 +582,7 @@ Expected output: '* soft core 0' and '* hard core 0'
 Use the following commands to check the kernel parameter:
 ----
    # sysctl fs.suid_dumpable
-   # grep "fs\.suid_dumpable" /etc/sysctl.conf /etc/sysctl.d/*
+   # grep "fs.suid_dumpable" /etc/sysctl.conf /etc/sysctl.d/*
 ----
 Expected output for both commands: 'fs.suid_dumpable = 0'
 
@@ -636,7 +636,7 @@ Use the following command to check if buffer overflow protection is configured
 and activated in running kernel:
 ----
    # sysctl kernel.randomize_va_space
-   # grep "kernel\.randomize_va_space" /etc/sysctl.conf /etc/sysctl.d/*
+   # grep "kernel.randomize_va_space" /etc/sysctl.conf /etc/sysctl.d/*
 ----
 Expected output for both commands: kernel.randomize_va_space = 2
 
