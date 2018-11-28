@@ -4,7 +4,7 @@
 # Telekom Security - Script for Compliance Check
 # Linux OS for Servers (3.65)
 # Version: 0.1
-# Date: 20-11-18
+# Date: 28-11-18
 # Author: Markus Schumburg (security.automation@telekom.de)
 # -----------------------------------------------------------------------------
 
@@ -30,6 +30,51 @@ SUID_FILES="/bin/ping /sbin/pam_timestamp_check /sbin/unix_chkpwd /usr/bin/at \
  /usr/lib/squid/ncsa_auth /usr/lib/squid/pam_auth /usr/kerberos/bin/ksu \
  /usr/sbin/ccreds_validate /usr/lib/dbus-1.0/dbus-daemon-launch-helper \
  /usr/lib/policykit-1/polkit-agent-helper-1"
+IPV4_1="net.ipv4.ip_forward = 0"
+IPV4_2="net.ipv4.conf.all.accept_redirects = 0"
+IPV4_3="net.ipv4.conf.default.accept_redirects = 0"
+IPV4_4="net.ipv4.conf.all.secure_redirects = 1"
+IPV4_5="net.ipv4.conf.default.secure_redirects = 1"
+IPV4_6="net.ipv4.conf.all.send_redirects = 0"
+IPV4_7="net.ipv4.conf.default.send_redirects = 0"
+IPV4_8="net.ipv4.conf.all.accept_source_route = 0"
+IPV4_9="net.ipv4.conf.default.accept_source_route = 0"
+IPV4_10="net.ipv4.conf.all.log_martians = 1"
+IPV4_11="net.ipv4.conf.default.log_martians = 1"
+IPV4_12="net.ipv4.icmp_echo_ignore_broadcasts = 1"
+IPV4_13="net.ipv4.icmp_ignore_bogus_error_responses = 1"
+IPV4_14="net.ipv4.conf.all.rp_filter = 1"
+IPV4_15="net.ipv4.conf.default.rp_filter = 1"
+IPV4_16="net.ipv4.tcp_syncookies = 1"
+IPV4_17="net.ipv4.icmp_ratelimit = 100"
+IPV4_18="net.ipv4.icmp_ratemask = 88089"
+IPV4_19="net.ipv4.tcp_timestamps = 0"
+IPV4_20="net.ipv4.conf.all.arp_ignore = 2"
+IPV4_21="net.ipv4.conf.all.arp_announce = 2"
+IPV4_22="net.ipv4.conf.all.arp_notify = 0"
+IPV4_23="net.ipv4.conf.all.arp_accept = 0"
+IPV6_1="net.ipv6.conf.all.disable_ipv6 = 0"
+IPV6_2="net.ipv6.conf.default.disable_ipv6 = 0"
+IPV6_3="net.ipv6.conf.all.forwarding = 0"
+IPV6_4="net.ipv6.conf.default.forwarding = 0"
+IPV6_5="net.ipv6.conf.all.accept_redirects = 0"
+IPV6_6="net.ipv6.conf.default.accept_redirects = 0"
+IPV6_7="net.ipv6.conf.all.accept_source_route = 0"
+IPV6_8="net.ipv6.conf.default.accept_source_route = 0"
+IPV6_9="net.ipv6.conf.all.accept_ra = 0"
+IPV6_10="net.ipv6.conf.default.accept_ra = 0"
+IPV6_11="net.ipv6.conf.all.accept_ra_rtr_pref = 0"
+IPV6_12="net.ipv6.conf.default.accept_ra_rtr_pref = 0"
+IPV6_13="net.ipv6.conf.all.accept_ra_pinfo = 0"
+IPV6_14="net.ipv6.conf.default.accept_ra_pinfo = 0"
+IPV6_15="net.ipv6.conf.all.accept_ra_defrtr = 0"
+IPV6_16="net.ipv6.conf.default.accept_ra_defrtr = 0"
+IPV6_17="net.ipv6.conf.all.router_solicitations = 0"
+IPV6_18="net.ipv6.conf.default.router_solicitations = 0"
+IPV6_19="net.ipv6.conf.all.dad_transmits = 0"
+IPV6_20="net.ipv6.conf.default.dad_transmits = 0"
+IPV6_21="net.ipv6.conf.all.autoconf = 0"
+IPV6_22="net.ipv6.conf.default.autoconf = 0"
 
 # -----------------------------------------------------------------------------
 # Pre-Checks
@@ -41,11 +86,15 @@ fi
 
 if [ -f /etc/os-release ]; then
    OS=`awk -F\" '/^NAME=/ {print $2}' /etc/os-release | awk '{print $1}'`
-   if [ "$OS" == "Amazon" ] || [ "$OS" == "Red" ] || \
-   [ "$OS" == "CentOS" ] || [ "$OS" == "SLES" ]; then
-      PACKAGE="rpm -qa"
+   if [ "$OS" == "Amazon" ] || [ "$OS" == "Red" ] || [ "$OS" == "CentOS" ]; then
+      PACKAGE="rpm -qa";
+      OS="RedHat";
    elif [ "$OS" == "Ubuntu" ]; then
-      PACKAGE="dpkg -l"
+      PACKAGE="dpkg -l";
+      OS="Ubuntu";
+   elif [ "$OS" == "SLES" ]; then
+     PACKAGE="rpm -qa";
+     OS="Suse";
    else
      ERR="1"
      ERR_TXT="Linux version $OS not supported with this script!"
@@ -59,7 +108,7 @@ if [ "$ERR" == "1" ]; then
   clear
   echo -e "\r\n   -- Important! -----------------------------------------\r\n\r\n" >&2
   echo -e "      $ERR_TXT\r\n\r\n" >&2
-  echo -e "   -------------------------------------------------------\r\n\r\n" >&2
+  echo -e "   -------------------------------------------------------\r\n" >&2
   exit
 fi
 
@@ -80,6 +129,12 @@ echo -e "-----------------------------------------------------------------------
 
 exec 3>$OUT_CSV
 echo ReqNo.,Requirement,Statement of Compliance>&3
+
+if [ -z "$(ls -A /etc/sysctl.d/)" ]; then
+  SYSCTL_CONF="/etc/sysctl.conf"
+else
+  SYSCTL_CONF="/etc/sysctl.conf /etc/sysctl.d/*"
+fi
 
 # -----------------------------------------------------------------------------
 # Function
@@ -138,7 +193,12 @@ write_to_soc $FAIL $PASS
 # Req 2: The reachability of services must be restricted.
 let "REQ_NR++"
 REQ_TXT="The reachability of services must be restricted."
-#<tbd>
+
+# Not implemented yet! Manual check necessary!
+FAIL=1
+echo "[req-$REQ_NR:] restriction of reachability: FAILED (no test: check manual!)"
+
+write_to_soc $FAIL $PASS
 
 # Req 3: Unused software must not be installed or must be uninstalled.
 let "REQ_NR++"
@@ -404,7 +464,7 @@ else
 fi
 
 # Test 3/3
-CHK_FILE=`grep "fs.suid_dumpable = 0" /etc/sysctl.conf /etc/sysctl.d/* | wc -l`
+CHK_FILE=`grep "fs.suid_dumpable = 0" $SYSCTL_CONF | wc -l`
 
 if [ $CHK_FILE -eq 1 ]; then
   PASS=1
@@ -448,10 +508,10 @@ else
 fi
 
 # Test 3/3
-CHK_FILE=`grep "kernel.randomize_va_space = 2" /etc/sysctl.conf /etc/sysctl.d/* | wc -l`
+CHK_FILE=`grep "kernel.randomize_va_space = 2" $SYSCTL_CONF | wc -l`
 
 if [ $CHK_FILE -eq 1 ]; then
-  PASS=1
+  PASS=1;
   echo "[req-$REQ_NR: test 3/3] check kernel.randomize_va_space in config: PASSED";
 elif [ $CHK_FILE -eq 0 ]; then
   FAIL=1;
@@ -469,23 +529,97 @@ REQ_TXT="Prelink must not be used"
 FAIL=0
 PASS=0
 
-# write_to_soc $FAIL $PASS
+# Test 1/1
+if [ "`$PACKAGE | grep -ow prelink | wc -l`" -ne "0" ]; then
+  echo "[req-$REQ_NR: test 1/1] check if prelink is used: FAILED (found prelink)";
+  FAIL=1;
+else
+  echo "[req-$REQ_NR: test 1/1] check if prelink is used: PASSED";
+  PASS=1;
+fi
+
+write_to_soc $FAIL $PASS
 
 # Req 17: IPv4 protocol stack must be securely configured.
 let "REQ_NR++"
 REQ_TXT="IPv4 protocol stack must be securely configured."
 FAIL=0
 PASS=0
+CNT=1
+IPV4=IPV4_$CNT
 
-# write_to_soc $FAIL $PASS
+while [ $CNT -lt 24 ]; do
+  PAR=`echo ${!IPV4} | awk '{print $1}'`;
+  VALUE=`echo ${!IPV4} | awk '{print $3}'`;
+  # Test 1/2
+  SYSCTL=`sysctl $PAR | awk '{print $3}'`
+  if [ $SYSCTL -eq $VALUE ]; then
+    PASS=1;
+    echo "[req-$REQ_NR: test 1/2] check $PAR: PASSED";
+  else
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/2] check $PAR: FAILED (value: $SYSCTL)";
+  fi
+  # Test 2/2
+  CHK_FILE=`grep "${!IPV4}" $SYSCTL_CONF | wc -l`
+  if [ $CHK_FILE -eq 1 ]; then
+    PASS=1
+    echo "[req-$REQ_NR: test 2/2] check $PAR in config: PASSED";
+  elif [ $CHK_FILE -eq 0 ]; then
+    FAIL=1;
+    echo "[req-$REQ_NR: test 2/2] check $PAR in config: FAILED (absent)";
+  else
+    FAIL=1;
+    echo "[req-$REQ_NR: test 2/2] check $PAR in config: FAILED (found multiple entries)";
+  fi
+  let CNT++;
+  IPV4=IPV4_$CNT;
+done
+
+write_to_soc $FAIL $PASS
 
 # Req 18: IPv6 protocol stack must be securely configured.
 let "REQ_NR++"
 REQ_TXT="IPv6 protocol stack must be securely configured."
 FAIL=0
 PASS=0
+CNT=1
+IPV6=IPV6_$CNT
 
-# write_to_soc $FAIL $PASS
+if [ `sysctl net.ipv6.conf.all.disable_ipv6 | awk '{print $3}'` -eq 0 ] && \
+   [ `sysctl net.ipv6.conf.default.disable_ipv6 | awk '{print $3}'` -eq 0 ]; then
+     while [ $CNT -lt 23 ]; do
+       PAR=`echo ${!IPV6} | awk '{print $1}'`;
+       VALUE=`echo ${!IPV6} | awk '{print $3}'`;
+       # Test 1/2
+       SYSCTL=`sysctl $PAR | awk '{print $3}'`
+       if [ $SYSCTL -eq $VALUE ]; then
+         PASS=1;
+         echo "[req-$REQ_NR: test 1/2] check $PAR: PASSED";
+       else
+      FAIL=1;
+      echo "[req-$REQ_NR: test 1/2] check $PAR: FAILED (value: $SYSCTL)";
+    fi
+    # Test 2/2
+    CHK_FILE=`grep "${!IPV6}" $SYSCTL_CONF | wc -l`
+    if [ $CHK_FILE -eq 1 ]; then
+      PASS=1
+      echo "[req-$REQ_NR: test 2/2] check $PAR in config: PASSED";
+    elif [ $CHK_FILE -eq 0 ]; then
+      FAIL=1;
+      echo "[req-$REQ_NR: test 2/2] check $PAR in config: FAILED (absent)";
+    else
+      FAIL=1;
+      echo "[req-$REQ_NR: test 2/2] check $PAR in config: FAILED (found multiple entries)";
+    fi
+    let CNT++;
+    IPV6=IPV6_$CNT;
+  done
+  write_to_soc $FAIL $PASS
+else
+  echo "[req-$REQ_NR: test 2/2] check IPv6 in config: n/a (disabled)";
+  echo "Req $REQ_NR,$REQ_TXT,Not Applicable">&3;
+fi
 
 # Req 19: Emerged vulnerabilities in software and hardware of a system must be
 # fixed or protected against misuse.
@@ -493,8 +627,28 @@ let "REQ_NR++"
 REQ_TXT="Emerged vulnerabilities in software and hardware of a system must be fixed or protected against misuse."
 FAIL=0
 PASS=0
+ERR=0
 
-# write_to_soc $FAIL $PASS
+# Test 1/1
+if [ "$OS" == "Ubuntu" ]; then
+  apt update 1>&2>/dev/null
+  if [ `apt list --upgradable 2>/dev/null | wc -l` -ne 0 ]; then ERR=1; fi
+elif [ "$OS" == "RedHat" ]; then
+  if [ `yum check-update 2>/dev/null | grep "updates$" | wc -l` -ne 0 ]; then ERR=1; fi
+elif [ "$OS" == "Suse" ]; then
+  zypper refresh -s 1>&2>/dev/null
+  if [ `zypper list-updates 2>/dev/null | grep "No updates found." | wc -l` -ne 1 ]; then ERR=1; fi
+fi
+
+if [ $ERR -eq 1 ]; then
+  echo "[req-$REQ_NR: test 1/1] check if system is up-to-date: FAILED (updates missing)";
+  FAIL=1;
+else
+  echo "[req-$REQ_NR: test 1/1] check if system is up-to-date: PASSED";
+  PASS=1;
+fi
+
+write_to_soc $FAIL $PASS
 
 # Req 20: GPG check for repository server must be activated and corresponding
 # keys for trustable repositories must be configured.
@@ -502,8 +656,32 @@ let "REQ_NR++"
 REQ_TXT="GPG check for repository server must be activated and corresponding keys for trustable repositories must be configured."
 FAIL=0
 PASS=0
+ERR=0
 
-# write_to_soc $FAIL $PASS
+# Test 1/1
+if [ "$OS" == "Ubuntu" ]; then
+  if [ `grep "trusted=yes" /etc/apt/sources.list | wc -l` -ne 0 ]; then ERR=1; fi
+elif [ "$OS" == "RedHat" ]; then
+  if [ `awk -F\= '/^gpgcheck=/ {print $2}' /etc/yum.conf` -ne 1 ]; then ERR=1; fi
+elif [ "$OS" == "Suse" ]; then
+  CHK=`awk -F\= '/^gpgcheck=/ {print $2}' /etc/zypp/zypp.conf`
+  CHK2=`zypper repos -E | grep -i yes | awk -F'|' '{print $5}' | sort -u | wc -l`
+  if [ -z $CHK ]; then
+    if [ $CHK2 -ne 1 ]; then ERR=1; fi
+  else
+    if [ $CHK -ne 1 ]; then ERR=1; fi
+  fi
+fi
+
+if [ $ERR -ne 1 ]; then
+  echo "[req-$REQ_NR: test 1/1] check if repos are trusted: FAILED (found untrusted)";
+  FAIL=1;
+else
+  echo "[req-$REQ_NR: test 1/1] check if repos are trusted: PASSED";
+  PASS=1;
+fi
+
+write_to_soc $FAIL $PASS
 
 # Req 21: User accounts must be used that allow unambiguous identification of
 # the user.
@@ -512,15 +690,43 @@ REQ_TXT="User accounts must be used that allow unambiguous identification of the
 FAIL=0
 PASS=0
 
-# write_to_soc $FAIL $PASS
+# Test 1/1
+if [ "$OS" == "Ubuntu" ]; then
+    ACCOUNTS=`awk -F':' '{ if ( $3 >= 1000 && $7 != "/usr/sbin/nologin" ) print $1 }' /etc/passwd`
+elif [ "$OS" == "RedHat" ] ||
+     [ "$OS" == "Suse" ]; then
+    ACCOUNTS=`awk -F':' '{ if ( $3 >= 1000 && $7 != "/sbin/nologin" ) print $1 }' /etc/passwd`
+fi
+
+if [ -z "$ACCOUNTS" ]; then
+  echo "[req-$REQ_NR: test 1/1] check local user accounts: PASSED";
+  PASS=1;
+else
+  echo "[req-$REQ_NR: test 1/1] check local user accounts: FAILED (check accounts $ACCOUNTS)"
+  FAIL=1
+fi
+
+write_to_soc $FAIL $PASS
 
 # Req 22: System accounts must be non-login.
 let "REQ_NR++"
 REQ_TXT="System accounts must be non-login."
 FAIL=0
 PASS=0
+CHK=
 
-# write_to_soc $FAIL $PASS
+# Test 1/1:
+CHK=`awk -F':' '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $3<1000 && $7=="/bin/bash") {print $1}' /etc/passwd`
+
+if [ -z "$CHK" ]; then
+    PASS=1
+    echo "[req-$REQ_NR: test 1/1] check system acounts if non-login: PASSED";
+else
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/1] check system acounts if non-login: FAILED (found user(s) $CHK)";
+fi
+
+write_to_soc $FAIL $PASS
 
 # Req 23: User accounts must be protected against unauthorized usage by at least
 # one authentication attribute.
@@ -528,8 +734,19 @@ let "REQ_NR++"
 REQ_TXT="User accounts must be protected against unauthorized usage by at least one authentication attribute."
 FAIL=0
 PASS=0
+CHK=
 
-# write_to_soc $FAIL $PASS
+CHK=`awk -F":" '($2 == "" && $2 != "!" && $2 !="*") {print $1}' /etc/shadow`
+
+if [ -z "$CHK" ]; then
+    PASS=1
+    echo "[req-$REQ_NR: test 1/1] check acounts in /etc/shadow: PASSED";
+else
+    FAIL=1;
+    echo "[req-$REQ_NR: test 1/1] check acounts in /etc/shadow: FAILED (found $CHK without attribute)";
+fi
+
+write_to_soc $FAIL $PASS
 
 # Req 24: User accounts with extensive rights must be protected with two
 # authentication attributes.
@@ -538,7 +755,11 @@ REQ_TXT="User accounts with extensive rights must be protected with two authenti
 FAIL=0
 PASS=0
 
-# write_to_soc $FAIL $PASS
+# Not implemented yet! Manual check necessary!
+FAIL=1
+echo "[req-$REQ_NR:] check 2-factor authentication: FAILED (no test: check manual!)"
+
+write_to_soc $FAIL $PASS
 
 # Req 25: The system must be connected to a central system for user administration.
 let "REQ_NR++"
@@ -546,15 +767,41 @@ REQ_TXT="The system must be connected to a central system for user administratio
 FAIL=0
 PASS=0
 
-# write_to_soc $FAIL $PASS
+# Not implemented yet! Manual check necessary!
+FAIL=1
+echo "[req-$REQ_NR:] check central user administration: FAILED (no test: check manual!)"
+
+write_to_soc $FAIL $PASS
 
 # Req 26: Authentication must be used for single user mode.
 let "REQ_NR++"
 REQ_TXT="Authentication must be used for single user mode."
 FAIL=0
 PASS=0
+ERR=0
 
-# write_to_soc $FAIL $PASS
+# Test 1/1
+if [ "$OS" == "Ubuntu" ]; then
+    CHK=`grep "^root:[*\!]:" /etc/shadow`
+    if [ -z  "$CHK" ]; then ERR=1; fi
+elif [ "$OS" == "RedHat" ] ||
+     [ "$OS" == "Suse" ]; then
+       CHK="ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\""
+       if [ "$CHK" != "`grep "^ExecStart=" /usr/lib/systemd/system/rescue.service`"] && \
+          [ "$CHK" != "`grep "^ExecStart=" /usr/lib/systemd/system/emergency.service`"]; then
+            ERR=1;
+       fi
+fi
+
+if [ $ERR = 0 ]; then
+  echo "[req-$REQ_NR: test 1/1] check single user mode: PASSED";
+  PASS=1;
+else
+  echo "[req-$REQ_NR: test 1/1] check single user mode: FAILED (not activated)"
+  FAIL=1
+fi
+
+write_to_soc $FAIL $PASS
 
 # Req 27: The management of the operating system must be done via a dedicated
 # management network which is independent from the production network.
@@ -563,7 +810,11 @@ REQ_TXT="The management of the operating system must be done via a dedicated man
 FAIL=0
 PASS=0
 
-# write_to_soc $FAIL $PASS
+# Not implemented yet! Manual check necessary!
+FAIL=1
+echo "[req-$REQ_NR:] check management network: FAILED (no test: check manual!)"
+
+write_to_soc $FAIL $PASS
 
 # Req 28: Management services must be bound to the management network.
 let "REQ_NR++"
@@ -571,13 +822,21 @@ REQ_TXT="Management services must be bound to the management network."
 FAIL=0
 PASS=0
 
-# write_to_soc $FAIL $PASS
+# Not implemented yet! Manual check necessary!
+FAIL=1
+echo "[req-$REQ_NR:] check services on management network: FAILED (no test: check manual!)"
 
-# Req 29: Encrypted protocols must be used for management access to administrate
+write_to_soc $FAIL $PASS
+
+# Req 29 = Encrypted protocols must be used for management access to administrate
 # the operating system.
 let "REQ_NR++"
 REQ_TXT="Encrypted protocols must be used for management access to administrate the operating system."
 FAIL=0
 PASS=0
 
-# write_to_soc $FAIL $PASS
+# Not implemented yet! Manual check necessary!
+FAIL=1
+echo "[req-$REQ_NR:] check management services for encryption: FAILED (no test: check manual!)"
+
+write_to_soc $FAIL $PASS

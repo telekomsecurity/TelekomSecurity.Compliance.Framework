@@ -964,12 +964,13 @@ used.
 
 Use the following command to check if GPG check is enabled:
 ----
-   # grep ^gpgcheck /etc/yum.conf
+   # awk -F\= '/^gpgcheck=/ {print $2}' /etc/yum.conf
 ----
-Expected output: 'gpgcheck=1' or none
+Expected output: '1'
 
 Use the following commands to check the GPG key configuration:
 ----
+   # yum repolist enabled
    # rpm -q gpg-pubkey --qf '%{name}-%{version}-%{release} --> %{summary}\n'
 ----
 Expected output (example): +
@@ -986,12 +987,13 @@ used.
 ----
 Use the following command to check if GPG check is enabled:
 ----
-   # grep ^gpgcheck /etc/zypp/zypp.conf
+   # awk -F\= '/^gpgcheck=/ {print $2}' /etc/zypp/zypp.conf
 ----
-Expected output: 'gpgcheck=1' or none
+Expected output: '1' or none
 
 Use the following commands to check the GPG key configuration:
 ----
+   # zypper repos -E
    # rpm -q gpg-pubkey --qf '%{name}-%{version}-%{release} --> %{summary}\n'
 ----
 Expected output (example): +
@@ -1043,7 +1045,7 @@ the system:
    # awk -F':' '{ if ( $3 >= 1000 && $7 != "/usr/sbin/nologin" ) print $1 }' /etc/passwd
 ----
 
-*Compliance Check* (all)
+*Compliance Check* (RedHat, Suse)
 
 Use the following command to search for not needed and prohibited user accounts on
 the system:
@@ -1084,14 +1086,14 @@ Expected output: none (if system accounts are configured correct)
 
 Use the following command to set system accounts to no-login:
 ----
-   # /usr/sbin/usermod -s /usr/sbin/nologin <system-account>
+   # usermod -s /usr/sbin/nologin <system-account>
 ----
 
 *Implementation* (RedHat, Suse)
 
 Use the following command to set system accounts to no-login:
 ----
-   # /usr/sbin/usermod -s /sbin/nologin <system-account>
+   # usermod -s /sbin/nologin <system-account>
 ----
 
 [#req365-23]
@@ -1111,7 +1113,7 @@ This means that authentication based on a parameter that can be spoofed (e.g.
   Exceptions are attributes that cannot be faked or spoofed by an attacker.
   Two of the above options can be combined (2-factor authentication) to achieve
   a higher level of security. Whether or not this is suitable and necessary
-  depends on the pro-tection needs of the individual system and its data and
+  depends on the protection needs of the individual system and its data and
   must be evaluated for individual cases.
 
 In companies of Deutsche Telekom group where the MyCard or a comparable smartcard
@@ -1235,7 +1237,7 @@ Use the following commands to search for relevant entry in files:
    # grep "^ExecStart=" /usr/lib/systemd/system/emergency.service
 ----
 Expected output:
-ExecStart=-/bin/sh -c "/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"'
+ExecStart=-/bin/sh -c "/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default"
 
 *Implementation* (Ubuntu)
 
