@@ -4,7 +4,7 @@
 # Telekom Security - Script for Compliance Check
 # Linux OS for Servers (3.65)
 # Version: 0.1
-# Date: 28-11-18
+# Date: 29-11-18
 # Author: Markus Schumburg (security.automation@telekom.de)
 # -----------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ echo " Telekom Security - Compliance Check - Linux OS"
 echo -e "-----------------------------------------------------------------------------------"
 echo "   Host:" $HOSTNAME
 echo "   Date:" `date +"%d-%m-%y"`
-echo -e "------------------------------------------------------------------------------------\r\n"
+echo "------------------------------------------------------------------------------------"
 
 exec 3>$OUT_CSV
 echo ReqNo.,Requirement,Statement of Compliance>&3
@@ -141,12 +141,12 @@ fi
 # -----------------------------------------------------------------------------
 write_to_soc () {
   if [ $1 -eq 0 ]; then
-    echo "Req $REQ_NR,$REQ_TXT,Compliant">&3;
+    echo "Req $REQ_NR;$REQ_TXT;Compliant">&3;
   else
     if [ $2 -ne 0 ]; then
-       echo "Req $REQ_NR,$REQ_TXT,Partly Compliant">&3;
+       echo "Req $REQ_NR;$REQ_TXT;Partly Compliant">&3;
      else
-       echo "Req $REQ_NR,$REQ_TXT,Not Compliant">&3;
+       echo "Req $REQ_NR;$REQ_TXT;Not Compliant">&3;
      fi
   fi
 }
@@ -618,7 +618,7 @@ if [ `sysctl net.ipv6.conf.all.disable_ipv6 | awk '{print $3}'` -eq 0 ] && \
   write_to_soc $FAIL $PASS
 else
   echo "[req-$REQ_NR: test 2/2] check IPv6 in config: n/a (disabled)";
-  echo "Req $REQ_NR,$REQ_TXT,Not Applicable">&3;
+  echo "Req $REQ_NR;$REQ_TXT;Not Applicable">&3;
 fi
 
 # Req 19: Emerged vulnerabilities in software and hardware of a system must be
@@ -631,12 +631,12 @@ ERR=0
 
 # Test 1/1
 if [ "$OS" == "Ubuntu" ]; then
-  apt update 1>&2>/dev/null
+  apt update &>/dev/null
   if [ `apt list --upgradable 2>/dev/null | wc -l` -ne 0 ]; then ERR=1; fi
 elif [ "$OS" == "RedHat" ]; then
   if [ `yum check-update 2>/dev/null | grep "updates$" | wc -l` -ne 0 ]; then ERR=1; fi
 elif [ "$OS" == "Suse" ]; then
-  zypper refresh -s 1>&2>/dev/null
+  zypper refresh -s &>/dev/null
   if [ `zypper list-updates 2>/dev/null | grep "No updates found." | wc -l` -ne 1 ]; then ERR=1; fi
 fi
 
@@ -673,7 +673,7 @@ elif [ "$OS" == "Suse" ]; then
   fi
 fi
 
-if [ $ERR -ne 1 ]; then
+if [ $ERR -eq 1 ]; then
   echo "[req-$REQ_NR: test 1/1] check if repos are trusted: FAILED (found untrusted)";
   FAIL=1;
 else
@@ -787,8 +787,8 @@ if [ "$OS" == "Ubuntu" ]; then
 elif [ "$OS" == "RedHat" ] ||
      [ "$OS" == "Suse" ]; then
        CHK="ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\""
-       if [ "$CHK" != "`grep "^ExecStart=" /usr/lib/systemd/system/rescue.service`"] && \
-          [ "$CHK" != "`grep "^ExecStart=" /usr/lib/systemd/system/emergency.service`"]; then
+       if [ "$CHK" != "`grep ^ExecStart= /usr/lib/systemd/system/rescue.service`" ] && \
+          [ "$CHK" != "`grep ^ExecStart= /usr/lib/systemd/system/emergency.service`" ]; then
             ERR=1;
        fi
 fi
