@@ -47,8 +47,8 @@ Use the following command to restart SSH daemon:
 # service <ssh-daemon> restart
 ----
 Values for <ssh-daemon>: +
-Debian based Linux distributions: 'ssh'
-RedHat based Linux distributions: 'sshd'
+Debian based Linux distributions: 'ssh' +
+RedHat based Linux distributions: 'sshd' +
 
 NOTE: Before configuring SSH the running version must be verified and validated
 if current version is used! Check version on https://www.openssh.com/[openssh.com].
