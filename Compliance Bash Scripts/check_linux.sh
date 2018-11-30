@@ -116,12 +116,12 @@ fi
 # Output File
 # -----------------------------------------------------------------------------
 DAY=`date +"%d%m%y"`
-OUT_FILE="compliance-$DAY.log"
-OUT_CSV="compliance-$DAY.csv"
+OUT_FILE="compliance-linux-$DAY.log"
+OUT_CSV="compliance-linux-$DAY.csv"
 
 exec >$OUT_FILE
 echo -e "-----------------------------------------------------------------------------------"
-echo " Telekom Security - Compliance Check - Linux OS"
+echo " Telekom Security - Compliance Check - Linux OS (3.65)"
 echo -e "-----------------------------------------------------------------------------------"
 echo "   Host:" $HOSTNAME
 echo "   Date:" `date +"%d-%m-%y"`

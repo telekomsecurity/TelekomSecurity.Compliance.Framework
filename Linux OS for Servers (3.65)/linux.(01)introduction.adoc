@@ -23,7 +23,7 @@ bare metal servers to high scaling cloud environments.
 
 This documents includes examples for technical implementation and compliance
 checks for the security requirements of https://security.telekom.com/[Telekom Security]
-for Linux OS for servers.
+for Linux OS for servers  [Doc. 'SecReq 3.65: Linux OS for Servers'].
 
 The examples in this document are tested for the following Linux distributions:
 
