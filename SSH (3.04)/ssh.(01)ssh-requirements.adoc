@@ -47,8 +47,8 @@ Use the following command to restart SSH daemon:
 # service <ssh-daemon> restart
 ----
 Values for <ssh-daemon>: +
-* Debian based Linux distributions: 'ssh'
-* RedHat based Linux distributions: 'sshd'
+Debian based Linux distributions: 'ssh'
+RedHat based Linux distributions: 'sshd'
 
 NOTE: Before configuring SSH the running version must be verified and validated
 if current version is used! Check version on https://www.openssh.com/[openssh.com].
@@ -322,7 +322,7 @@ All users must have unique and personal user accounts. Constantly working as
 root is not permitted. To avoid remote login with user root the login over SSH
 must be disabled.
 
-IMPORTANT: It is also possible to achieve an adequate security level if only
+NOTE: It is also possible to achieve an adequate security level if only
 functional user accounts are used on a system. It must be guaranteed to share
 SSH keys over a central ac-count management system (e.g. ZAM) for the root user
 and to enroll them with a configuration management system. Additionally, access
@@ -382,7 +382,7 @@ Add the following parameter and value to configuration file
 
 Authentication with public/private key must be used for SSH login.
 
-IMPORTANT: The private key of human beings must be protected with a passphrase.
+NOTE: The private key of human beings must be protected with a passphrase.
 
 _Motivation:_ Passwords are usually attackable via Phishing, Keylogger and Brute
 Force attacks. An attacker who occupies a password can misuse the corresponding
