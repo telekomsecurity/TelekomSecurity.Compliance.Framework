@@ -1,8 +1,8 @@
 = Telekom Security Compliance Framework
 :author_name: Markus Schumburg (Telekom Security)
 :author_email: security.automation@telekom.de
-:revnumber: 0.1
-:revdate: 26-10-2018
+:revnumber: 0.9
+:revdate: 30-10-2018
 :revremark: draft
 :imagesdir: ./images
 ifdef::env-github[]

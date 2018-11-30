@@ -1,13 +1,19 @@
 = Telekom Security Compliance Framework
 :author_name: Markus Schumburg (Telekom Security)
 :author_email: security.automation@telekom.de
-:revnumber: 0.1
-:revdate: 26-10-2018
+:revnumber: 0.9
+:revdate: 30-11-2018
 :revremark: draft
+ifdef::env-github[]
 :imagesdir: ./images
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 :toc:
-:toc-title: List of Requirements
-:toclevels: 4
+:toclevels: 5
 
 :sectlinks:
 
@@ -54,7 +60,7 @@ Debian based Linux (e.g. Ubuntu) distributions:
    # dpkg -l | awk '/openssh-server/ {print $3}'
 ----
 
- RedHat based Linux (e.g. CentOS, Amazon Linux) distributions:
+RedHat based Linux (e.g. CentOS, Amazon Linux) distributions:
 ----
    # rpm -qa | awk -F- '/openssh-server/ {print $3}'
 ----
