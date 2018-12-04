@@ -89,9 +89,9 @@ if [ -f /etc/os-release ]; then
    if [ "$OS" == "Amazon" ] || [ "$OS" == "Red" ] || [ "$OS" == "CentOS" ]; then
       PACKAGE="rpm -qa";
       OS="RedHat";
-   elif [ "$OS" == "Ubuntu" ]; then
+   elif [ "$OS" == "Debian" ] ||  [ "$OS" == "Ubuntu" ]; then
       PACKAGE="dpkg -l";
-      OS="Ubuntu";
+      OS="Debian";
    elif [ "$OS" == "SLES" ]; then
      PACKAGE="rpm -qa";
      OS="Suse";
@@ -128,7 +128,7 @@ echo "   Date:" `date +"%d-%m-%y"`
 echo "------------------------------------------------------------------------------------"
 
 exec 3>$OUT_CSV
-echo ReqNo.,Requirement,Statement of Compliance>&3
+echo "ReqNo.;Requirement;Statement of Compliance">&3
 
 if [ -z "$(ls -A /etc/sysctl.d/)" ]; then
   SYSCTL_CONF="/etc/sysctl.conf"
@@ -630,7 +630,7 @@ PASS=0
 ERR=0
 
 # Test 1/1
-if [ "$OS" == "Ubuntu" ]; then
+if [ "$OS" == "Debian" ]; then
   apt update &>/dev/null
   if [ `apt list --upgradable 2>/dev/null | wc -l` -ne 0 ]; then ERR=1; fi
 elif [ "$OS" == "RedHat" ]; then
@@ -659,7 +659,7 @@ PASS=0
 ERR=0
 
 # Test 1/1
-if [ "$OS" == "Ubuntu" ]; then
+if [ "$OS" == "Debian" ]; then
   if [ `grep "trusted=yes" /etc/apt/sources.list | wc -l` -ne 0 ]; then ERR=1; fi
 elif [ "$OS" == "RedHat" ]; then
   if [ `awk -F\= '/^gpgcheck=/ {print $2}' /etc/yum.conf` -ne 1 ]; then ERR=1; fi
@@ -691,7 +691,7 @@ FAIL=0
 PASS=0
 
 # Test 1/1
-if [ "$OS" == "Ubuntu" ]; then
+if [ "$OS" == "Debian" ]; then
     ACCOUNTS=`awk -F':' '{ if ( $3 >= 1000 && $7 != "/usr/sbin/nologin" ) print $1 }' /etc/passwd`
 elif [ "$OS" == "RedHat" ] ||
      [ "$OS" == "Suse" ]; then
@@ -781,7 +781,7 @@ PASS=0
 ERR=0
 
 # Test 1/1
-if [ "$OS" == "Ubuntu" ]; then
+if [ "$OS" == "Debian" ]; then
     CHK=`grep "^root:[*\!]:" /etc/shadow`
     if [ -z  "$CHK" ]; then ERR=1; fi
 elif [ "$OS" == "RedHat" ] ||

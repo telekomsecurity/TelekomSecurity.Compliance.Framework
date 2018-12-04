@@ -67,7 +67,7 @@ RedHat based Linux (e.g. CentOS, Amazon Linux) distributions:
 
 Alternative command (all Linux versions):
 ----
-   # ssh -v
+   # ssh -V
 ----
 Expected output: version of installed OpenSSH software
 
