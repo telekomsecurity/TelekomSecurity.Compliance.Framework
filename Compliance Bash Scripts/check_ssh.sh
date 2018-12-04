@@ -12,7 +12,7 @@
 # Variables
 # -----------------------------------------------------------------------------
 SSH_CONFIG="/etc/ssh/sshd_config"
-SSH_PROT_VER=2
+PROTOCOL_VERSION=2
 MODULI_MIN=2048
 KEYEX1="curve25519-sha256 @libssh.org"
 KEYEX2="diffie-hellman-group-exchange-sha256"
@@ -32,6 +32,15 @@ MAC4="umac-128-etm@openssh.com"
 MAC5="hmac-sha2-512"
 MAC6="hmac-sha2-256"
 MAC7="hmac-ripemd160"
+LOG_LEVEL=INFO
+LOGIN_GRACE_TIME=60
+MAX_AUTH_TRIES=5
+PERMIT_ROOT=no
+STRICT_MODES=yes
+PUB_KEY_AUTH=yes
+PASS_AUTH=no
+IGNORE_RHOSTS=yes
+HOST_BASED_AUTH=no
 
 # -----------------------------------------------------------------------------
 # Pre-Checks
@@ -123,16 +132,16 @@ FAIL=0
 PASS=0
 
 # Test 1/1
-if [ $(echo "if (${SSH_VER} >= 7.4) 1 else 0" | bc) -eq 1 ] ; then
+if [ $(echo "if (${PROTOCOL_VERSION} >= 7.4) 1 else 0" | bc) -eq 1 ] ; then
   PASS=1
-  echo "[req-$REQ_NR: test 1/1] check ssh version: PASSED";
+  echo "[req-$REQ_NR: test 1/1] check ssh protocol version: PASSED";
 else
-  if [ $(grep -i "^Protocol $SSH_PROT_VER" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  if [ $(grep -i "^Protocol $PROTOCOL_VERSION$" $SSH_CONFIG | wc -l) -eq 1 ]; then
     PASS=1
-    echo "[req-$REQ_NR: test 1/1] check ssh version: PASSED";
+    echo "[req-$REQ_NR: test 1/1] check if protocol version $PROTOCOL_VERSION: PASSED";
   else
     FAIL=1
-    echo "[req-$REQ_NR: test 1/1] check ssh version: FAILED (wrong version 1)";
+    echo "[req-$REQ_NR: test 1/1] check if protocol version $PROTOCOL_VERSION: FAILED (incorrect version)";
   fi
 fi
 
@@ -147,10 +156,10 @@ PASS=0
 # Test 1/1
 if [ -z "$(awk '$5 < $MODULI_MIN' /etc/ssh/moduli)" ]; then
   PASS=1
-  echo "[req-$REQ_NR: test 1/1] check moduli: PASSED";
+  echo "[req-$REQ_NR: test 1/1] check if moduli >= $MODULI_MIN: PASSED";
 else
   FAIL=1
-  echo "[req-$REQ_NR: test 1/1] check moduli: FAILED (found moduli < 2048)";
+  echo "[req-$REQ_NR: test 1/1] check moduli >= $MODULI_MIN: FAILED (found moduli < $MODULI_MIN)";
 fi
 
 write_to_soc $FAIL $PASS
@@ -187,7 +196,7 @@ else
   for CHK in $GET_KEYEX; do
     if [ "$CHK" != "$(echo $FOUND_KEYEX | grep -ow $CHK)" ]; then
       FAIL=1;
-      echo "[req-$REQ_NR: test 1/1] check key exchange: FAILED (found wrong $CHK)";
+      echo "[req-$REQ_NR: test 1/1] check key exchange: FAILED (found incorrect KeyEx:$CHK)";
     fi
   done
 fi
@@ -227,7 +236,7 @@ else
   for CHK in $GET_CIPHER; do
     if [ "$CHK" != "$(echo $FOUND_CIPHER | grep -ow $CHK)" ]; then
       FAIL=1;
-      echo "[req-$REQ_NR: test 1/1] check ciphers: FAILED (found wrong $CHK)";
+      echo "[req-$REQ_NR: test 1/1] check ciphers: FAILED (found incorrect Cipher:$CHK)";
     fi
   done
 fi
@@ -267,7 +276,7 @@ else
   for CHK in $GET_MAC; do
     if [ "$CHK" != "$(echo $FOUND_MACS| grep -ow $CHK)" ]; then
       FAIL=1;
-      echo "[req-$REQ_NR: test 1/1] check mac algorithms: FAILED (found wrong $CHK)";
+      echo "[req-$REQ_NR: test 1/1] check mac algorithms: FAILED (found incorrect MAC:$CHK)";
     fi
   done
 fi
@@ -281,9 +290,16 @@ REQ_TXT="SSH logging must be enabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^LogLevel $LOG_LEVEL$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if LogLevel $LOG_LEVEL: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if LogLevel $LOG_LEVEL: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 7: SSH LoginGraceTime must be set to one minute or less.
 let "REQ_NR++"
@@ -291,9 +307,16 @@ REQ_TXT="SSH LoginGraceTime must be set to one minute or less."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^LoginGraceTime $LOGIN_GRACE_TIME$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if LoginGraceTime $LOGIN_GRACE_TIME: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if LoginGraceTime $LOGIN_GRACE_TIME: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 8: SSH MaxAuthTries must be set to 5 or less.
 let "REQ_NR++"
@@ -301,9 +324,16 @@ REQ_TXT="SSH MaxAuthTries must be set to 5 or less."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^MaxAuthTries $MAX_AUTH_TRIES$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if MaxAuthTries $MAX_AUTH_TRIES: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if MaxAuthTries $MAX_AUTH_TRIES: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 9: SSH root login must be disabled.
 let "REQ_NR++"
@@ -311,9 +341,16 @@ REQ_TXT="SSH root login must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^PermitRootLogin $PERMIT_ROOT$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if PermitRootLogin $PERMIT_ROOT: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if PermitRootLogin $PERMIT_ROOT: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 10:	SSH strict mode must be enabled.
 let "REQ_NR++"
@@ -321,9 +358,16 @@ REQ_TXT="SSH strict mode must be enabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^StrictModes $STRICT_MODES$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if StrictModes $STRICT_MODES: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if StrictModes $STRICT_MODES: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 11:	SSH user authentication must be done with public keys.
 let "REQ_NR++"
@@ -331,9 +375,16 @@ REQ_TXT="SSH user authentication must be done with public keys."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^PubkeyAuthentication $PUB_KEY_AUTH$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if PubkeyAuthentication $PUB_KEY_AUTH: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if PubkeyAuthentication $PUB_KEY_AUTH: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 12:	SSH password authentication must be disabled.
 let "REQ_NR++"
@@ -341,9 +392,16 @@ REQ_TXT="SSH password authentication must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^PasswordAuthentication $PASS_AUTH$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if PasswordAuthentication $PASS_AUTH: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if PasswordAuthentication $PASS_AUTH: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 13:	SSH IgnoreRhosts must be enabled.
 let "REQ_NR++"
@@ -351,9 +409,16 @@ REQ_TXT="SSH IgnoreRhosts must be enabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^IgnoreRhosts $IGNORE_RHOSTS$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if IgnoreRhosts $IGNORE_RHOSTS: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if IgnoreRhosts $IGNORE_RHOSTS: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 14:	SSH HostbasedAuthentication must be disabled.
 let "REQ_NR++"
@@ -361,9 +426,16 @@ REQ_TXT="SSH HostbasedAuthentication must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^HostbasedAuthentication $HOST_BASED_AUTH$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if HostbasedAuthentication $HOST_BASED_AUTH: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if HostbasedAuthentication $HOST_BASED_AUTH: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 15:	The usage of the SSH service must be restricted to dedicated groups
 # or users.
