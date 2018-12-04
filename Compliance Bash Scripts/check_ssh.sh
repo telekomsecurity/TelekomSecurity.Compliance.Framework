@@ -41,6 +41,16 @@ PUB_KEY_AUTH=yes
 PASS_AUTH=no
 IGNORE_RHOSTS=yes
 HOST_BASED_AUTH=no
+ALLOW_GROUPS=""
+CLIENT_ALIVE_INT=300
+CLIENT_ALIVE_CNT=0
+PERMIT_TUNNEL=no
+TCP_FORWARDING=no
+AGENT_FORWARDING=no
+GATEWAY_PORTS=no
+X11_FORWARDING=no
+PERMIT_USER_ENV=no
+PERMIT_EMPTY_PW=no
 
 # -----------------------------------------------------------------------------
 # Pre-Checks
@@ -55,12 +65,15 @@ if [ -f /etc/os-release ]; then
    if [ "$OS" == "Amazon" ] || [ "$OS" == "Red" ] || [ "$OS" == "CentOS" ]; then
       PACKAGE="rpm -qa";
       OS="RedHat";
+      SSH_GROUP="sshd"
    elif [ "$OS" == "Debian" ] ||  [ "$OS" == "Ubuntu" ]; then
       PACKAGE="dpkg -l";
       OS="Ubuntu";
+      SSH_GROUP="ssh"
    elif [ "$OS" == "SLES" ]; then
      PACKAGE="rpm -qa";
      OS="Suse";
+     SSH_GROUP="sshd"
    else
      ERR="1"
      ERR_TXT="Linux version $OS not supported with this script!"
@@ -132,7 +145,9 @@ FAIL=0
 PASS=0
 
 # Test 1/1
-if [ $(echo "if (${PROTOCOL_VERSION} >= 7.4) 1 else 0" | bc) -eq 1 ] ; then
+SSH_VER_NEW="7.4"
+if [ "$(echo $SSH_VER | awk -F. '{print $1}')" -eq "$(echo $SSH_VER_NEW | awk -F. '{print $1}')" ] &&
+   [ "$(echo $SSH_VER | awk -F. '{print $2}')" -eq "$(echo $SSH_VER_NEW | awk -F. '{print $2}')" ] ; then
   PASS=1
   echo "[req-$REQ_NR: test 1/1] check ssh protocol version: PASSED";
 else
@@ -199,8 +214,8 @@ else
       echo "[req-$REQ_NR: test 1/1] check key exchange: FAILED (found incorrect KeyEx:$CHK)";
     fi
   done
+  IFS=$ORG_IFS
 fi
-IFS=$ORG_IFS
 
 write_to_soc $FAIL $PASS
 
@@ -239,8 +254,9 @@ else
       echo "[req-$REQ_NR: test 1/1] check ciphers: FAILED (found incorrect Cipher:$CHK)";
     fi
   done
+  IFS=$ORG_IFS
 fi
-IFS=$ORG_IFS
+
 
 write_to_soc $FAIL $PASS
 
@@ -279,8 +295,8 @@ else
       echo "[req-$REQ_NR: test 1/1] check mac algorithms: FAILED (found incorrect MAC:$CHK)";
     fi
   done
+  IFS=$ORG_IFS
 fi
-IFS=$ORG_IFS
 
 write_to_soc $FAIL $PASS
 
@@ -444,9 +460,32 @@ REQ_TXT="The usage of the SSH service must be restricted to dedicated groups or 
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/2
+for CHK in AllowUsers DenyGroups DenyUsers; do
+  if [ -z "$(grep -i "^$CHK" $SSH_CONFIG)" ]; then
+    PASS=1
+    echo "[req-$REQ_NR: test 1/2] check if $CHK exists: PASSED"
+  else
+    FAIL=1
+    echo "[req-$REQ_NR: test 1/2] check if $CHK exists: FAILED (entry exists)"
+  fi
+done
 
-# write_to_soc $FAIL $PASS
+# Test 2/2
+if [ ! -z $ALLOWGROUPS ]; then SSH="$SSH_GROUP $ALLOWGROUPS"; fi
+CHK_GROUPS=$(awk '/AllowGroups/ {$1=""; print}' /etc/ssh/sshd_config | sed -e 's/^[ \t]*//')
+
+for CHK in $CHK_GROUPS; do
+  if [ "$CHK" == "$(echo $SSH_GROUP | grep -ow $CHK)" ]; then
+    PASS=1
+    echo "[req-$REQ_NR: test 1/2] check AllowGroups: PASSED";
+  else
+    FAIL=1
+    echo "[req-$REQ_NR: test 1/2] check AllowGroups: FAILED (group $CHK unknown)";
+  fi
+done
+
+write_to_soc $FAIL $PASS
 
 # Req 16:	The SSH Idle Timeout Interval must be configured to an adequate time.
 let "REQ_NR++"
@@ -454,9 +493,25 @@ REQ_TXT="The SSH Idle Timeout Interval must be configured to an adequate time."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/2
+if [ $(grep -i "^ClientAliveInterval $CLIENT_ALIVE_INT$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/2] check if ClientAliveInterval $CLIENT_ALIVE_INT: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/2] check if ClientAliveInterval $CLIENT_ALIVE_INT: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+# Test 2/2
+if [ $(grep -i "^ClientAliveCountMax $CLIENT_ALIVE_CNT$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 2/2] check if ClientAliveCountMax $CLIENT_ALIVE_CNT: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 2/2] check if ClientAliveCountMax $CLIENT_ALIVE_CNT: FAILED (incorrect)";
+fi
+
+write_to_soc $FAIL $PASS
 
 # Req 17:	SSH tunnel devices must be disabled.
 let "REQ_NR++"
@@ -464,9 +519,16 @@ REQ_TXT="SSH tunnel devices must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^PermitTunnel $PERMIT_TUNNEL$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if PermitTunnel $PERMIT_TUNNEL: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if PermitTunnel $PERMIT_TUNNEL: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 18:	SSH TCP port forwarding must be disabled.
 let "REQ_NR++"
@@ -474,9 +536,16 @@ REQ_TXT="SSH TCP port forwarding must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^AllowTcpForwarding $TCP_FORWARDING$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if AllowTcpForwarding $TCP_FORWARDING: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if AllowTcpForwarding $TCP_FORWARDING: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 19:	SSH agent forwarding must be disabled.
 let "REQ_NR++"
@@ -484,9 +553,16 @@ REQ_TXT="SSH agent forwarding must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^AllowAgentForwarding $AGENT_FORWARDING$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if AllowAgentForwarding $AGENT_FORWARDING: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if AllowAgentForwarding $AGENT_FORWARDING: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 20:	SSH gateway ports must be disabled.
 let "REQ_NR++"
@@ -494,9 +570,16 @@ REQ_TXT="SSH gateway ports must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^GatewayPorts $GATEWAY_PORTS$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if GatewayPorts $GATEWAY_PORTS: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if GatewayPorts $GATEWAY_PORTS: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 21:	SSH X11 forwarding must be disabled.
 let "REQ_NR++"
@@ -504,9 +587,16 @@ REQ_TXT="SSH X11 forwarding must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^X11Forwarding $X11_FORWARDING$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if X11Forwarding $X11_FORWARDING: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if X11Forwarding $X11_FORWARDING: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 22:	SSH PermitUserEnvironment must be disabled.
 let "REQ_NR++"
@@ -514,9 +604,16 @@ REQ_TXT="SSH PermitUserEnvironment must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^PermitUserEnvironment $PERMIT_USER_ENV$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if PermitUserEnvironment $PERMIT_USER_ENV: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if PermitUserEnvironment $PERMIT_USER_ENV: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 23:	SSH PermitEmptyPasswords must be disabled.
 let "REQ_NR++"
@@ -524,9 +621,16 @@ REQ_TXT="SSH PermitEmptyPasswords must be disabled."
 FAIL=0
 PASS=0
 
-# Test 1/x
+# Test 1/1
+if [ $(grep -i "^PermitEmptyPasswords $PERMIT_EMPTY_PW$" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  PASS=1
+  echo "[req-$REQ_NR: test 1/1] check if PermitEmptyPasswords $PERMIT_EMPTY_PW: PASSED";
+else
+  FAIL=1
+  echo "[req-$REQ_NR: test 1/1] check if PermitEmptyPasswords $PERMIT_EMPTY_PW: FAILED (incorrect)";
+fi
 
-# write_to_soc $FAIL $PASS
+write_to_soc $FAIL $PASS
 
 # Req 24:	If SFTP is activated, internal server of OpenSSH must be used.
 let "REQ_NR++"

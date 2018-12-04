@@ -49,6 +49,7 @@ Use the following command to restart SSH daemon:
 Values for <ssh-daemon>: +
 Debian based Linux distributions: 'ssh' +
 RedHat based Linux distributions: 'sshd' +
+Suse Linux: 'sshd' +
 
 NOTE: Before configuring SSH the running version must be verified and validated
 if current version is used! Check version on https://www.openssh.com/[openssh.com].
@@ -509,7 +510,7 @@ Expected output: user and groups
 
 NOTE: It is recommended to configure and use a dedicated group for SSH. All users
 that are allowed to access the system via SSH are added to this group. This means
-also that paramters 'AllowUser', 'DenyGroups' and 'DenyUser' are not used and must
+also that parameters 'AllowUser', 'DenyGroups' and 'DenyUser' are not used and must
 be empty.
 
 *Implementation*
@@ -519,6 +520,18 @@ Add the following parameter and value to configuration file
 ----
    AllowGroups <ssh-group>
 ----
+If possible use the following existing default groups for SSH: +
+* Ubuntu: ssh
+* RedHat: sshd
+* Suse: sshd
+
+Additionally add the needed user to the ssh group with the following command:
+----
+   # usermod -a -G <ssh-group> <user>
+----
+
+NOTE: If you miss to add the needed users to the group used for SSH, you
+can not login afterwards!
 
 [#req365-16]
 ==== Req 16:	The SSH Idle Timeout Interval must be configured to an adequate time.
@@ -776,14 +789,14 @@ Add the following parameter and value to configuration file
 ----
 Parameter '-l' activates logging for SFTP.
 
-It is recommended to use a chroot environment for SFTP. This can be impmented
+It is recommended to use a chroot environment for SFTP. This can be implemented
 by adding the following configuration at the end of the file '/etc/ssh/sshd_conf':
 
 ----
    Match Group <sftp-group>
       ForceCommand internal-sftp -l INFO
       ChrootDirectory /home/%u
-      llowTcpForwarding no
+      AllowTcpForwarding no
       AllowAgentForwarding no
       PasswordAuthentication no
       PermitRootLogin no
