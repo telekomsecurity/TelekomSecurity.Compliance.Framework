@@ -36,6 +36,7 @@ Other Linux versions may work also but they are not tested now.
 The scripts must be executed with root rights on the system itself to check compliance.
 
 $ sudo ./check_linux.sh
+
 $ sudo ./check_ssh.sh
 
 The script will use bash commands like grep, awk, sed, ss etc. It will not change
