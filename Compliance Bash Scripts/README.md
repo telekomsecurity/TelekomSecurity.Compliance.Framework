@@ -35,10 +35,8 @@ Other Linux versions may work also but they are not tested now.
 
 The scripts must be executed with root rights on the system itself to check compliance.
 
------
-   $ sudo ./check_linux.sh
-   $ sudo ./check_ssh.sh
------
+$ sudo ./check_linux.sh
+$ sudo ./check_ssh.sh
 
 The script will use bash commands like grep, awk, sed, ss etc. It will not change
 or manipulate anything on the system. Two output files will be generated in the directory were the scripts are executed:
@@ -50,8 +48,7 @@ PASSED or FAILED.
 
 SoC file (csv): compliance-linux-<date>.csv or compliance-ssh-<date>.csv
 
-This file will include the compliance statements (compliant, partly compliant, not
-compliant) for all requirements. 
+This file will include the compliance statements (compliant, partly compliant, not compliant) for all requirements.
 
 ## References
 
@@ -59,8 +56,7 @@ Telekom Security - Security Requirements:
 * SecReq 3.65: Linux OS for Servers
 * SecReq 3.04: SSH
 
-Telekom Security Compliance Framework:
-* [GitHub TelekomSecurity.Compliance.Framework] https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework
+Telekom Security Compliance Framework: [on GitHub](https://github.com/telekomsecurity/TelekomSecurity.Compliance.Framework)
 
 ## License
 
