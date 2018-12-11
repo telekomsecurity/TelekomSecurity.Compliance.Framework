@@ -123,8 +123,10 @@ exec >$OUT_FILE
 echo -e "-----------------------------------------------------------------------------------"
 echo " Telekom Security - Compliance Check - Linux OS (3.65)"
 echo -e "-----------------------------------------------------------------------------------"
-echo "   Host:" $HOSTNAME
-echo "   Date:" `date +"%d-%m-%y"`
+echo "   Host: "$HOSTNAME
+echo "   Date: "$(date +"%d-%m-%y")
+echo "   OS: "$(awk -F\" '/^NAME=/ {print $2}' /etc/os-release)
+echo "   Version: "$(awk -F\" '/^VERSION=/ {print $2}' /etc/os-release)
 echo "------------------------------------------------------------------------------------"
 
 exec 3>$OUT_CSV

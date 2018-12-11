@@ -14,7 +14,7 @@
 SSH_CONFIG="/etc/ssh/sshd_config"
 PROTOCOL_VERSION=2
 MODULI_MIN=2048
-KEYEX1="curve25519-sha256 @libssh.org"
+KEYEX1="curve25519-sha256@libssh.org"
 KEYEX2="diffie-hellman-group-exchange-sha256"
 KEYEX3="ecdh-sha2-nistp521"
 KEYEX4="ecdh-sha2-nistp384"
@@ -27,11 +27,8 @@ CIPHER5="aes192-ctr"
 CIPHER6="aes128-ctr"
 MAC1="hmac-sha2-512-etm@openssh.com"
 MAC2="hmac-sha2-256-etm@openssh.com"
-MAC3="hmac-ripemd160-etm@openssh.com"
-MAC4="umac-128-etm@openssh.com"
-MAC5="hmac-sha2-512"
-MAC6="hmac-sha2-256"
-MAC7="hmac-ripemd160"
+MAC3="hmac-sha2-512"
+MAC4="hmac-sha2-256"
 LOG_LEVEL=INFO
 LOGIN_GRACE_TIME=60
 MAX_AUTH_TRIES=5
@@ -85,7 +82,7 @@ fi
 
 # Check OpenSSH is installed and version
 
-if [ -z "$($PACKAGE | grep -ow openssh-server)" ]; then
+if [ -z "$($PACKAGE | grep -ow openssh)" ]; then
   ERR=1
   ERR_TXT="OpenSSH not found on system!"
 else
@@ -111,8 +108,11 @@ exec >$OUT_FILE
 echo -e "-----------------------------------------------------------------------------------"
 echo " Telekom Security - Compliance Check - SSH (3.04)"
 echo -e "-----------------------------------------------------------------------------------"
-echo "   Host:" $HOSTNAME
-echo "   Date:" `date +"%d-%m-%y"`
+echo "   Host: "$HOSTNAME
+echo "   Date: "$(date +"%d-%m-%y")
+echo "   OS: "$(awk -F\" '/^NAME=/ {print $2}' /etc/os-release)
+echo "   Version: "$(awk -F\" '/^VERSION=/ {print $2}' /etc/os-release)
+echo "   SSH Version: "$SSH_VER
 echo "------------------------------------------------------------------------------------"
 
 exec 3>$OUT_CSV
@@ -146,8 +146,8 @@ PASS=0
 
 # Test 1/1
 SSH_VER_NEW="7.4"
-if [ "$(echo $SSH_VER | awk -F. '{print $1}')" -eq "$(echo $SSH_VER_NEW | awk -F. '{print $1}')" ] &&
-   [ "$(echo $SSH_VER | awk -F. '{print $2}')" -eq "$(echo $SSH_VER_NEW | awk -F. '{print $2}')" ] ; then
+if [ "$(echo $SSH_VER | awk -F. '{print $1}')" -ge "$(echo $SSH_VER_NEW | awk -F. '{print $1}')" ] &&
+   [ "$(echo $SSH_VER | awk -F. '{print $2}')" -ge "$(echo $SSH_VER_NEW | awk -F. '{print $2}')" ]; then
   PASS=1
   echo "[req-$REQ_NR: test 1/1] check ssh protocol version: PASSED";
 else
@@ -193,11 +193,11 @@ if [ -z "$(grep -i ^KexAlgorithms $SSH_CONFIG)" ]; then
 else
   CNT=1
   KEYEX=KEYEX$CNT
-  while [ $CNT -lt 5 ]; do
+  while [ $CNT -lt 6 ]; do
     if [ $(grep -i "${!KEYEX}" $SSH_CONFIG | wc -l) -eq 1 ]; then
       PASS=1
       echo "[req-$REQ_NR: test 1/1] check key exchange: PASSED";
-      FOUND_KEYEX="$FOUND_KEYEX,${!KEYEX}"
+      if [ -z $FOUND_KEYEX ]; then FOUND_KEYEX="${!KEYEX}"; else FOUND_KEYEX="$FOUND_KEYEX,${!KEYEX}"; fi
     else
       FAIL=1
       echo "[req-$REQ_NR: test 1/1] check key exchange: FAILED (absent ${!KEYEX})";
@@ -205,11 +205,11 @@ else
     let CNT++;
     KEYEX=KEYEX$CNT;
   done
+  GET_KEYEX="$(awk '/^KexAlgorithms/ {print $2}' $SSH_CONFIG)"
   ORG_IFS=$IFS
   IFS=,
-  GET_KEYEX="$(awk '/^KexAlgorithms/ {print $2}' $SSH_CONFIG)"
   for CHK in $GET_KEYEX; do
-    if [ "$CHK" != "$(echo $FOUND_KEYEX | grep -ow $CHK)" ]; then
+    if [ "$CHK" != "$(echo $FOUND_KEYEX | grep -ow $CHK | sort -u)" ]; then
       FAIL=1;
       echo "[req-$REQ_NR: test 1/1] check key exchange: FAILED (found incorrect KeyEx:$CHK)";
     fi
@@ -232,31 +232,30 @@ if [ -z "$(grep -i ^Ciphers $SSH_CONFIG)" ]; then
   echo "[req-$REQ_NR: test 1/1] check ciphers: FAILED (absent Ciphers)";
 else
   CNT=1
-  CIPHER=CIPHERS$CNT
-  while [ $CNT -lt 6 ]; do
-    if [ $(grep -i "${!CIPHER}" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  CIPHERS=CIPHER$CNT
+  while [ $CNT -lt 7 ]; do
+    if [ $(grep -i "${!CIPHERS}" $SSH_CONFIG | wc -l) -eq 1 ]; then
       PASS=1
       echo "[req-$REQ_NR: test 1/1] check ciphers: PASSED";
-      FOUND_CIPHERS="$FOUND_CIPHERS,${!CIPHERS}"
+      if [ -z $FOUND_CIPHERS ]; then FOUND_CIPHERS="${!CIPHERS}"; else FOUND_CIPHERS="$FOUND_CIPHERS,${!CIPHERS}"; fi
     else
       FAIL=1
-      echo "[req-$REQ_NR: test 1/1] check ciphers: FAILED (absent ${!CIPHER})";
+      echo "[req-$REQ_NR: test 1/1] check ciphers: FAILED (absent ${!CIPHERS})";
     fi
     let CNT++;
-    CIPHER=CIPHER$CNT;
+    CIPHERS=CIPHER$CNT;
   done
+  GET_CIPHERS="$(awk '/^Ciphers/ {print $2}' $SSH_CONFIG)"
   ORG_IFS=$IFS
   IFS=,
-  GET_CIPHER="$(awk '/^Ciphers/ {print $2}' $SSH_CONFIG)"
-  for CHK in $GET_CIPHER; do
-    if [ "$CHK" != "$(echo $FOUND_CIPHER | grep -ow $CHK)" ]; then
+  for CHK in $GET_CIPHERS; do
+    if [ "$CHK" != "$(echo $FOUND_CIPHERS | grep -ow $CHK | sort -u)" ]; then
       FAIL=1;
       echo "[req-$REQ_NR: test 1/1] check ciphers: FAILED (found incorrect Cipher:$CHK)";
     fi
   done
   IFS=$ORG_IFS
 fi
-
 
 write_to_soc $FAIL $PASS
 
@@ -273,24 +272,24 @@ if [ -z "$(grep -i ^MACs $SSH_CONFIG)" ]; then
   echo "[req-$REQ_NR: test 1/1] check mac algorithms: FAILED (absent MACs)";
 else
   CNT=1
-  MAC=MAC$CNT
-  while [ $CNT -lt 7 ]; do
-    if [ $(grep -i "${!MAC}" $SSH_CONFIG | wc -l) -eq 1 ]; then
+  MACS=MAC$CNT
+  while [ $CNT -lt 5 ]; do
+    if [ $(grep -i "${!MACS}" $SSH_CONFIG | wc -l) -eq 1 ]; then
       PASS=1
       echo "[req-$REQ_NR: test 1/1] check mac algorithms: PASSED";
-      FOUND_MACS="$FOUND_MACS,${!MAC}"
+      if [ -z $FOUND_MACS ]; then FOUND_MACS="${!MACS}"; else FOUND_MACS="$FOUND_MACS,${!MACS}"; fi
     else
       FAIL=1
-      echo "[req-$REQ_NR: test 1/1] check mac algorithms: FAILED (absent ${!MAC})";
+      echo "[req-$REQ_NR: test 1/1] check mac algorithms: FAILED (absent ${!MACS})";
     fi
     let CNT++;
-    MAC=MAC$CNT;
+    MACS=MAC$CNT;
   done
+  GET_MACS="$(awk '/^MACs/ {print $2}' $SSH_CONFIG)"
   ORG_IFS=$IFS
   IFS=,
-  GET_MAC="$(awk '/^MACs/ {print $2}' $SSH_CONFIG)"
-  for CHK in $GET_MAC; do
-    if [ "$CHK" != "$(echo $FOUND_MACS| grep -ow $CHK)" ]; then
+  for CHK in $GET_MACS; do
+    if [ "$CHK" != "$(echo $FOUND_MACS | grep -o $CHK | sort -u)" ]; then
       FAIL=1;
       echo "[req-$REQ_NR: test 1/1] check mac algorithms: FAILED (found incorrect MAC:$CHK)";
     fi
