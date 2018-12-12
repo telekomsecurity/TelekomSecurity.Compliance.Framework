@@ -42,6 +42,8 @@ _Motivation:_ Logging security-relevant events is a basic requirement for detect
 [#req365-31]
 ==== Req 31:	Log rotation for logfiles must be configured.
 
+HINWEIS: cron beim Prüfen nicht vergessen!!!
+
 Log rotation for logfiles must be enabled. Files must be rotated based on file size and max lifetime of file.
 
 _Motivation:_ An attacker can trigger log events to fill up the disk space of the server. This could lead to a denial of service of the server.
