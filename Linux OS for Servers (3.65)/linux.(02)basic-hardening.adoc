@@ -417,14 +417,14 @@ existing the rights of these files must be changed to an adequate level.
 _Motivation:_ Data in world-writable files can be read, modified, and potentially
 compromised by any user on the system.
 
-*Compliance Check* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Compliance Check* (all)
 
 Use the following command to find world-writable files:
 ----
    # df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002
 ----
 
-*Implementation* (Ubuntu LTS  14.04/16.04/18.04,  RHEL 7.x/CentOS 7.x, SLES 15)
+*Implementation* (all)
 
 Use the following command to set correct permission to files:
 ----
