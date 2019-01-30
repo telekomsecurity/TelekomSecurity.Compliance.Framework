@@ -38,6 +38,16 @@ The examples in this document are tested for the following SSH software:
 NOTE: Root privileges are needed to perform compliance checks and to implement needed
 configuration for the security requirements for SSH.
 
+---
+=== Telekom Security Compliance Automation
+
+Telekom Security provides Ansible roles for an automated implementation of security
+requirements. This Ansible roles can be found on following page:
+
+  * link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Automation[Telekom Security Compliance Automation]
+
+---
+
 ==== 1.1 Special Requirements
 
 NOTE: SSH daemon must be restarted after the implementation of the configuration!
