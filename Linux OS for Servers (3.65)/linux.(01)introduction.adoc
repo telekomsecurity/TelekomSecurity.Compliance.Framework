@@ -33,10 +33,10 @@ The examples in this document are tested for the following Linux distributions:
 * RedHat Enterprise Linux 7.x (RHEL)
 * CentOS 7.x (CentOS)
 * Oracle Linux 7.x (Oracle)
-* Amazon Linux AMI (AMI)
+* Amazon Linux AMI (v2)
 * Suse Linux Enterprise Server 15 (SLES)
 
-RHEL, CentOS, Oracle and AMI are summarized in the following documents as 'RedHat'.
+RHEL, CentOS, Oracle and Amazon Linux are summarized in the following documents as 'RedHat'.
 
 NOTE: Root privileges are needed to perform compliance checks and to implement needed
 configuration for the security requirements on a Linux system.
@@ -55,6 +55,14 @@ container images based on Linux. Because of different use cases, associated
 threats and needed software, workstations need another set of requirements.
 Container images have to be treated differently as they normally do not include
 a full Linux OS.
+
+---
+=== Telekom Security Compliance Automation
+
+Telekom Security provides Ansible roles for an automated implementation of security
+requirements. This Ansible roles can be found on following page:
+
+  * link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Automation[Telekom Security Compliance Automation]
 
 ---
 === Content
