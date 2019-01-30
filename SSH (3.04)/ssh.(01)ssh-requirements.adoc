@@ -143,7 +143,7 @@ Use the following commands to delete wrong moduli from file '/etc/ssh/moduli':
 
 For key exchange the following algorithms are allowed:
 
-*	curve25519-sha256@libssh.org
+*	pass:[curve25519-sha256@libssh.org]
 *	diffie-hellman-group-exchange-sha256
 *	ecdh-sha2-nistp521
 *	ecdh-sha2-nistp384
@@ -177,9 +177,9 @@ See requirement for allowed key-exchange algorithms!
 Outdated and insecure ciphers and algorithms must not be used. Use the following
 ciphers for SSH:
 
-*	chacha20-poly1305@openssh.com
-*	aes256-gcm@openssh.com
-*	aes128-gcm@openssh.com
+*	pass:[chacha20-poly1305@openssh.com]
+*	pass:[aes256-gcm@openssh.com]
+*	pass:[aes128-gcm@openssh.com]
 *	aes256-ctr
 *	aes192-ctr
 *	aes128-ctr
@@ -214,7 +214,7 @@ of such outdated algorithms are MD5 and SHA1. The following MAC algorithms are
 allowed and must be configured for SSH daemon:
 
 *	pass:[hmac-sha2-512-etm@openssh.com]
-*	hmac-sha2-256-etm@openssh.com
+*	pass:[hmac-sha2-256-etm@openssh.com]
 *	hmac-sha2-512
 *	hmac-sha2-256
 
