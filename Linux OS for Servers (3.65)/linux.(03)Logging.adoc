@@ -147,7 +147,7 @@ To check if time is synchronized with correct NTP server use the following comma
 ----
   # netq -p
 ----
-Expected output (example): show the if synchronized with server +
+Expected output (example):
 ----
 remote           refid      st t when poll reach   delay   offset  jitter
 ==============================================================================
@@ -156,13 +156,14 @@ ntp1.sul.t-onli 172.20.96.197    2 u   53   64    1    9.419  -17.683   0.000
 
 *Compliance Check* (Ubuntu LTS 16.04/18.04)
 
-Ubuntu 16.04 and 18.04 uses
+Ubuntu 16.04 and 18.04 uses 'timesyncd' as default time synchronization. It works in
+the in lightweight way to synchronize system time.
 
 To check the status of time synchronization use:
 ----
   # systemctl status systemd-timesyncd.service
 ----
-Expected output (example): check for follwing line in output
+Expected output - check for following line in output:
 Status: "Synchronized to time server 194.25.134.196:123 (ntp1.t-online.de)."
 
 *Compliance Check* (RedHat & Suse)
@@ -175,9 +176,9 @@ Expected output: 'active' if chrony is running properly.
 
 Use the following command to check chrony sources:
 ----
-	# chronyc sources
+  # chronyc sources
 ----
-Expected output (example): show the if synchronized with server +
+Expected output (example):
 ----
 MS Name/IP address         Stratum Poll Reach LastRx Last sample
 ===============================================================================
