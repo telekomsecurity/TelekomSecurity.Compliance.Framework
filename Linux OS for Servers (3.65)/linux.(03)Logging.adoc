@@ -127,14 +127,14 @@ Check with the following command if time synchronization is enabled:
 ----
   # timedatectl
 ----
-Expected output (example): Command shows if time synchronization is enabled (bold) +
+Expected output (example): Command shows if time is synchronization (NTP synchronized). +
 ----
 Local time: Mon 2019-02-04 15:50:50 CET
   Universal time: Mon 2019-02-04 14:50:50 UTC
         RTC time: Mon 2019-02-04 14:50:49
         Timezone: Europe/Berlin (CET, +0100)
-     NTP enabled: **yes**
-NTP synchronized: **yes**
+     NTP enabled: yes
+NTP synchronized: yes
  RTC in local TZ: no
       DST active: no
 ----
