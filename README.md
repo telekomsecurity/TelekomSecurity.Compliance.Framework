@@ -18,5 +18,12 @@ The [Telekom Security](https://security.telekom.com/) Compliance Framework gives
 **SSH**
 * [Secure Shell (SSH)](SSH%20(3.04)/ssh.(01)ssh-requirements.adoc)
 
+
+## Telekom Security Compliance Automation
+
+Telekom Security provides Ansible roles for an automated implementation of security requirements. This Ansible roles can be found on following page:
+
+  * link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Automation[Telekom Security Compliance Automation]
+
 ## Author Information
 Author: [Telekom Security](https://security.telekom.com/) (security.automation@telekom.de)

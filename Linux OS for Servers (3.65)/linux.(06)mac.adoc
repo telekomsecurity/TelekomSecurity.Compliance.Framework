@@ -31,15 +31,15 @@ Mandatory access control (MAC) enforces additional security policies for access.
 
 TIP: On Debian based Linux (e.g. Ubuntu) and Suse Enterprise Linux AppArmor is used by default. On RedHat based Linux (e.g. RHEL, Oracle Linux, CentOS) SELinux is used. It is recommended to use the pre-installed MAC solution of the used Linux OS.
 
-_Motivation:_ The stricter access model of MAC protects services better as Linux did it by default. In case of a suc-cessful compromise of a service the attacker is limited in accessing the system.
+_Motivation:_ The stricter access model of MAC protects servSLES 15tter as Linux did it by default. In case of a suc-cessful compromise of a service the attacker is limited in accessing the system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -54,16 +54,28 @@ SELinux must be activated in bootloader configuration of Grub to be executed dur
 
 _Motivation:_ The stricter access model of MAC protects services better as Linux did it by default. In case of a suc-cessful compromise of a service the attacker is limited in accessing the system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+Grub must be reloaded after configuration has changed with the following command:
+
+*Ubuntu Linux*
+----
+  # update-grub
+----
+
+*RedHat & Suse Linux*
+----
+  # grub2-mkconfig -o /boot/grub2/grub.cfg
 ----
 
 [#req365-54]
@@ -73,13 +85,13 @@ Profiles for SELinux must be enforced for daemons with high security risk like h
 
 _Motivation:_ The stricter access model of MAC protects services better as Linux did it by default. In case of a suc-cessful compromise of a service the attacker is limited in accessing the system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -92,13 +104,13 @@ The SELinux policy must be configured at least for targeted network daemons or s
 
 _Motivation:_ The stricter access model of MAC protects services better as Linux did it by default. In case of a suc-cessful compromise of a service the attacker is limited in accessing the system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -111,13 +123,13 @@ The SETroubleshoot is an unnecessary daemon to have running on a server, especia
 
 _Motivation:_ Not needed software and services must not be installed on a system to reduce the amount of poten-tially vulnerable code.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -130,13 +142,13 @@ Change of SELinux files must be monitored and logged.
 
 _Motivation:_ Changes to SELinux files could indicate that an unauthorized user is attempting to modify access con-trols and change security contexts.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -151,16 +163,28 @@ AppArmor must be activated in bootloader configuration of Grub to be executed du
 
 _Motivation:_ The stricter access model of MAC protects services better as Linux did it by default. In case of a suc-cessful compromise of a service the attacker is limited in accessing the system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+Grub must be reloaded after configuration has changed with the following command:
+
+*Ubuntu Linux*
+----
+  # update-grub
+----
+
+*RedHat & Suse Linux*
+----
+  # grub2-mkconfig -o /boot/grub2/grub.cfg
 ----
 
 [#req365-59]
@@ -170,13 +194,13 @@ Profiles for AppArmor must be enforced for daemons with high security risk like 
 
 _Motivation:_ The stricter access model of MAC protects services better as Linux did it by default. In case of a suc-cessful compromise of a service the attacker is limited in accessing the system.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -189,13 +213,13 @@ Change of AppArmor files must be monitored and logged.
 
 _Motivation:_ Changes to AppArmor files could indicate that an unauthorized user is attempting to modify access controls and change security contexts.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check

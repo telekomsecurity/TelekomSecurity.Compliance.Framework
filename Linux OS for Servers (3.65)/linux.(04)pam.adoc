@@ -1,4 +1,4 @@
-= Telekom Security Compliance Framework
+SLES 15= Telekom Security Compliance Framework
 :author_name: Markus Schumburg (Telekom Security)
 :author_email: security.automation@telekom.de
 :revnumber: 0.1
@@ -29,13 +29,13 @@ If PAM is used the hashing algorithm for password protection must be configured 
 
 _Motivation:_ It an unauthorized person gets access to a password file, the password can be misused if not stored in a secure way.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -51,13 +51,13 @@ PAM must be configuration that only passwords that comply with the following com
 
 _Motivation:_ Passwords with the above complexity offer high robustness against attacks coupled with acceptable user friendliness. Passwords with this level of complexity have proved their efficiency in practice. Trivial passwords that are too short are susceptible to brute force and dictionary attacks and are therefore easy for attackers to determine. Once a password has been ascertained it can be used by an attacker for unauthorized access to the system and the data on it.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -70,13 +70,13 @@ Brute force and dictionary attacks aim to use automated guessing to passwords fo
 
 _Motivation:_ Without any protection mechanism, an attacker can possibly determine a password by executing dictionary lists or automated creation of character combinations. With the guessed password than the misuse of the according user account is possible.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -92,13 +92,13 @@ Message of the day (motd) outputs must not contain any sensitive data like numbe
 
 _Motivation:_ Sensitive data in motd can give attackers information that are helpful for further attacks.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check

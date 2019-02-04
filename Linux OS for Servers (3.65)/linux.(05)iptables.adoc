@@ -29,15 +29,15 @@ The following requirements are a minimal setup for IPTables. If needed additiona
 
 Loopback traffic is used between server processes. A policy for traffic to the loopback network (127.0.0.0/8) must be configured for all other network interfaces.
 
-_Motivation:_ To prevent spoofing attacks, the loopback network must be protected from such malicious traffic.
+_Motivation:_ To prevent spoofing attacks, the loopback netwSLES 15t be protected from such malicious traffic.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -52,13 +52,13 @@ For outbound and established connections iptables policies must be configured.
 
 _Motivation:_ Without rules for outbound and established connections all packets will be dropped by the default iptables policy which will prevent network usage.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -71,13 +71,13 @@ It is necessary to configure iptables rules for all available services (ports) o
 
 _Motivation:_ A restriction of reachability of a network service minimizes the possible attack vector.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -90,13 +90,13 @@ To reject connections to unconfigured network services, the default policy of ip
 
 _Motivation:_ Uncontrolled access to network services is possible without an iptables default DROP policy.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check

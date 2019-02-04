@@ -29,13 +29,13 @@ The character "+" is used as a marker in configuration files to insert data from
 
 _Motivation:_ Attackers could possibly inject own code to gain privileged access if the character "+" exists in files '/etc/passwd', '/etc/shadows' and '/etc/group'.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
-----
+----SLES 15
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -50,13 +50,13 @@ This is only valid for accounts of real users and excludes system accounts. An e
 
 _Motivation:_ If accidently a wrong user becomes owner of another user's home directory or if permissions are wrong another user can access foreign data.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -69,13 +69,13 @@ The usage of GID 0 as default group for the root account is the default on most 
 
 _Motivation:_ Changing the GID for root may result in root-owned files that become accessible by non-privileged users.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -88,13 +88,13 @@ Any account with UID 0 has root privileges on the server. It must be validated o
 
 _Motivation:_ A user with restricted rights can accidently become root if UID 0 is set for its account.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -107,13 +107,13 @@ It must be checked on a regular basis that all groups exit in '/etc/group file' 
 
 _Motivation:_ Errors in group management can result in unspecific authentication and authorization behavior.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -126,13 +126,13 @@ It must be checked on a regular basis that no duplicate UIDs and GIDs in the fil
 
 _Motivation:_Users and groups must be assigned to unique UIDs and GIDs for accountability and to ensure appro-priate access protections.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -145,13 +145,13 @@ The tools "useradd" and " groupadd" do not allow to set duplicate user or group 
 
 _Motivation:_ Duplicate user name or group name can result in unauthorized access to data.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -164,13 +164,13 @@ On Ubuntu Linux the shadow group allows system programs which require access the
 
 _Motivation:_ With unauthorized access to the '/etc/shadow' file it is possible to run password cracking attacks against the stored password hashes.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -183,13 +183,13 @@ If users or groups are deleted from a system, their files and directories must a
 
 _Motivation:_ If files and directories without an assigned user or group exist on system, it could happen that a new-ly generated user can access this data if same UID or GID is assigned as used by the user or group deleted before.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
@@ -212,13 +212,13 @@ The permissions of configuration files must be correct and set to according user
 
 _Motivation:_ In configuration files sensitive information is stored. With wrong privileges, an unauthorized user can possibly access these files and misuse data or even modify configuration.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>implementation
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check

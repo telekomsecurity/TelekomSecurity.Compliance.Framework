@@ -27,37 +27,88 @@ It is important to configure logging during system boot in grub.cfg to ensure th
 
 _Motivation:_ Logging security-relevant events is a basic requirement for detecting ongoing attacks as well as at-tacks that have already occurred. This is the only way in which suitable measures can be taken to maintain or restore system security. Logging data could be used as evidence to take legal steps against attackers.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (all)
 
+Use the following command to check grub configuration in file '/etc/default/grub':
 ----
-   <tbd>implementation
+   grep -i "GRUB_CMDLINE_LINUX=" /etc/default/grub
+----
+Expected output: GRUB_CMDLINE_LINUX="audit=1"
+
+*Implementation* (all)
+
+Add the following line to the file '/etc/default/grub'
+----
+   GRUB_CMDLINE_LINUX="audit=1"
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+Grub must be reloaded after configuration has changed with the following command:
 
+*Ubuntu Linux*
 ----
-   <tbd>Compliance Check
+  # update-grub
+----
+
+*RedHat & Suse Linux*
+----
+  # grub2-mkconfig -o /boot/grub2/grub.cfg
 ----
 
 [#req365-31]
 ==== Req 31:	Log rotation for logfiles must be configured.
 
-HINWEIS: cron beim Prüfen nicht vergessen!!!
-
 Log rotation for logfiles must be enabled. Files must be rotated based on file size and max lifetime of file.
 
 _Motivation:_ An attacker can trigger log events to fill up the disk space of the server. This could lead to a denial of service of the server.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (all)
 
+Check the file '/etc/logrotate.conf' for correct parameters for default configuration
+with following commands:
+
+Value in which interval log files should be rotated.
 ----
-   <tbd>implementation
+   # grep -i <logrotate-time> /etc/logrotate.conf
+----
+Possible outputs: daily, weekly, monthly  (recommended weekly)
+
+Value how many times should be rotated before oldest file will be deleted.
+----
+  # grep -i "^rotate" /etc/logrotate.conf
+----
+Recommended value: 4
+
+Additionally must be checked if the execution of logrotate will be done on a daily
+basis. Check folder '/etc/cron.daily' with the following command:
+----
+  # ls -la logrotate
+----
+Expected output (beside existents of file check priviledges, user and group):
+-rwxr-xr-x 1 root root 372 Jan 22  2014 logrotate
+
+NOTE: Additional specific configurations can be found in files located in directory
+'logrotate.d/'.
+
+*Implementation* (all)
+
+The following entries must be added to file '/etc/logrotate.conf':
+----
+   weekly
+   rotate 4
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+Additionally specific configurations can be changed in file '/etc/logrotate.conf'
+and files in folder 'logrotate.d/' if needed.
 
+Example:
 ----
-   <tbd>Compliance Check
+/var/log/wtmp {
+    missingok
+    **monthly**
+    create 0660 root utmp
+    **maxsize 10**
+    rotate **1**
+}
 ----
 
 [#req365-32]
@@ -70,16 +121,77 @@ A service like NTP (client programs: ntp, crony) must be used for time synchroni
 
 _Motivation:_ Time synchronization must be done on a server to support time sensitive security mechanisms like the usage of certificates or solutions like Kerberos. A precise time is also mandatory to ensures con-sistent time records for logging events.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (all)
+
+Check with the following command if time synchronization is enabled:
+----
+  # timedatectl
+----
+Expected output (example): Command shows if time synchronization is enabled (bold) +
+----
+Local time: Mon 2019-02-04 15:50:50 CET
+  Universal time: Mon 2019-02-04 14:50:50 UTC
+        RTC time: Mon 2019-02-04 14:50:49
+        Timezone: Europe/Berlin (CET, +0100)
+     NTP enabled: **yes**
+NTP synchronized: **yes**
+ RTC in local TZ: no
+      DST active: no
+----
+
+*Compliance Check* (Ubuntu LTS 14.04)
+
+Ubuntu 14.04 uses ntpd for time synchronization.
+
+To check if time is synchronized with correct NTP server use the following command:
+----
+  # netq -p
+----
+Expected output (example): show the if synchronized with server +
+----
+remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+ntp1.sul.t-onli 172.20.96.197    2 u   53   64    1    9.419  -17.683   0.000
+----
+
+*Compliance Check* (Ubuntu LTS 16.04/18.04)
+
+Ubuntu 16.04 and 18.04 uses
+
+To check the status of time synchronization use:
+----
+  # systemctl status systemd-timesyncd.service
+----
+Expected output (example): check for follwing line in output
+Status: "Synchronized to time server 194.25.134.196:123 (ntp1.t-online.de)."
+
+*Compliance Check* (RedHat & Suse)
+
+Use the following command to check the status of chronyd:
+----
+  # systemctl status chronyd -l
+----
+Expected output: 'active' if chrony is running properly.
+
+Use the following command to check chrony sources:
+----
+	# chronyc sources
+----
+Expected output (example): show the if synchronized with server +
+----
+MS Name/IP address         Stratum Poll Reach LastRx Last sample
+===============================================================================
+^* ntp1.sul.t-online.de          2   6    37    41   +133us[ +320us] +/-   50ms
+----
+
+*Implementation* (Ubuntu LTS 14.04)
+
+*Implementation* (Ubuntu LTS 16.04/18.04)
+
+*Implementation* (RedHat & Suse)
 
 ----
    <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>Compliance Check
 ----
 
 === 3.1	Auditd
@@ -93,16 +205,16 @@ On Linux server, the auditd daemon must be installed and configured to log secur
 
 _Motivation:_ Logging security-relevant events is a basic requirement for detecting ongoing attacks as well as at-tacks that have already occurred. This is the only way in which suitable measures can be taken to maintain or restore system security. Logging data could be used as evidence to take legal steps against attackers.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-34]
@@ -141,16 +253,16 @@ On Linux servers, the following System events must be logged:
 
 _Motivation:_ It is unusual to make system changes when the OS is put into operation. An attacker who has access to the server could change the system for its malicious purpose. The logging of the system events is necessary to detect and backtrack these attacks.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RedHat, Suse)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-35]
@@ -184,16 +296,16 @@ On Linux servers, the following Access and Authentication events must be logged:
 _Motivation:_ The logging of authentication and access events can be useful to backtrack who has access to a certain time.
 With these logs it is for example possible to detect a captured account which is used by an attacker.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-36]
@@ -230,16 +342,16 @@ On Linux servers, the following Account and Group Management events must be logg
 _Motivation:_ The logging of account and group management events can be useful to backtrack user and group management.
 With these logs it is possible to detect malicious modification, creation and deletion of users and groups.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-37]
@@ -282,16 +394,16 @@ On Linux servers, the following Configuration Change events must be logged:
 _Motivation:_ Configuration changes could have a massive impact of the OS and consequently could be a security risk.
 It is necessary to identify all important configurations on the OS and log the changes.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-38]
@@ -301,16 +413,16 @@ Immutable mode must be set for auditd to avoid that audit rules can be modified 
 
 _Motivation:_ If auditd is not in immutable mode, unauthorized users can initiate changes to hide malicious activity.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 === 3.2	External Logging
@@ -322,16 +434,16 @@ Security relevant logging data must be forwarded to a logging server as soon as 
 
 _Motivation:_ If logging data is only stored locally, it can be manipulated by an attacker to conceal the attack and any manipulation done on the system. This is the reason why the events must be forwarded immedi-ately after occurrence.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 ==== 3.2.1	RSyslog
@@ -343,16 +455,16 @@ For RSyslog the default permissions of 640 or more restrictive used for new gene
 
 _Motivation:_ Unauthorized access to logging files is possible if they have wrong file permissions. This is a risk of unwanted information leakage, as such files can contain sensitive information.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 [#req365-41]
@@ -362,16 +474,16 @@ One or several external log servers must be configured in RSyslog configuration.
 
 _Motivation:_ If logging data is only stored locally, it can be manipulated by an attacker to conceal the attack and any manipulation done on the system. This is the reason why the events must be forwarded immedi-ately after occurrence.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
-
-----
-   <tbd>implementation
-----
-
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
    <tbd>Compliance Check
+----
+
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
+
+----
+   <tbd>implementation
 ----
 
 ==== 3.2.2	Syslog-NG
@@ -383,16 +495,16 @@ For Syslog-NG the default permissions of 640 or more restrictive used for new ge
 
 _Motivation:_ Unauthorized access to logging files is possible if they have wrong file permissions. This is a risk of unwanted information leakage, as such files can contain sensitive information.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
-   <tbd>implementation
+   _(tbd) will be implemented in future version of document_
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
-   <tbd>Compliance Check
+   _(tbd) will be implemented in future version of document_
 ----
 
 [#req365-43]
@@ -402,16 +514,16 @@ One or several external log servers must be configured in RSyslog configuration.
 
 _Motivation:_ If logging data is only stored locally, it can be manipulated by an attacker to conceal the attack and any manipulation done on the system. This is the reason why the events must be forwarded immedi-ately after occurrence.
 
-*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
-   <tbd>implementation
+   _(tbd) will be implemented in future version of document_
 ----
 
-*Compliance Check* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 12)
+*Implementation* (Ubuntu LTS (14.04/16.04/18.04), RHEL 7.x, SLES 15)
 
 ----
-   <tbd>Compliance Check
+   _(tbd) will be implemented in future version of document_
 ----
 
 ---
