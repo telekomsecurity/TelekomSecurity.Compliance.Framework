@@ -44,12 +44,12 @@ Add the following line to the file '/etc/default/grub'
 
 Grub must be reloaded after configuration has changed with the following command:
 
-*Ubuntu Linux*
+Ubuntu Linux:
 ----
   # update-grub
 ----
 
-*RedHat & Suse Linux*
+RedHat & Suse Linux:
 ----
   # grub2-mkconfig -o /boot/grub2/grub.cfg
 ----
@@ -98,16 +98,17 @@ The following entries must be added to file '/etc/logrotate.conf':
 ----
 
 Additionally specific configurations can be changed in file '/etc/logrotate.conf'
-and files in folder 'logrotate.d/' if needed.
+and files in folder 'logrotate.d/' if needed (<time> = daily, weekly, monthly;
+<rotate_value>).
 
 Example:
 ----
 /var/log/wtmp {
     missingok
-    **monthly**
+    <time>
     create 0660 root utmp
-    **maxsize 10**
-    rotate **1**
+    maxsize 10
+    rotate <rotate_value>
 }
 ----
 
@@ -139,34 +140,19 @@ NTP synchronized: yes
       DST active: no
 ----
 
-*Compliance Check* (Ubuntu LTS 14.04)
-
-Ubuntu 14.04 uses ntpd for time synchronization.
-
-To check if time is synchronized with correct NTP server use the following command:
-----
-  # netq -p
-----
-Expected output (example):
-----
-remote           refid      st t when poll reach   delay   offset  jitter
-==============================================================================
-ntp1.sul.t-onli 172.20.96.197    2 u   53   64    1    9.419  -17.683   0.000
-----
-
 *Compliance Check* (Ubuntu LTS 16.04/18.04)
 
-Ubuntu 16.04 and 18.04 uses 'timesyncd' as default time synchronization. It works in
-the in lightweight way to synchronize system time.
+Ubuntu 16.04 and 18.04 uses 'timesyncd' as default time synchronization. It works
+in the in lightweight way to synchronize system time.
 
 To check the status of time synchronization use:
 ----
   # systemctl status systemd-timesyncd.service
 ----
-Expected output - check for following line in output:
+Expected output (example) - check for following line in output:
 Status: "Synchronized to time server 194.25.134.196:123 (ntp1.t-online.de)."
 
-*Compliance Check* (RedHat & Suse)
+*Compliance Check* Chrony (RedHat, Suse, Ubuntu 14.04)
 
 Use the following command to check the status of chronyd:
 ----
@@ -185,14 +171,64 @@ MS Name/IP address         Stratum Poll Reach LastRx Last sample
 ^* ntp1.sul.t-online.de          2   6    37    41   +133us[ +320us] +/-   50ms
 ----
 
-*Implementation* (Ubuntu LTS 14.04)
+*Compliance Check* NTP (RedHat, Suse, Ubuntu 14.04)
+
+To check if time is synchronized with correct NTP server use the following command:
+----
+  # netq -p
+----
+Expected output (example):
+----
+remote           refid      st t when poll reach   delay   offset  jitter
+==============================================================================
+ntp1.sul.t-onli 172.20.96.197    2 u   53   64    1    9.419  -17.683   0.000
+----
 
 *Implementation* (Ubuntu LTS 16.04/18.04)
 
-*Implementation* (RedHat & Suse)
+Ubuntu 16.04 and 18.04 use 'timesyncd' as default time synchronization.
 
+To configure own NTP servers edit file '/etc/systemd/timesyncd.conf' with following
+entry (example):
 ----
-   <tbd>implementation
+[Time]
+NTP=<ntp_server_1> <ntp_server_2> ... <ntp_server_n>
+----
+
+Optional the following entry can be added to define a fallback NTP server:
+----
+FallbackNTP=<ntp_server_fallback>
+----
+
+*Implementation* Chrony (RedHat, Suse, Ubuntu 14.04)
+
+NOTE: Chrony should be preferred. Other than NTP in default configuration chrony
+acts only as a client for time synchronization.
+
+Add NTP servers to use in file '/etc/crony.conf' with following variable:
+----
+  server <ntp_server_1>
+  server <ntp_server_1>
+----
+
+Additionally, configure that NTP will be executed with user 'chrony' in file
+'/etc/sysconfig/chronyd':
+----
+  OPTIONS="-u chrony"
+----
+
+*Implementation* NTP (RedHat, Suse, Ubuntu 14.04)
+
+Add NTP servers to use in file '/etc/ntp.conf' with following variable:
+----
+  server <ntp_server_1>
+  server <ntp_server_1>
+----
+
+Additionally, configure that NTP will be executed with user 'ntp' in file
+'/etc/init.d/ntp':
+----
+  RUNASUSER=ntp
 ----
 
 === 3.1	Auditd

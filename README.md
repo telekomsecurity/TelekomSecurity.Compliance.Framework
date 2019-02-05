@@ -23,7 +23,7 @@ The [Telekom Security](https://security.telekom.com/) Compliance Framework gives
 
 Telekom Security provides Ansible roles for an automated implementation of security requirements. This Ansible roles can be found on following page:
 
-  * link:https://github.com/telekomsecurity/TelekomSecurity.Compliance.Automation[Telekom Security Compliance Automation]
+  * [Telekom Security Compliance Automation](https://github.com/telekomsecurity/TelekomSecurity.Compliance.Automation)
 
 ## Author Information
 Author: [Telekom Security](https://security.telekom.com/) (security.automation@telekom.de)
